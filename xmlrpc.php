@@ -783,6 +783,141 @@ function bloggersettemplate($m) {
 
 
 
+/**** PingBack functions ****/
+
+$pingback_ping_sig = array(array($xmlrpcString, $xmlrpcString, $xmlrpcString));
+
+$pingback_ping_doc = 'gets a pingback and registers it as a comment prefixed by &lt;pingback /&gt;';
+
+function pingback_ping($m) {
+	global $tableposts, $tablecomments, $comments_notify;
+	global $siteurl, $blogfilename;
+
+	dbconnect();
+
+	$title='';
+
+	$pagelinkedfrom = $m->getParam(0);
+	$pagelinkedfrom = $pagelinkedfrom->scalarval();
+
+	$pagelinkedto = $m->getParam(1);
+	$pagelinkedto = $pagelinkedto->scalarval();
+
+#	$pagelinkedfrom=$args[0];
+#	$pagelinkedto=$args[1];
+
+	$messages = array(
+		htmlentities("Pingback from ".$pagelinkedfrom." to ".$pagelinkedto." registered. Keep the web talking! :-)"),
+		htmlentities("The URL you provided doesn't seem to belong in this site"),
+		htmlentities("We can't find the post you are trying to link to. Please check the post's permalink")
+	);
+
+	$message = $messages[0];
+
+	// Check if the page linked to is in our site
+	$pos1 = strpos($pagelinkedto, str_replace('http://', '', str_replace('www.', '', $siteurl)));
+	if($pos1) {
+
+		// let's find which post is linked to
+		$urltest = parse_url($pagelinkedto);
+		if (preg_match('#p/[0-9]{1,}#', $urltest['path'], $match)) {
+			// the path defines the post_ID (archives/p/XXXX)
+			$blah = explode('/', $match[0]);
+			$post_ID = $blah[1];
+		} elseif (preg_match('#p=[0-9]{1,}#', $urltest['query'], $match)) {
+			// the querystring defines the post_ID (?p=XXXX)
+			$blah = explode('=', $match[0]);
+			$post_ID = $blah[1];
+		} elseif (isset($urltest['fragment'])) {
+			// an #anchor is there, it's either...
+			if (is_int($urltest['fragment'])) {
+				// ...an integer #XXXX (simpliest case)
+				$post_ID = $urltest['fragment'];
+			} elseif (is_string($urltest['fragment'])) {
+				// ...or a string #title, a little more complicated
+				$title = preg_replace('/[^a-zA-Z0-9]/', '.', $urltest['fragment']);
+				$sql = "SELECT ID FROM $tableposts WHERE post_title RLIKE '$title'";
+				$result = mysql_query($sql) or die("Query: $sql\n\nError: ".mysql_error());
+				$blah = mysql_fetch_array($result);
+				$post_ID = $blah['ID'];
+			}
+		} else {
+			$post_ID = -1;
+		}
+
+		$sql = 'SELECT post_content FROM '.$tableposts.' WHERE ID = '.$post_ID;
+		$consulta = mysql_query($sql);
+
+		if (mysql_num_rows($consulta)) {
+
+			// Let's check the remote site
+			$fp = @fopen($pagelinkedfrom, 'r');
+
+			$puntero = 16384;
+			while($linea = fread($fp, $puntero)) {
+				if (empty($matchtitle)) {
+					preg_match('|<title>([^<]*?)</title>|', $linea, $matchtitle);
+				}
+				$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
+				if (is_integer($pos2)) {
+					$start = $pos2-100;
+					$context = substr(strip_tags($linea, '<a>'), $start, 225);
+				}
+				$puntero = $puntero + 4096;
+			}
+			fclose($fp);
+
+			if (!empty($context)) {
+
+				$title = $matchtitle[1];
+				$original_context = $context;
+				$context = '<pingback />[...] '.addslashes(trim($context)) .' [...]';
+				$context = format_to_post($context);
+				$original_pagelinkedfrom = $pagelinkedfrom;
+				$pagelinkedfrom = addslashes($pagelinkedfrom);
+				$pagelinkedfrom = htmlspecialchars($pagelinkedfrom);
+				$original_title = $title;
+				$title = addslashes(strip_tags(trim($title)));
+				$sql = "INSERT INTO $tablecomments (comment_post_ID, comment_author, comment_author_url, comment_date, comment_content) VALUES ($post_ID, '$title', '$pagelinkedfrom', NOW(), '$context')";
+				$consulta = mysql_query($sql);
+
+				if ($comments_notify) {
+
+					$notify_message  = "New pingback on your post #$post_ID.\r\n\r\n";
+					$notify_message .= "website: $original_title\r\n";
+					$notify_message .= "url    : $original_pagelinkedfrom\r\n";
+					$notify_message .= "excerpt: \n[...] $original_context [...]\r\n\r\n";
+					$notify_message .= "You can see all pingbacks on this post there: \r\n";
+					$notify_message .= "$siteurl/$blogfilename?p=$post_ID&pb=1\r\n\r\n";
+
+					$postdata = get_postdata($post_ID);
+					$authordata = get_userdata($postdata['Author_ID']);
+					$recipient = $authordata['user_email'];
+					$subject = "pingback on post #$post_ID \"".$postdata['Title'].'"';
+
+					@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.6pre5 - PHP/" . phpversion());
+					
+				}
+			} else {
+				// URL pattern not found
+				$message = "Page linked to: $pagelinkedto\nPage linked from: $pagelinkedfrom\nTitle: $title\nContext: $context\n\n".$messages[1];
+			}
+		} else {
+			// Post_ID not found
+			$message = $messages[2];
+		}
+	}
+	return new xmlrpcresp(new xmlrpcval($message));;
+}
+
+
+
+
+
+/**** /PingBack functions ****/
+
+
+
 /**** Legacy functions ****/
 
 // a PHP version
@@ -1358,6 +1493,10 @@ $s=new xmlrpc_server( array( "blogger.newPost" =>
 										 "signature" => $b2ping_sig,
 										 "docstring" => $b2ping_doc),
 
+							 "pingback.ping" => 
+							 array("function" => "pingback_ping",
+										 "signature" => $pingback_ping_sig,
+										 "docstring" => $pingback_ping_doc),
 
 
 							 "examples.getStateName" =>
