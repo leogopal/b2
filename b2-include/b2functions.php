@@ -303,10 +303,15 @@ function is_email($user_email) {
 
 
 function get_lastpostdate() {
-	global $tableposts,$cache_lastpostdate,$use_cache, $time_difference;
+	global $tableposts, $cache_lastpostdate, $use_cache, $time_difference, $pagenow;
 	if ((!isset($cache_lastpostdate)) OR (!$use_cache)) {
 		$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
-		$sql = "SELECT * FROM $tableposts WHERE post_date <= '$now' ORDER BY post_date DESC LIMIT 1";
+		if ($pagenow != 'b2edit.php') {
+			$showcatzero = 'post_category > 0 AND";
+		} else {
+			$showcatzero = '';
+		}
+		$sql = "SELECT * FROM $tableposts WHERE $showcatzero post_date <= '$now' ORDER BY post_date DESC LIMIT 1";
 		$result = mysql_query($sql) or die("Your SQL query: <br />$sql<br /><br />MySQL said:<br />".mysql_error());
 		$querycount++;
 		$myrow = mysql_fetch_object($result);
@@ -321,12 +326,12 @@ function get_lastpostdate() {
 
 function user_pass_ok($user_login,$user_pass) {
 	global $cache_userdata,$use_cache;
-	if ((empty($cache_userdata["$user_login"])) OR (!$use_cache)) {
+	if ((empty($cache_userdata[$user_login])) OR (!$use_cache)) {
 		$userdata = get_userdatabylogin($user_login);
 	} else {
-		$userdata = $cache_userdata["$user_login"];
+		$userdata = $cache_userdata[$user_login];
 	}
-	return ($user_pass == $userdata["user_pass"]);
+	return ($user_pass == $userdata['user_pass']);
 }
 
 function get_userdata($userid) {
@@ -346,16 +351,13 @@ function get_userdata($userid) {
 function get_userdata2($userid) { // for team-listing
 	global $tableusers,$row;
 	$user_data['ID'] = $userid;
-	$user_data["user_login"] = $row->user_login;
-	$user_data["user_firstname"] = $row->user_firstname;
-	$user_data["user_lastname"] = $row->user_lastname;
-	$user_data["user_nickname"] = $row->user_nickname;
-	$user_data["user_level"] = $row->user_level;
-	$user_data["user_email"] = $row->user_email;
-	$user_data["user_email"] = $row->user_email;
-	$user_data["user_email"] = $row->user_email;
-	$user_data["user_email"] = $row->user_email;
-	$user_data["user_url"] = $row->user_url;
+	$user_data['user_login'] = $row->user_login;
+	$user_data['user_firstname'] = $row->user_firstname;
+	$user_data['user_lastname'] = $row->user_lastname;
+	$user_data['user_nickname'] = $row->user_nickname;
+	$user_data['user_level'] = $row->user_level;
+	$user_data['user_email'] = $row->user_email;
+	$user_data['user_url'] = $row->user_url;
 	return($user_data);
 }
 
