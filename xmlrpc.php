@@ -919,15 +919,18 @@ function pingback_ping($m) {
 			// the path defines the post_ID (archives/p/XXXX)
 			$blah = explode('/', $match[0]);
 			$post_ID = $blah[1];
+			$way = 'from the path';
 		} elseif (preg_match('#p=[0-9]{1,}#', $urltest['query'], $match)) {
 			// the querystring defines the post_ID (?p=XXXX)
 			$blah = explode('=', $match[0]);
 			$post_ID = $blah[1];
+			$way = 'from the querystring';
 		} elseif (isset($urltest['fragment'])) {
 			// an #anchor is there, it's either...
-			if (is_int($urltest['fragment'])) {
+			if (intval($urltest['fragment'])) {
 				// ...an integer #XXXX (simpliest case)
 				$post_ID = $urltest['fragment'];
+				$way = 'from the fragment (numeric)';
 			} elseif (is_string($urltest['fragment'])) {
 				// ...or a string #title, a little more complicated
 				$title = preg_replace('/[^a-zA-Z0-9]/', '.', $urltest['fragment']);
@@ -935,12 +938,13 @@ function pingback_ping($m) {
 				$result = mysql_query($sql) or die("Query: $sql\n\nError: ".mysql_error());
 				$blah = mysql_fetch_array($result);
 				$post_ID = $blah['ID'];
+				$way = 'from the fragment (title)';
 			}
 		} else {
 			$post_ID = -1;
 		}
 
-		debug_fwrite($log, 'Found post ID: '.$post_ID."\n");
+		debug_fwrite($log, "Found post ID $way: $post_ID\n");
 
 		$sql = 'SELECT post_author FROM '.$tableposts.' WHERE ID = '.$post_ID;
 		$result = mysql_query($sql);
@@ -955,15 +959,18 @@ function pingback_ping($m) {
 
 			if (mysql_num_rows($result) || (1==1)) {
 			
+				// very stupid, but gives time to the 'from' server to publish !
+				sleep(1);
+
 				// Let's check the remote site
 				$fp = @fopen($pagelinkedfrom, 'r');
 
 				$puntero = 4096;
 				while($linea = fread($fp, $puntero)) {
+					$linea = preg_replace('#&([^amp\;])#is', '&amp;$1', $linea);
 					if (empty($matchtitle)) {
 						preg_match('|<title>([^<]*?)</title>|', $linea, $matchtitle);
 					}
-					$linea = preg_replace('#&([^amp\;])#is', '&amp;$1', $linea);
 					$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
 					$pos3 = strpos(strip_tags($linea, '<a>'), str_replace('http://www.', 'http://', $pagelinkedto));
 
@@ -973,8 +980,8 @@ function pingback_ping($m) {
 						$context = substr(strip_tags($linea, '<a>'), $start, 150);
 						$context = strip_tags($context);
 						$context = str_replace("\n", ' ', $context);
+						$context = str_replace('&amp;', '&', $context);
 					}
-#					$puntero = $puntero + 4096;
 				}
 				fclose($fp);
 
