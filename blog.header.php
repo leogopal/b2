@@ -15,6 +15,8 @@ require_once ($b2blah.$b2inc.'/b2template.functions.php');
 require_once ($b2blah.$b2inc.'/xmlrpc.inc');
 require_once ($b2blah.$b2inc.'/xmlrpcs.inc');
 
+@header ("X-PingBack: $pathserver/xmlrpc.php");
+
 $b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search','exact','sentence','poststart','postend','preview','debug','calendar','page','more','tb','pb');
 
 	for ($i=0; $i<count($b2varstoreset); $i += 1) {
