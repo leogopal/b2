@@ -97,12 +97,16 @@ for ($iCount=1; $iCount<=$Count; $iCount++) {
 				if ( ($j == 'M') || ($j == 'T') || ($j == 'W') || ($j == 'F') || ($j == 'S') ) {
 					$ddate = substr($ddate, 5, strlen($ddate)-5);
 				}
-				$ddate_H = substr($ddate, 12, 2);
-				$ddate_i = substr($ddate, 15, 2);
-				$ddate_s = substr($ddate, 18, 2);
-				$ddate_m = substr($ddate, 3, 3);
-				$ddate_d = substr($ddate, 0, 2);
-				$ddate_Y = substr($ddate, 7, 4);
+				$date_arr = explode(' ', $ddate);
+				$date_time = explode(':', $date_arr[3]);
+				
+				$ddate_H = $date_time[0];
+				$ddate_i = $date_time[1];
+				$ddate_s = $date_time[2];
+				
+				$ddate_m = $date_arr[1];
+				$ddate_d = $date_arr[0];
+				$ddate_Y = $date_arr[2];
 				for ($i=0; $i<12; $i++) {
 					if ($ddate_m == $dmonths[$i]) {
 						$ddate_m = $i+1;
