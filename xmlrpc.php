@@ -8,6 +8,7 @@ include("b2config.php");
 require_once($b2inc."/xmlrpc.inc");
 require_once($b2inc."/xmlrpcs.inc");
 require_once($b2inc."/b2functions.php");
+require_once($b2inc."/b2vars.php");
 require_once($b2inc."/b2template.functions.php");
 
 $use_cache = 1;
@@ -58,6 +59,7 @@ function b2newpost($m) {
 	global $xmlrpcerruser; // import user errcode value
 	global $blog_ID,$cache_userdata,$tableposts,$use_rss,$use_weblogsping,$post_autobr;
 	global $post_default_title,$post_default_category;
+	global $cafelogID;
 	$err="";
 
 	dbconnect();
@@ -89,7 +91,7 @@ function b2newpost($m) {
 
 		
 		$content = format_to_post($content);
-		$post_title = addslashes($post_title);
+		$post_title = addslashes($title);
 
 		$time_difference = get_settings("time_difference");
 		if ($postdate != "") {
@@ -98,17 +100,14 @@ function b2newpost($m) {
 			$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
 		}
 
-		$sql = "INSERT INTO $tableposts (post_author, post_date, post_content, post_title, post_category) VALUES ('$user_ID','$now','$content','$title','$category')";
+		$sql = "INSERT INTO $tableposts (post_author, post_date, post_content, post_title, post_category) VALUES ('$user_ID','$now','$content','$post_title','$category')";
 		$result = mysql_query($sql);
 
 		if (!$result)
 			return new xmlrpcresp(0, $xmlrpcerruser+2, // user error 2
            "For some strange yet very annoying reason, your entry couldn't be posted.");
 
-		$sql2 = "SELECT * FROM $tableposts WHERE 1=1 ORDER BY ID DESC LIMIT 1";
-		$result2 = mysql_query($sql2);
-		$myrow2 = mysql_fetch_array($result2);
-		$post_ID=$myrow2[0];
+		$post_ID = mysql_insert_id();
 
 		if (!isset($blog_ID)) { $blog_ID = 1; }
 
@@ -207,6 +206,7 @@ function bloggernewpost($m) {
 	global $xmlrpcerruser; // import user errcode value
 	global $blog_ID,$cache_userdata,$tableposts,$use_rss,$use_weblogsping,$post_autobr;
 	global $post_default_title,$post_default_category;
+	global $cafelogID;
 	$err="";
 
 	dbconnect();
@@ -245,10 +245,7 @@ function bloggernewpost($m) {
 			return new xmlrpcresp(0, $xmlrpcerruser+2, // user error 2
            "For some strange yet very annoying reason, your entry couldn't be posted.");
 
-		$sql2 = "SELECT * FROM $tableposts WHERE 1=1 ORDER BY ID DESC LIMIT 1";
-		$result2 = mysql_query($sql2);
-		$myrow2 = mysql_fetch_array($result2);
-		$post_ID=$myrow2[0];
+		$post_ID = mysql_insert_id();
 
 		if (!isset($blog_ID)) { $blog_ID = 1; }
 
