@@ -100,12 +100,22 @@ textarea,input,select {
 
 <textarea rows="8" cols="12" style="width: 100%" name="content" tabindex="2" class="postform" wrap="virtual" onFocus="if (this.value=='Post') { this.value='';}" onBlur="if (this.value=='') {this.value='Post';}">Post</textarea>
 
-<input type="checkbox" name="post_autobr" value="1" <?php if ($autobr) echo " checked" ?> tabindex="4" class="checkbox" /> Auto-BR<br />
+<input type="checkbox" name="post_autobr" value="1" <?php if ($autobr) echo " checked" ?> tabindex="4" class="checkbox" id="autobr" /><label for="autobr"> Auto-BR</label><br />
+
+<?php if ($use_pingback) { ?>
+<input type="checkbox" class="checkbox" name="post_pingback" value="1" checked="checked" tabindex="5" id="pingback" /><label for="pingback"> PingBack</label>
+<?php } ?>
+
 <input type="submit" name="submit" value="Blog this !" class="search" tabindex="3" /> 
-<?php
-if ($use_spellchecker)
-	echo "<br /><input type = \"button\" value = \"Spell Check\" onclick=\"var f=document.forms[0]; doSpell( 'en', f.post_content, '$spellchecker_url/sproxy.cgi', true);\" class=\"search\" tabindex=\"5\" /><br />";
-?>
+
+<?php if ($use_spellchecker) { ?>
+<br /><input type = "button" value = "Spell Check" onclick="var f=document.forms[0]; doSpell( 'en', f.post_content, '$spellchecker_url/sproxy.cgi', true);" class="search" tabindex="6" /><br />
+<?php }
+
+if ($use_trackback) { ?>
+<br /><label for="trackback"><b>TrackBack</b> an URL:</label><br /><input type="text" name="trackback_url" style="width: 100%" id="trackback" tabindex="7" />
+<?php } ?>
+
 <script language="JavaScript">
 <!--
 //				document.blog.post_content.focus();
