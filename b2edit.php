@@ -25,10 +25,11 @@ case "post":
 	$standalone = 1;
 	require_once("./b2header.php");
 
-	$post_autobr = $HTTP_POST_VARS["post_autobr"];
+	$post_autobr = intval($HTTP_POST_VARS["post_autobr"]);
 	$content = format_to_post($HTTP_POST_VARS["content"]);
 	$content = balanceTags($content);
 	$post_title = addslashes($HTTP_POST_VARS["post_title"]);
+	$post_category = intval($HTTP_POST_VARS["post_category"]);
 
 	if ($user_level == 0)
 	die ("Cheatin' uh ?");
@@ -49,7 +50,7 @@ case "post":
 		$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
 	}
 
-	$query = "INSERT INTO $tableposts (ID, post_author, post_date, post_content, post_title, post_category) VALUES ('0','$user_ID','$now','$content','".$HTTP_POST_VARS["post_title"]."','".$HTTP_POST_VARS["post_category"]."')";
+	$query = "INSERT INTO $tableposts (ID, post_author, post_date, post_content, post_title, post_category) VALUES ('0','$user_ID','$now','$content','".$post_title."','".$post_category."')";
 	$result = mysql_query($query);
 
 	if (!$result)
@@ -127,8 +128,8 @@ case "editpost":
 		$blog_ID = 1;
 	}
 	$post_ID = $HTTP_POST_VARS["post_ID"];
-	$post_category = $HTTP_POST_VARS["post_category"];
-	$post_autobr = $HTTP_POST_VARS["post_autobr"];
+	$post_category = intval($HTTP_POST_VARS["post_category"]);
+	$post_autobr = intval($HTTP_POST_VARS["post_autobr"]);
 	$content = balanceTags($HTTP_POST_VARS["content"]);
 	$content = format_to_post($content);
 	$post_title = addslashes($HTTP_POST_VARS["post_title"]);
