@@ -232,7 +232,7 @@ echo " selected";
 				?>
 				]
 				<br />
-				<font color="#999999"><b><?php the_title() ?></b> by <b><?php the_author() ?> (<a href="javascript:profile(<?php the_author_ID() ?>)"><?php the_author_nickname() ?></a>)</b>, in <b><?php the_category() ?></b></font><br />
+				<font color="#999999"><b><a href="<?php permalink_single($blogfilename); ?>" title="permalink"><?php the_title() ?></a></b> by <b><?php the_author() ?> (<a href="javascript:profile(<?php the_author_ID() ?>)"><?php the_author_nickname() ?></a>)</b>, in <b><?php the_category() ?></b></font><br />
 				<?php permalink_anchor(); ?>
 				<?php
 				if ($safe_mode)
