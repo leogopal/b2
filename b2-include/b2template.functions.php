@@ -415,7 +415,7 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 
 
 
-function next_posts() { // original by cfactor at cooltux.org
+function next_posts($max_page = 0) { // original by cfactor at cooltux.org
 	global $HTTP_SERVER_VARS, $blogfilename, $p, $page, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
@@ -423,17 +423,27 @@ function next_posts() { // original by cfactor at cooltux.org
 		$qstr = preg_replace("/&page=\d{0,}/","",$qstr);
 		$qstr = preg_replace("/page=\d{0,}/","",$qstr);
 		$nextpage = intval($page) + 1;
-		echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'page'.$querystring_equal.$nextpage;
+		if (!$max_page || $max_page >= $nextpage) {
+			echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'page'.$querystring_equal.$nextpage;
+		}
 	}
 }
 
 function next_posts_link($label='Next Page >>') {
-	global $p, $result, $posts_per_page, $what_to_show;
-	$num_rows = mysql_num_rows($result);
-	if (empty($p) && ($num_rows >= $posts_per_page) && ($what_to_show == 'paged')) {
-		echo '<a href="';
-		echo next_posts();
-		echo '">'. htmlspecialchars($label) .'</a>';
+	global $p, $page, $result, $request, $posts_per_page, $what_to_show;
+	if ($what_to_show == 'paged') {
+		$nxt_request = $request;
+		if ($pos = strpos(strtoupper($request), 'LIMIT')) {
+			$nxt_request = substr($request, 0, $pos);
+		}
+		$nxt_result = mysql_query($nxt_request);
+		$numposts = mysql_num_rows($nxt_result);
+		$max_page = $numposts / $posts_per_page;
+		if (empty($p) && (empty($page) || $page < $max_page)) {
+			echo '<a href="';
+			echo next_posts($max_page);
+			echo '">'. htmlspecialchars($label) .'</a>';
+		}
 	}
 }
 
