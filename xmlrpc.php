@@ -860,8 +860,8 @@ function pingback_ping($m) {
 				}
 				$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
 				if (is_integer($pos2)) {
-					$start = $pos2-50;
-					$context = substr(strip_tags($linea, '<a>'), $start, 125);
+					$start = $pos2-40;
+					$context = substr(strip_tags($linea, '<a>'), $start, 120);
 					$context = strip_tags($context);
 				}
 				$puntero = $puntero + 4096;
@@ -911,8 +911,86 @@ function pingback_ping($m) {
 }
 
 
+$pingback_getPostURL_sig = array(array($xmlrpcString, $xmlrpcString, $xmlrpcString, $xmlrpcString, $xmlrpcString, $xmlrpcString));
 
+$pingback_getPostURL_doc = 'Given optional (optional means that the value may matter or not depending on the tool) appkey (for Blogger if they want to implement it), blog ID, username, password (should you want to make that method private), and a post ID, returns the URL to that post.';
 
+function pingback_getPostURL($m) {
+	global $xmlrpcerruser, $tableposts;
+	global $siteurl, $blogfilename, $querystring_start, $querystring_equal, $querystring_separator;
+
+	dbconnect();
+
+	// ideally, this would be used:
+	// $blog_ID = $m->getParam(0);
+	// $blog_ID = $blog_ID->scalarval();
+	// but right now, b2 handles only one blog, so...
+	$blog_ID = 1;
+
+	$username=$m->getParam(2);
+	$username = $username->scalarval();
+
+	$password=$m->getParam(3);
+	$password = $password->scalarval();
+
+	$post_ID = $m->getParam(4);
+	$post_ID = intval($post_ID->scalarval());
+
+	$userdata = get_userdatabylogin($username);
+
+	if ($userdata["user_level"] < 1) {
+		return new xmlrpcresp(0, $xmlrpcerruser+1, // user error 1
+	   "Sorry, users whose level is zero, can not use this method.");
+	}
+
+	if (user_pass_ok($username,$password)) {
+
+		$blog_URL = $siteurl.'/'.$blogfilename;
+
+		$postdata = get_postdata($post_ID);
+
+		if (!($postdata===false)) {
+
+			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
+
+			// this code is blatantly derived from permalink_link()
+			$archive_mode = get_settings('archive_mode');
+			switch($archive_mode) {
+				case 'daily':
+					$post_URL = $blog_URL.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).substr($postdata['Date'],8,2).'#'.$title;
+					break;
+				case 'monthly':
+					$post_URL = $blog_URL.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$title;
+					break;
+				case 'weekly':
+					if((!isset($cacheweekly)) || (empty($cacheweekly[$postdata['Date']]))) {
+						$sql = "SELECT WEEK('".$postdata['Date']."')";
+						$result = mysql_query($sql);
+						$row = mysql_fetch_row($result);
+						$cacheweekly[$postdata['Date']] = $row[0];
+					}
+					$post_URL = $blog_URL.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).$querystring_separator.'w'.$querystring_equal.$cacheweekly[$postdata['Date']].'#'.$title;
+					break;
+				case 'postbypost':
+					$post_URL = $blog_URL.$querystring_start.'p'.$querystring_equal.$post_ID;
+					break;
+			}
+		} else {
+			$err = 'This post ID ('.$post_ID.') does not correspond to any post here.';
+		}
+
+		if ($err) {
+			return new xmlrpcresp(0, $xmlrpcerruser, $err);
+		} else {
+			return new xmlrpcresp(new xmlrpcval($post_URL));;
+		}
+
+	} else {
+		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
+           'Wrong username/password combination '.$username.' / '.starify($password));
+	}
+
+}
 
 /**** /PingBack functions ****/
 
@@ -1197,12 +1275,15 @@ function mail_send($m) {
 	$msghdr.="X-Mailer: XML-RPC for PHP mailer 1.0";
 
 	if ($err=="") {
+		/*
 		if (!mail("", 
 							$mSub->scalarval(), 
 							$mBody->scalarval(), 
 							$msghdr)) {
 			$err="Error, could not send the mail.";
 		}
+		*/
+		$err = 'Just in case someone wants to use this for spam, this method is disabled';
 	}
 
   if ($err) {
@@ -1497,6 +1578,11 @@ $s=new xmlrpc_server( array( "blogger.newPost" =>
 							 array("function" => "pingback_ping",
 										 "signature" => $pingback_ping_sig,
 										 "docstring" => $pingback_ping_doc),
+
+							 "pingback.getPostURL" => 
+							 array("function" => "pingback_getPostURL",
+										 "signature" => $pingback_getPostURL_sig,
+										 "docstring" => $pingback_getPostURL_doc),
 
 
 							 "examples.getStateName" =>
