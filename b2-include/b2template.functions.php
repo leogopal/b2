@@ -817,16 +817,6 @@ function trackback_rdf($timezone=0) {
 
 /***** PingBack tags *****/
 
-function pingback_url($display = 1) {
-	global $pathserver, $id;
-	$tb_url = $pathserver.'/b2pingbacks.php?tb_id='.$id;
-	if ($display) {
-		echo $tb_url;
-	} else {
-		return $tb_url;
-	}
-}
-
 function pingback_number($zero='no pingback', $one='1 pingback', $more='% pingbacks') {
 	global $id, $tablecomments, $tb, $querycount, $cache_pingbacknumber, $use_cache;
 	if (empty($cache_pingbacknumber[$id]) OR (!$use_cache)) {
@@ -855,7 +845,7 @@ function pingback_link($file='') {
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($file == '')	$file = $pagenow;
 	if ($file == '/')	$file = '';
-	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'tb'.$querystring_equal.'1#pingbacks';
+	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'pb'.$querystring_equal.'1#pingbacks';
 }
 
 function pingback_popup_link($zero='no pingback', $one='1 pingback', $more='% pingbacks', $CSSclass='') {
