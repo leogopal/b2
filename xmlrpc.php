@@ -846,63 +846,72 @@ function pingback_ping($m) {
 			$post_ID = -1;
 		}
 
-		$sql = 'SELECT post_content FROM '.$tableposts.' WHERE ID = '.$post_ID;
-		$consulta = mysql_query($sql);
+		$sql = 'SELECT post_author FROM '.$tableposts.' WHERE ID = '.$post_ID;
+		$result = mysql_query($sql);
 
-		if (mysql_num_rows($consulta)) {
+		if (mysql_num_rows($result)) {
 
-			// Let's check the remote site
-			$fp = @fopen($pagelinkedfrom, 'r');
+			// Let's check that the remote site didn't already pingback this entry
+			$sql = 'SELECT * FROM '.$tablecomments.' WHERE comment_post_ID = '.$post_ID.' AND comment_author_url = \''.$pagelinkedfrom.'\'';
+			$result = mysql_query($sql);
 
-			$puntero = 16384;
-			while($linea = fread($fp, $puntero)) {
-				if (empty($matchtitle)) {
-					preg_match('|<title>([^<]*?)</title>|', $linea, $matchtitle);
+			if (mysql_num_rows($result)) {
+			
+				// Let's check the remote site
+				$fp = @fopen($pagelinkedfrom, 'r');
+
+				$puntero = 16384;
+				while($linea = fread($fp, $puntero)) {
+					if (empty($matchtitle)) {
+						preg_match('|<title>([^<]*?)</title>|', $linea, $matchtitle);
+					}
+					$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
+					if (is_integer($pos2)) {
+						$start = $pos2-40;
+						$context = substr(strip_tags($linea, '<a>'), $start, 120);
+						$context = strip_tags($context);
+					}
+					$puntero = $puntero + 4096;
 				}
-				$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
-				if (is_integer($pos2)) {
-					$start = $pos2-40;
-					$context = substr(strip_tags($linea, '<a>'), $start, 120);
-					$context = strip_tags($context);
-				}
-				$puntero = $puntero + 4096;
-			}
-			fclose($fp);
+				fclose($fp);
 
-			if (!empty($context)) {
+				if (!empty($context)) {
 
-				$title = $matchtitle[1];
-				$original_context = $context;
-				$context = '<pingback />[...] '.addslashes(trim($context)) .' [...]';
-				$context = format_to_post($context);
-				$original_pagelinkedfrom = $pagelinkedfrom;
-				$pagelinkedfrom = addslashes($pagelinkedfrom);
-				$original_title = $title;
-				$title = addslashes(strip_tags(trim($title)));
-				$sql = "INSERT INTO $tablecomments (comment_post_ID, comment_author, comment_author_url, comment_date, comment_content) VALUES ($post_ID, '$title', '$pagelinkedfrom', NOW(), '$context')";
-				$consulta = mysql_query($sql);
+					$title = $matchtitle[1];
+					$original_context = $context;
+					$context = '<pingback />[...] '.addslashes(trim($context)) .' [...]';
+					$context = format_to_post($context);
+					$original_pagelinkedfrom = $pagelinkedfrom;
+					$pagelinkedfrom = addslashes($pagelinkedfrom);
+					$original_title = $title;
+					$title = addslashes(strip_tags(trim($title)));
+					$sql = "INSERT INTO $tablecomments (comment_post_ID, comment_author, comment_author_url, comment_date, comment_content) VALUES ($post_ID, '$title', '$pagelinkedfrom', NOW(), '$context')";
+					$consulta = mysql_query($sql);
 
-				if ($comments_notify) {
+					if ($comments_notify) {
 
-					$notify_message  = "New pingback on your post #$post_ID.\r\n\r\n";
-					$notify_message .= "website: $original_title\r\n";
-					$notify_message .= "url    : $original_pagelinkedfrom\r\n";
-					$notify_message .= "excerpt: \n[...] $original_context [...]\r\n\r\n";
-					$notify_message .= "You can see all pingbacks on this post there: \r\n";
-					$notify_message .= "$siteurl/$blogfilename?p=$post_ID&pb=1\r\n\r\n";
+						$notify_message  = "New pingback on your post #$post_ID.\r\n\r\n";
+						$notify_message .= "website: $original_title\r\n";
+						$notify_message .= "url    : $original_pagelinkedfrom\r\n";
+						$notify_message .= "excerpt: \n[...] $original_context [...]\r\n\r\n";
+						$notify_message .= "You can see all pingbacks on this post there: \r\n";
+						$notify_message .= "$siteurl/$blogfilename?p=$post_ID&pb=1\r\n\r\n";
 
-					$postdata = get_postdata($post_ID);
-					$authordata = get_userdata($postdata['Author_ID']);
-					$recipient = $authordata['user_email'];
-					$subject = "pingback on post #$post_ID \"".$postdata['Title'].'"';
+						$postdata = get_postdata($post_ID);
+						$authordata = get_userdata($postdata['Author_ID']);
+						$recipient = $authordata['user_email'];
+						$subject = "pingback on post #$post_ID \"".$postdata['Title'].'"';
 
-					@mail($recipient, $subject, $notify_message, "From: b2@".$HTTP_SERVER_VARS['SERVER_NAME']."\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
-					
+						@mail($recipient, $subject, $notify_message, "From: b2@".$HTTP_SERVER_VARS['SERVER_NAME']."\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
+						
+					}
+				} else {
+					// URL pattern not found
+					$message = "Page linked to: $pagelinkedto\nPage linked from: $pagelinkedfrom\nTitle: $title\nContext: $context\n\n".$messages[1];
 				}
 			} else {
-				// URL pattern not found
-				$message = "Page linked to: $pagelinkedto\nPage linked from: $pagelinkedfrom\nTitle: $title\nContext: $context\n\n".$messages[1];
-			}
+				// We already have a Pingback from this URL
+				$message = "Sorry, you already did a pingback to $pagelinkedto from $pagelinkedfrom.";
 		} else {
 			// Post_ID not found
 			$message = $messages[2];
