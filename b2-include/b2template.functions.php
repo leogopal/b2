@@ -559,6 +559,7 @@ function comments_popup_link($zero='no comment', $one='1 comment', $more='% comm
 	} else {
 		// if comments_popup_script() is not in the template, display simple comment link
 		comments_link();
+		echo '"';
 	}
 	if (!empty($CSSclass)) {
 		echo ' class="'.$CSSclass.'"';
