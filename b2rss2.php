@@ -40,7 +40,6 @@ if (!isset($rss_excerpt_length) || ($rss_encoded_html == 1)) { $rss_excerpt_leng
 		<description><?php the_content_rss('', 0, '', $rss_excerpt_length, 2) ?></description>
 		<content:encoded><![CDATA[<?php the_content('', 0, '') ?>]]></content:encoded>
 	</item>
-	<?php } ?>
-
+	<?php $items_count++; if (($items_count == $posts_per_rss) && empty($m)) { break; } } ?>
 </channel>
 </rss>
