@@ -1,12 +1,9 @@
 <?php
 
-include_once('b2config.php');
-include_once("$b2inc/b2functions.php");
-include_once("$b2inc/b2vars.php");
-dbconnect();
-
-
 /* customize these as you wish */
+
+$calendarmonthnamedisplay = 1;	// set this to 0 if you don't want to display the month name
+$calendarmonthnameformat = 'F Y';
 
 $calendartablestart = '<table class="b2calendartable">';
 $calendartableend = '</table>';
@@ -14,8 +11,10 @@ $calendartableend = '</table>';
 $calendarrowstart = '<tr class="b2calendarrow">';
 $calendarrowend = '</tr>';
 
-$calendarheadercellstart = '<td class="b2calendarheadercell">';
-$calendarheadercellend = '</td>';
+$calendarheaderdisplay = 1;	// set this to 0 if you don't want to display the "Mon Tue Wed..." header
+$calendarheadercellstart = '<th class="b2calendarheadercell" abbr="$abbr">';	// please leave $abbr there !
+$calendarheadercellend = '</th>';
+$calendarheaderabbrlenght = 3;	// lenght of the shortened weekday
 
 $calendarcellstart = '<td class="b2calendarcell">';
 $calendarcellend = '</td>';
@@ -29,6 +28,10 @@ $calendaremptycellcontent = '&nbsp;';
 /* stop customizing (unless you really know what you're doing) */
 
 
+include_once('b2config.php');
+include_once("$b2inc/b2functions.php");
+include_once("$b2inc/b2vars.php");
+dbconnect();
 
 if (isset($calendar) && ($calendar != '')) {
 	$thisyear = substr($calendar,0,4);
@@ -99,18 +102,26 @@ $afterthismonth = zeroise(intval($thismonth)-1,2);
 
 // displays everything
 
-echo '<span class="b2calendarmonth">'.$month[$thismonth].' '.$thisyear.'</span>'."\n";
-
-echo $calendartablestart."\n";
-echo $calendarrowstart."\n";
-
-for ($i = $start_of_week; $i<($start_of_week+7); $i = $i + 1) {
-	echo $calendarheadercellstart;
-	echo ucwords(substr($weekday[($i % 7)],0,3));
-	echo $calendarheadercellend;
+if ($calendarmonthnamedisplay) {
+	echo '<span class="b2calendarmonth">';
+	echo date_i18n($calendarmonthnameformat, mktime(0, 0, 0, $thismonth, 1, $thisyear));
+	echo '</span>'."\n";
 }
 
-echo $calendarrowend."\n";
+echo $calendartablestart."\n";
+
+if ($calendarheaderdisplay) {
+	echo $calendarrowstart."\n";
+
+	for ($i = $start_of_week; $i<($start_of_week+7); $i = $i + 1) {
+		echo str_replace('$abbr', $weekday[($i % 7)], $calendarheadercellstart);
+		echo ucwords(substr($weekday[($i % 7)], 0, $calendarheaderabbrlenght));
+		echo $calendarheadercellend;
+	}
+
+	echo $calendarrowend."\n";
+}
+
 echo $calendarrowstart."\n";
 
 $newrow = 0;
