@@ -752,7 +752,7 @@ function start_b2() {
 		$id = 0;
 		$postdata = array (
 			'ID' => 0, 
-			'ID' => $HTTP_GET_VARS['preview_userid'],
+			'Author_ID' => $HTTP_GET_VARS['preview_userid'],
 			'Date' => $HTTP_GET_VARS['preview_date'],
 			'Content' => $HTTP_GET_VARS['preview_content'],
 			'Title' => $HTTP_GET_VARS['preview_title'],
@@ -765,7 +765,7 @@ function start_b2() {
 			$postdata['Content'] = autobrize($postdata['Content']);
 		}
 	}
-	$authordata = get_userdata($postdata['ID']);
+	$authordata = get_userdata($postdata['Author_ID']);
 	$day = mysql2date('d.m.y',$postdata['Date']);
 	$currentmonth = mysql2date('m',$postdata['Date']);
 	$numpages=1;
