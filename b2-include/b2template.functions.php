@@ -595,9 +595,9 @@ function generic_ctp_number($post_id, $mode = 'comments') {
 		$querycount++;
 		$ctp_number = array();
 		while($row = mysql_fetch_object($result)) {
-			if (stristr($row->comment_text, '<trackback />')) {
+			if (substr($row->comment_content, 0, 13) == '<trackback />') {
 				$ctp_number['trackbacks']++;
-			} elseif (stristr($row->comment_text, '<pingback />')) {
+			} elseif (substr($row->comment_content, 0, 12) == '<pingback />') {
 				$ctp_number['pingbacks']++;
 			} else {
 				$ctp_number['comments']++;
@@ -606,7 +606,7 @@ function generic_ctp_number($post_id, $mode = 'comments') {
 		}
 		$cache_ctp_number[$post_id] = $ctp_number;
 	} else {
-		$ctp_number = $cache_ctp_number[$post_id][$mode];
+		$ctp_number = $cache_ctp_number[$post_id];
 	}
 	if (($mode != 'comments') && ($mode != 'trackbacks') && ($mode != 'pingbacks') && ($mode != 'ctp')) {
 		$mode = 'ctp';
