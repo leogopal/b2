@@ -69,11 +69,8 @@ case 'post':
 	}
 
 	$query = "INSERT INTO $tableposts (ID, post_author, post_date, post_content, post_title, post_category) VALUES ('0','$user_ID','$now','$content','".$post_title."','".$post_category."')";
-	$result = mysql_query($query);
+	$result = mysql_query($query) or mysql_oops($query);
 
-	if (!$result)
-	die ("Error in posting... contact the <a href=\"mailto:$admin_email\">webmaster</a>");
-	
 	$post_ID = mysql_insert_id();
 
 	if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
@@ -181,10 +178,7 @@ case "editpost":
 	}
 
 	$query = "UPDATE $tableposts SET post_content=\"$content\", post_title=\"$post_title\", post_category=\"$post_category\"".$datemodif." WHERE ID=$post_ID";
-	$result = mysql_query($query);
-
-	if (!$result)
-	die ("Error in editing... contact the <a href=\"mailto:$admin_email\">webmaster</a>");
+	$result = mysql_query($query) or mysql_oops($query);
 
 	if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
 		sleep($sleep_after_edit);
@@ -220,8 +214,6 @@ case "delete":
 
 	$query = "DELETE FROM $tablecomments WHERE comment_post_ID=$post";
 	$result = mysql_query($query) or die("Oops, no comment associated to that post. <a href=\"b2edit.php\">Go back</a> !");
-	if (!$result)
-	die("Error in deleting the comments associated to this post... contact the <a href=\"mailto:$admin_email\">webmaster</a>...");
 
 	if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
 		sleep($sleep_after_edit);
@@ -270,9 +262,6 @@ case "deletecomment":
 	$query = "DELETE FROM $tablecomments WHERE comment_ID=$comment";
 	$result = mysql_query($query) or die("Oops, no comment with this ID. <a href=\"b2edit.php\">Go back</a> !");
 
-	if (!$result)
-		die("Error in deleting... contact the <a href=\"mailto:$admin_email\">webmaster</a>...");
-
 	header ("Location: b2edit.php?p=$p&c=1#comments"); //?a=dc");
 
 break;
@@ -314,10 +303,7 @@ case "editedcomment":
 	$content = format_to_post($content);
 
 	$query = "UPDATE $tablecomments SET comment_content=\"$content\", comment_author=\"$newcomment_author\", comment_author_email=\"$newcomment_author_email\", comment_author_url=\"$newcomment_author_url\"".$datemodif." WHERE comment_ID=$comment_ID";
-	$result = mysql_query($query);
-
-	if (!$result)
-		die("Error in editing... contact the <a href=\"mailto:$admin_email\">webmaster</a>.<br \><br \>Here's the guilty code:<br \>$query<br \><br \>MySQL said:<br \>".mysql_error());
+	$result = mysql_query($query) or mysql_oops($query);
 
 	header ("Location: b2edit.php?p=$comment_post_ID&c=1#comments"); //?a=ec");
 
