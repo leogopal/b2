@@ -507,6 +507,15 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 
 
 
+/***** <Link> tags *****/
+
+
+
+/***** // <Link> tags *****/
+
+
+
+
 /***** Comment tags *****/
 
 function comments_number($zero='no comment', $one='1 comment', $more='% comments') {
