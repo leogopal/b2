@@ -115,6 +115,11 @@ body>#header {height:14px;}
 	padding:10px;
 	}
 
+#contentcomments {
+	margin:0px 0px 50px 10px;
+	padding:10px;
+	}
+
 #menu {
 	position:absolute;
 	top:100px;
@@ -159,4 +164,20 @@ body>#menu {width:150px;}
 
 .centerP {
     text-align: center; 
+}
+
+#contentcomments input, #content input, #menu input {
+	margin: 1px;
+	padding: 1px 1px 4px 1px;
+	border: 1px solid #ccc;
+	font:11px/14px verdana, arial, helvetica, sans-serif;
+}
+#contentcomments textarea, #content textarea, #menu textarea {
+	margin: 1px;
+	padding: 1px;
+	border: 1px solid #ccc;
+	font:11px/14px verdana, arial, helvetica, sans-serif;
+}
+.commentfield {
+	margin-bottom: 4px;
 }
