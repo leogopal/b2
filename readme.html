@@ -312,13 +312,12 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  <br /><br />
 
 		<strong>&lt;?php next_posts() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
-	</strong>Return the URL portion of a link to the next posts. <br />
+	</strong>Display the URL portion of a link to the next set of posts. <br />
 
-	Generally you would use this in a template to navigate to the next "set" of posts or days
-	depending on the "Options" settings for the site.  The returned string can then be used to 
-	construct a link.  When the site options are set to 'Post", the next and previous functions will display the next or previous number of posts as set in the "post" options value.  When 
-	the site option is set to "Days", that number of consecutive days will be displayed.  In 
-	situations where there are not any post for those days, no output will be produced.<br />
+	Generally you would use this in a template to navigate to the next "set" of posts 
+	when the "Show Options" settings for the site is set to "posts paged".  The displayed 
+	string can be used to construct a link.  When the site options are not set to 'posts paged", 
+	the next and previous functions will display nothing.<br />
 	  <div class="params">Parameters:<ul>
 	  <li>No parameters.</li>
 	  </ul>
@@ -328,19 +327,20 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 	<strong>&lt;?php next_posts_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
 
 	</strong>
-	Displays a full link to the next "set" of posts or days.<br />
+	Displays a full link to the next "set" of posts only if show options set to "posts paged"<br />
 	  <div class="params">Parameters:<ul>
-	  <li>A user supplied string. Default "Next &gt;&gt;"</li>
+	  <li>A user supplied string. Default "Next Page &gt;&gt;"</li>
 	  </ul>
 	  </div>
 	  <br /><br />
 
 	  
 	<strong>&lt;?php previous_posts() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
-	</strong>Returns the URL portion of a link to the previous posts.<br />
-	Generally you would use this in a template to navigate to the next "set" of posts or days
-	depending on the "Options" settings for the site.  The returned string can then be used to construct
-	a link for example.<br />
+	</strong>Displays the URL portion of a link to the previous posts.<br />
+	Generally you would use this in a template to navigate to the previous "set" of posts 
+	when the "Show Options" settings for the site is set to "posts paged".  
+	The displayed string can then be used to construct a link. When the site options are not set to 'posts paged", 
+	the next and previous functions will display nothing.<br />
 	  <div class="params">Parameters:<ul>
 	  <li>No parameters.</li>
 
@@ -350,10 +350,23 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 	
 	<strong>&lt;?php previous_posts_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
 	</strong>
-	Displays a full link to the previous "set" of posts or days if there are any, otherwise nothing is displayed.<br />
+	Displays a full link to the previous "set" of posts only if show options set to "posts paged" and if there is a previous set, otherwise nothing is displayed.<br />
 	  <div class="params">Parameters:<ul>
 
-	  <li>A user supplied string. Default "&lt;&lt; Previous"</li>
+	  <li>A user supplied string. Default "&lt;&lt; Previous Page"</li>
+	  </ul>
+	  </div>
+	  <br /><br />
+	   
+ 	<strong>&lt;?php posts_nav_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+	 </strong>The function displays a complete navigation set of links including a user definable "separator" with the ability to supply a the text string to be used for the "previous" and "next" links.<br />
+		The default result will produce the following string:<br />
+		<p align="center">&lt;&lt; Previous Page :: Next Page &gt;&gt;</p>
+	  <div class="params">Parameters:<ul>
+
+	  <li>A user supplied "separator" string. Default " :: "</li>
+	  <li>A user supplied "previous" string. Default "&lt;&lt; Previous Page"</li>
+	  <li>A user supplied "next" string. Default "Next Page &gt;&gt;"</li>
 	  </ul>
 	  </div>
 	  <br /><br />
