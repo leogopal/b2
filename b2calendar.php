@@ -57,7 +57,7 @@ if (isset($calendar) && ($calendar != '')) {
 // original arrow hack by Alex King
 $archive_link_m = $siteurl.'/'.$blogfilename.$querystring_start.'m'.$querystring_equal;
 $ak_date = mktime(0,0,0,$thismonth,1,$thisyear);
-$ak_previous_month = date("m", $ak_date - ((date("t", $ak_date) * 86400) + 86400));
+$ak_previous_month = date("m", $ak_date - ((date("t", $ak_date) * 86400) - 86400));
 $ak_next_month = date("m", $ak_date + ((date("t", $ak_date) * 86400) + 86400));
 $ak_first_post = mysql_query("SELECT MONTH(MIN(post_date)), YEAR(MIN(post_date)) FROM $tableposts");
 $ak_first_post = mysql_fetch_array($ak_first_post);
