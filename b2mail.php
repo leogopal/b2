@@ -4,10 +4,10 @@
 # v0.3 20020716
 
 require('b2config.php');
+require($b2inc."/b2template.functions.php");
 require($b2inc.'/b2vars.php');
 require($b2inc.'/class.POP3.php');
 require($b2inc.'/b2functions.php');
-require($b2inc."/b2template.functions.php");
 require($b2inc."/xmlrpc.inc");
 require($b2inc."/xmlrpcs.inc");
 
