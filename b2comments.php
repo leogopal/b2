@@ -18,7 +18,9 @@ if ($resultc) {
 <!-- you can start editing here -->
 
 <a name="comments"></a>
-<p><strong><span style="color: #0099CC">::</span> comments</strong></p>
+<p>&nbsp;</p>
+<div><strong>comments <span style="color: #0099CC">::</span></strong></div>
+<p>&nbsp;</p>
 
 <?php // these lines are b2's motor, do not delete
 while($rowc = mysql_fetch_object($resultc)) {
@@ -33,6 +35,7 @@ while($rowc = mysql_fetch_object($resultc)) {
 <br />
 <?php comment_date() ?> @ <?php comment_time() ?>
 </p>
+<p>&nbsp;</p>
 <!-- /comment -->
 
 
@@ -41,7 +44,8 @@ while($rowc = mysql_fetch_object($resultc)) {
 
 ?>
 
-<p><strong><span style="color: #0099CC">::</span> leave a comment</strong></p>
+<div><strong>leave a comment <span style="color: #0099CC">::</span></strong></div>
+<p>&nbsp;</p>
 
 
 <!-- form to add a comment -->
@@ -49,21 +53,40 @@ while($rowc = mysql_fetch_object($resultc)) {
 <form action="b2comments.post.php" method="post">
 	<input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
 	<input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($HTTP_SERVER_VARS["REQUEST_URI"]); ?>" />
-	<input type="text" name="author" class="textarea" value="<?php echo $comment_author ?>" size="20" tabindex="1" /><br />
-	<input type="text" name="email" class="textarea" value="<?php echo $comment_author_email ?>" size="20" tabindex="2" /><br />
-	<input type="text" name="url" class="textarea" value="<?php echo $comment_author_url ?>" size="20" tabindex="3" /><br />
-	<textarea cols="40" rows="4" name="comment" tabindex="4" class="textarea">comment</textarea><br />
+
+	<p class="commentfield">
+	name<br />
+	<input type="text" name="author" class="textarea" value="<?php echo $comment_author ?>" size="20" tabindex="1" />
+	</p>
+
+	<p class="commentfield">
+	email<br />
+	<input type="text" name="email" class="textarea" value="<?php echo $comment_author_email ?>" size="20" tabindex="2" />
+	</p>
+
+	<p class="commentfield">
+	url<br />
+	<input type="text" name="url" class="textarea" value="<?php echo $comment_author_url ?>" size="20" tabindex="3" />
+	</p>
+
+	<p class="commentfield">
+	your comment<br />
+	<textarea cols="40" rows="4" name="comment" tabindex="4" class="textarea">comment</textarea>
+	</p>
+
+	<p class="commentfield">
 	<input type="checkbox" name="comment_autobr" value="1" <?php
 	if ($autobr)
 	echo " checked=\"checked\"" ?> tabindex="6" /> Auto-BR (line-breaks become &lt;br> tags)<br />
 	<input type="submit" name="submit" class="buttonarea" value="ok" tabindex="5" />
+	</p>
 
 </form>
 
 <!-- /form -->
 
-
-<p><b><font color="#0099CC">::</font> <a href="javascript:history.go(-1)">return to the blog</a></b></p>
+<p>&nbsp;</p>
+<div><b><a href="javascript:history.go(-1)">return to the blog</a> <span style="color: #0099CC">::</span></b></div>
 
 <?php // if you delete this the sky will fall on your head
 }
