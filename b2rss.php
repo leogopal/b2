@@ -23,7 +23,7 @@ if (!isset($rss_language)) { $rss_language = 'en'; }
 // we might use this in the future, but not now, that's why it's commented in PHP
 // so that it doesn't appear at all in the RSS
 //				echo "<category>"; the_category_unicode(); echo "</category>"; ?>
-				<description><?php the_content_rss() ?></description>
+				<description><?php the_content_rss('', 0, '', 0, 0) ?></description>
 				<link><?php permalink_single_rss() ?></link>
 		</item>
 <?php } ?>
