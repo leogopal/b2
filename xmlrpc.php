@@ -792,6 +792,7 @@ $pingback_ping_sig = array(array($xmlrpcString, $xmlrpcString, $xmlrpcString));
 $pingback_ping_doc = 'gets a pingback and registers it as a comment prefixed by &lt;pingback /&gt;';
 
 function pingback_ping($m) {
+	// original code by Mort (http://mort.mine.nu:8080)
 	global $tableposts, $tablecomments, $comments_notify;
 	global $siteurl, $blogfilename, $b2_version;
 
@@ -804,9 +805,6 @@ function pingback_ping($m) {
 
 	$pagelinkedto = $m->getParam(1);
 	$pagelinkedto = $pagelinkedto->scalarval();
-
-#	$pagelinkedfrom=$args[0];
-#	$pagelinkedto=$args[1];
 
 	$messages = array(
 		htmlentities("Pingback from ".$pagelinkedfrom." to ".$pagelinkedto." registered. Keep the web talking! :-)"),
