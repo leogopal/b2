@@ -5,10 +5,10 @@ $HTTP_RAW_POST_DATA=trim($HTTP_RAW_POST_DATA);
 
 include("b2config.php");
 
-include($b2inc."/xmlrpc.inc");
-include($b2inc."/xmlrpcs.inc");
-include($b2inc."/b2functions.php");
-include($b2inc."/b2template.functions.php");
+include_once($b2inc."/xmlrpc.inc");
+include_once($b2inc."/xmlrpcs.inc");
+include_once($b2inc."/b2functions.php");
+include_once($b2inc."/b2template.functions.php");
 
 $use_cache = 1;
 $post_autobr = 1;
