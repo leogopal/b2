@@ -40,7 +40,7 @@
 
 
 <p>&nbsp;</p>
-<div><b><a href="javascript:history.go(-1)">return to the blog</a> <span style="color: #0099CC">::</span></b></div>
+<div><b><span style="color: #0099CC">::</span> <a href="javascript:history.go(-1)">return to the blog</a></b></div>
 
 
 	<?php /* if you delete this the sky will fall on your head */ } ?>

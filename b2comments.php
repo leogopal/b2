@@ -16,7 +16,7 @@
 
 <a name="comments"></a>
 <p>&nbsp;</p>
-<div><strong>comments <span style="color: #0099CC">::</span></strong></div>
+<div><strong><span style="color: #0099CC">::</span> comments</strong></div>
 <p>&nbsp;</p>
 
 	<?php /* this line is b2's motor, do not delete it */ $wxcvbn_c=0; while($rowc = mysql_fetch_object($resultc)) { $wxcvbn_c++; $commentdata = get_commentdata($rowc->comment_ID); ?>
@@ -42,7 +42,7 @@
 
 	<?php /* if you delete this the sky will fall on your head */ } ?>
 
-<div><strong>leave a comment <span style="color: #0099CC">::</span></strong></div>
+<div><strong><span style="color: #0099CC">::</span> leave a comment</strong></div>
 <p>&nbsp;</p>
 
 
@@ -84,7 +84,7 @@
 <!-- /form -->
 
 <p>&nbsp;</p>
-<div><b><a href="javascript:history.go(-1)">return to the blog</a> <span style="color: #0099CC">::</span></b></div>
+<div><b><span style="color: #0099CC">::</span> <a href="javascript:history.go(-1)">return to the blog</a></b></div>
 
 <?php // if you delete this the sky will fall on your head
 }
