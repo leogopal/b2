@@ -28,7 +28,9 @@
 &nbsp;<a href="b2edit.php" class="menutop" style="-font-weight: bold;">Post / Edit</a><?php echo $sep ?><a href="javascript:profile(<?php echo $user_ID ?>)" class="menutop">My Profile</a><?php echo $sep ?><a href="b2team.php" class="menutop">Team</a><?php
 
 if ($pagenow != "b2profile.php") {
-
+// Prevent $b2inc being maliciously set on url.
+// Note this will now fail if this file is called standalone -- that's ok
+require_once("b2config.php");
 $menu = file($b2inc."/b2menutop.txt");
 $i=0;
 $j=$menu[0];
