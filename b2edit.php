@@ -67,7 +67,7 @@ case 'post':
 		pingback($content, $post_ID);
 	}
 
-	if (!empty($HTTP_POST_VARS['trackback_url']) {
+	if (!empty($HTTP_POST_VARS['trackback_url'])) {
 		$excerpt = (strlen(strip_tags($content)) > 255) ? substr(strip_tags($content), 0, 252).'...' : strip_tags($content);
 		trackback($HTTP_POST_VARS['trackback_url'], stripslashes($post_title), $excerpt, $post_ID);
 	}
