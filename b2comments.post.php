@@ -12,6 +12,7 @@ dbconnect();
 $author = $HTTP_POST_VARS["author"];
 $email = $HTTP_POST_VARS["email"];
 $url = $HTTP_POST_VARS["url"];
+$original_comment = $comment;
 $comment = $HTTP_POST_VARS["comment"];
 $autobr = $HTTP_POST_VARS["comment_autobr"];
 $comment_post_ID = $HTTP_POST_VARS["comment_post_ID"];
@@ -80,7 +81,7 @@ if ($ok) {
 		$notify_message .= "author : $comment_author (IP: $user_ip , $user_domain)\r\n";
 		$notify_message .= "e-mail : $comment_author_email\r\n";
 		$notify_message .= "url    : $comment_author_url\r\n";
-		$notify_message .= "comment: $comment\r\n\r\n";
+		$notify_message .= "comment: \n".stripslashes($original_comment)."\r\n\r\n";
 		$notify_message .= "You can see all comments on this post there: \r\n";
 		$notify_message .= "$siteurl/$blogfilename?p=$comment_post_ID&c=1\r\n\r\n";
 
