@@ -20,10 +20,11 @@ for ($i=0; $i<count($b2varstoreset); $i += 1) {
 
 switch($action) {
 	
-case "post":
+case 'post':
 
 	$standalone = 1;
-	require_once("./b2header.php");
+	require_once('./b2header.php');
+	require_once('./pingback.php');
 
 	$post_autobr = intval($HTTP_POST_VARS["post_autobr"]);
 	$content = format_to_post($HTTP_POST_VARS["content"]);
@@ -62,6 +63,8 @@ case "post":
 	pingWeblogs($blog_ID);
 	pingCafelog($cafelogID, $post_title, $post_ID);
 	pingBlogs($blog_ID);
+	$debug=1;
+	pingback($content, $post_ID);
 
 	if ($trackback_url) {
 		$excerpt = (strlen(strip_tags($content)) > 255) ? substr(strip_tags($content), 0, 252).'...' : strip_tags($content);
