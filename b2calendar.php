@@ -1,6 +1,6 @@
 <?php
 
-// $id$
+// $Id: b2calendar.php,v 1.14 2003/02/16 21:29:09 macshack Exp $
 // b2 Calendar
 //
 // Contributed work by:
