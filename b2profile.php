@@ -245,6 +245,10 @@ case 'IErightclick':
 	$profile = 1;
 	include ('b2header.php');
 
+	$bookmarklet_tbpb  = ($use_trackback) ? '&trackback=1' : '';
+	$bookmarklet_tbpb .= ($use_pingback)  ? '&pingback=1'  : '';
+	$bookmarklet_height= ($use_trackback) ? 340 : 300;
+
 	?>
 
 	<div class="menutop">&nbsp;IE one-click bookmarklet</div>
@@ -254,7 +258,7 @@ case 'IErightclick':
 
 	<p>To have a one-click bookmarklet, just copy and paste this<br />into a new text file:</p>
 	<?php
-	$regedit = "REGEDIT4\r\n[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Post To &b2 : ".$blogname."]\r\n@=\"javascript:doc=external.menuArguments.document;Q=doc.selection.createRange().text;void(btw=window.open('".$pathserver."/b2bookmarklet.php?text='+escape(Q)+'&popupurl='+escape(doc.location.href)+'&popuptitle='+escape(doc.title),'b2bookmarklet','scrollbars=no,width=480,height=300,left=100,top=150,status=yes'));btw.focus();\"\r\n\"contexts\"=hex:31\"";
+	$regedit = "REGEDIT4\r\n[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Post To &b2 : ".$blogname."]\r\n@=\"javascript:doc=external.menuArguments.document;Q=doc.selection.createRange().text;void(btw=window.open('".$pathserver."/b2bookmarklet.php?text='+escape(Q)+'".$bookmarklet_tbpb."&popupurl='+escape(doc.location.href)+'&popuptitle='+escape(doc.title),'b2bookmarklet','scrollbars=no,width=480,height=".$bookmarklet_height.",left=100,top=150,status=yes'));btw.focus();\"\r\n\"contexts\"=hex:31\"";
 	?>
 	<pre style="margin: 20px; background-color: #cccccc; border: 1px dashed #333333; padding: 5px; font-size: 12px;"><?php echo $regedit; ?></pre>
 	<p>Save it as b2.reg, and double-click on this file in an Explorer<br />
