@@ -103,7 +103,7 @@ default:
 		if (is_writeable($file)) {
 			echo "<input type=\"submit\" name=\"submit\" class=\"search\" value=\"update template !\" tabindex=\"2\" />";
 		} else {
-			echo "<input type=\"button\" name=\"oops\" class=\"search\" value=\"(you cannot update that file/template)\" tabindex=\"2\" />";
+			echo "<input type=\"button\" name=\"oops\" class=\"search\" value=\"(you cannot update that file/template: must make it writable, e.g. CHMOD 766)\" tabindex=\"2\" />";
 		}
 		?>
 		</form>
@@ -117,13 +117,16 @@ default:
 	</table>
 	<br />
 	<?php	echo $tabletop; ?>
-	You can also <a href="b2template.php?file=b2comments.php">edit the comments' template</a>, or edit any other file (provided it's writable by the server, e.g. CHMOD 766).<br />
+	You can also edit the <a href="b2template.php?file=b2comments.php">comments' template</a> or the <a href="b2template.php?file=b2commentspopup.php">popup comments' template</a>, or edit any other file (provided it's writable by the server, e.g. CHMOD 766).<br />
 	<br />
 	To edit a file, type its name here:
 	<form name="file" action="b2template.php" method="get">
 	<input type="text" name="file" />
 	<input type="submit" name="submit"  class="search" value="go" />
 	</form>
+	<br />
+	Note: of course, you can also edit the files/templates in your text editor and upload them. This online editor is only meant to be used when you don't have access to a text editor...
+	
 <?php	echo $tablebottom; ?>
 	
 
