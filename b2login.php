@@ -4,16 +4,18 @@ require("./b2config.php");
 require("$b2inc/b2functions.php");
 require("$b2inc/b2vars.php");
 
-function add_magic_quotes($array) {
-	foreach ($array as $k => $v) {
-		if (is_array($v)) {
-			$array[$k] = add_magic_quotes($v);
-		} else {
-			$array[$k] = addslashes($v);
+if (!function_exists('add_magic_quotes')) {
+	function add_magic_quotes($array) {
+		foreach ($array as $k => $v) {
+			if (is_array($v)) {
+				$array[$k] = add_magic_quotes($v);
+			} else {
+				$array[$k] = addslashes($v);
+			}
 		}
-	}
-	return $array;
-} 
+		return $array;
+	} 
+}
 
 if (!get_magic_quotes_gpc()) {
 	$HTTP_GET_VARS    = add_magic_quotes($HTTP_GET_VARS);
