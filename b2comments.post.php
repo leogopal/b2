@@ -102,8 +102,8 @@ if ($ok) {
 		$notify_message .= "url    : $comment_author_url\r\n";
 		$notify_message .= "comment: \n".stripslashes($original_comment)."\r\n\r\n";
 		$notify_message .= "You can see all comments on this post there: \r\n";
-		$notify_message .= "$siteurl/$blogfilename?p=$comment_post_ID&c=1\r\n\r\n";
-
+		$notify_message .= $siteurl.'/'.$blogfilename.$querystring_start.'p'.$querystring_equal.$comment_post_ID.$querystring_separator.'c'.$querystring_equal.'1'."\r\n\r\n";
+ 
 		$postdata = get_postdata($comment_post_ID);
 		$authordata = get_userdata($postdata["Author_ID"]);
 		$recipient = $authordata["user_email"];
