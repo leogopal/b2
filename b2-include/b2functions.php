@@ -1056,15 +1056,15 @@ function pingback($content, $post_ID) {
 */
 
 function balanceTags($text) {
-  global $use_balanceTags;
-  if ($use_balanceTags == 0) {
-	  return($text);
-  } else {
+	global $use_balanceTags;
+	if ($use_balanceTags == 0) {
+		return($text);
+	}
 
-  $tagstack = array();
-  $stacksize = 0;
-  $tagqueue = '';
-  $newtext = '';
+	$tagstack = array();
+	$stacksize = 0;
+	$tagqueue = '';
+	$newtext = '';
 
 	# b2 bug fix for comments - in case you REALLY meant to type '< !--'
 	$text = str_replace('< !--', '<    !--', $text);
@@ -1073,178 +1073,178 @@ function balanceTags($text) {
 	$text = preg_replace('#<([0-9]{1})#', '&lt;$1', $text);
 
 
- 	while (preg_match("/<(\/?\w*)\s*([^>]*)>/",$text,$regex)) {
-    $newtext = $newtext . $tagqueue;
-    
-		$i = strpos($text,$regex[0]);
-		$l = strlen($tagqueue) + strlen($regex[0]);
+	while (preg_match("/<(\/?\w*)\s*([^>]*)>/",$text,$regex)) {
+		$newtext = $newtext . $tagqueue;
+		
+			$i = strpos($text,$regex[0]);
+			$l = strlen($tagqueue) + strlen($regex[0]);
 
-    // clear the shifter
-    $tagqueue = '';
-   
-    // Pop or Push
+		// clear the shifter
+		$tagqueue = '';
+
+		// Pop or Push
 		if ($regex[1][0] == "/") { // End Tag
-      $tag = strtolower(substr($regex[1],1));
-      
-      // if too many closing tags
-      if($stacksize <= 0) { 
-        $tag = '';
-        //or close to be safe $tag = '/' . $tag;
-      }
-      // if stacktop value = tag close value then pop
-      else if ($tagstack[$stacksize - 1] == $tag) { // found closing tag
-        $tag = '</' . $tag . '>'; // Close Tag
-        // Pop
-        array_pop ($tagstack);
-        $stacksize--;
-      } else { // closing tag not at top, search for it
-        for ($j=$stacksize-1;$j>=0;$j--) {
-          if ($tagstack[$j] == $tag) {
-            // add tag to tagqueue
-            for ($k=$stacksize-1;$k>=$j;$k--){
-               $tagqueue .= '</' . array_pop ($tagstack) . '>';
-               $stacksize--;
-            }
-            break;
-          }
-        }
-          $tag = '';
-      }
-    }	else { // Begin Tag
-      $tag = strtolower($regex[1]);
+			$tag = strtolower(substr($regex[1],1));
 
-      // Tag Cleaning
-      if(checkTag($tag)) {
-        // Push if not img or br or hr
-        if($tag != 'br' && $tag != 'img' && $tag != 'hr') {
-          $stacksize = array_push ($tagstack, $tag);
-        }
+			// if too many closing tags
+			if($stacksize <= 0) { 
+				$tag = '';
+				//or close to be safe $tag = '/' . $tag;
+			}
+			// if stacktop value = tag close value then pop
+			else if ($tagstack[$stacksize - 1] == $tag) { // found closing tag
+				$tag = '</' . $tag . '>'; // Close Tag
+				// Pop
+				array_pop ($tagstack);
+				$stacksize--;
+			} else { // closing tag not at top, search for it
+				for ($j=$stacksize-1;$j>=0;$j--) {
+					if ($tagstack[$j] == $tag) {
+					// add tag to tagqueue
+						for ($k=$stacksize-1;$k>=$j;$k--){
+							$tagqueue .= '</' . array_pop ($tagstack) . '>';
+							$stacksize--;
+						}
+						break;
+					}
+				}
+				$tag = '';
+			}
+		} else { // Begin Tag
+			$tag = strtolower($regex[1]);
 
-        // Attributes
-        // $attributes = $regex[2];
-        $attributes = cleanAttributes($regex[2]);
-        if($attributes) {
-          $attributes = " " . $attributes;
-        }
+			// Tag Cleaning
+			if(checkTag($tag)) {
+				// Push if not img or br or hr
+				if($tag != 'br' && $tag != 'img' && $tag != 'hr') {
+					$stacksize = array_push ($tagstack, $tag);
+				}
 
-        $tag = "<$tag" . $attributes . ">";
-      } else {
-        $tag = '';
-      }
-    }
+				// Attributes
+				// $attributes = $regex[2];
+				$attributes = cleanAttributes($regex[2]);
+				if($attributes) {
+					// fix to avoid CSS defacements
+					if ($disable_styles) {
+						$attributes = str_replace('style=', 'title=', $attributes);
+						$attributes = str_replace('class=', 'title=', $attributes);
+						$attributes = str_replace('id=', 'title=', $attributes);
+					}
+					$attributes = ' '.$attributes;
+				}
 
- 		$newtext .= substr($text,0,$i) . $tag;
+				$tag = '<'.$tag.$attributes.'>';
+			} else {
+				$tag = '';
+			}
+		}
+
+		$newtext .= substr($text,0,$i) . $tag;
 		$text = substr($text,$i+$l);
-  }  
+	}  
 
-  // Clear Tag Queue
-  $newtext = $newtext . $tagqueue;
-  
-  // Add Remaining text
-  $newtext .= $text;
+	// Clear Tag Queue
+	$newtext = $newtext . $tagqueue;
 
-  // Empty Stack
-  while($x = array_pop($tagstack)) {
-    $newtext = $newtext . '</' . $x . '>'; // Add remaining tags to close      
-  }
+	// Add Remaining text
+	$newtext .= $text;
+
+	// Empty Stack
+	while($x = array_pop($tagstack)) {
+		$newtext = $newtext . '</' . $x . '>'; // Add remaining tags to close      
+	}
 
 	# b2 fix for the bug with HTML comments
 	$newtext = str_replace("< !--","<!--",$newtext);
 	$newtext = str_replace("<    !--","< !--",$newtext);
 
-  return $newtext;
-
-  }
+	return $newtext;
 }
 
-
-
 function checkTag($tag) {
-  $ok = 1;
+	$ok = 1;
 
-  // the using ifs are 25% faster than declaring an array and using in_array()
-  if ($tag == 'applet' || $tag == 'base' || $tag == 'body' || $tag == 'embed' || $tag == 'frame' || $tag == 'frameset' || $tag == 'html' || $tag == 'iframe' || $tag == 'layer' || $tag == 'meta' || $tag == 'object' || $tag == 'script' || $tag == 'style') {
-    $ok = 0;
-  }
+	// the using ifs are 25% faster than declaring an array and using in_array()
+	if ($tag == 'applet' || $tag == 'base' || $tag == 'body' || $tag == 'embed' || $tag == 'frame' || $tag == 'frameset' || $tag == 'html' || $tag == 'iframe' || $tag == 'layer' || $tag == 'meta' || $tag == 'object' || $tag == 'script' || $tag == 'style') {
+	$ok = 0;
+	}
 
-  return $ok;
+	return $ok;
 }
 
 function cleanAttributes($attributes) {
 
-	return($attributes);
+	return($attributes); // I forgot why this got deactivated, actually
 
-	if (1==2) {
+	$name = 1; // if we're in a name or a value
+	$quote = 0; // quote open or not
+	$new ='';
+	$attr = '';
+	$i = 0;
+	$l = 0;
 
-  $name = 1; // if we're in a name or a value
-  $quote = 0; // quote open or not
-  $new ='';
-  $attr = '';
-  $i = 0;
-  $l = 0;
- 
-  while($attributes) {
-    if($name) {
-      $found = preg_match('/([^\s=]+)\s*([=]*)/i', $attributes, $regex);
-      
-      $attr .= strtolower($regex[1]);
-  		$i = strpos($attributes,$regex[0]);
-      
-      //$new .= "[name]$attr" . '[/name]';
-      
-      // DEBUG
-      //echo "<fieldset><legend>name</legend>attributes: [$attributes]<br>regex[1]: [$regex[1]]</fieldset><br>";
+	while($attributes) {
+		if($name) {
+			$found = preg_match('/([^\s=]+)\s*([=]*)/i', $attributes, $regex);
 
-	  	$l = strlen($regex[0]);
+			$attr .= strtolower($regex[1]);
+			$i = strpos($attributes,$regex[0]);
 
-      // strip quotes in attribute names
-      $attr = str_replace('"', '', $attr);
-      
-      if($attr == 'style' || $attr == 'type' || preg_match('/^on/', $attr)) { // allow src and hrefs
-        $attr = ' ';
-      } else {
-        if($regex[2]) {
-          $attr .= '=';
-          $name = 0;
-        } else {
-          if(substr($attributes,$i+$l)) $attr .= ' ';
-        }
-      }
-    } else { //var
-      $found = preg_match('/("?)([^\s"]+)("?)/i', $attributes, $regex);
-      $attr = $regex[0];
-  		$i = strpos($attributes,$regex[0]);
-	  	$l = strlen($regex[0]);
+			//$new .= "[name]$attr" . '[/name]';
 
-      //DEBUG
-      //echo "<fieldset><legend>var</legend>found: $found<br>attributes: [$attributes]<br>regex[2]: [$regex[2]]<br>";
-      //print_r($regex);
-      //echo "</fieldset><br>";
-      
-      if($regex[1]) $quote ? !$quote : $quote;
-      if($regex[3]) $quote ? !$quote : $quote;
+			// DEBUG
+			//echo "<fieldset><legend>name</legend>attributes: [$attributes]<br>regex[1]: [$regex[1]]</fieldset><br>";
 
-      if(preg_match('/javascript:/', $attr)) {
-        $attr = '""';
-      }
+			$l = strlen($regex[0]);
 
-      // sets to name if closed quote
-      $quote ? $name = 0 : $name = 1;
-    }
+			// strip quotes in attribute names
+			$attr = str_replace('"', '', $attr);
 
- 		$new .= substr($attributes,0,$i) . $attr;
-    $attr = '';
+			if($attr == 'style' || $attr == 'type' || preg_match('/^on/', $attr)) { // allow src and hrefs
+				$attr = ' ';
+			} else {
+				if($regex[2]) {
+					$attr .= '=';
+					$name = 0;
+				} else {
+					if(substr($attributes,$i+$l)) $attr .= ' ';
+				}
+			}
+		} else { //var
+			$found = preg_match('/("?)([^\s"]+)("?)/i', $attributes, $regex);
+			$attr = $regex[0];
+			$i = strpos($attributes,$regex[0]);
+			$l = strlen($regex[0]);
+
+			//DEBUG
+			//echo "<fieldset><legend>var</legend>found: $found<br>attributes: [$attributes]<br>regex[2]: [$regex[2]]<br>";
+			//print_r($regex);
+			//echo "</fieldset><br>";
+
+			if($regex[1]) $quote ? !$quote : $quote;
+			if($regex[3]) $quote ? !$quote : $quote;
+
+			if(preg_match('/javascript:/', $attr)) {
+				$attr = '""';
+			}
+
+			// sets to name if closed quote
+			$quote ? $name = 0 : $name = 1;
+		}
+
+		$new .= substr($attributes,0,$i) . $attr;
+		$attr = '';
 		$attributes = substr($attributes,$i+$l);
-  }
 
-  //allow badly formed attributes?  i don't think so
-  //$new .= $attributes;
-
-  // open quote
-  $quote ? $new .= '"' : $new ;
-
-  return $new;
 	}
+
+	//allow badly formed attributes?  i don't think so
+	//$new .= $attributes;
+
+	// open quote
+	$quote ? $new .= '"' : $new ;
+
+	return $new;
 }
 
 ?>
