@@ -1,7 +1,7 @@
 <?php					// -*-c++-*-
 // by Edd Dumbill (C) 1999-2001
 // <edd@usefulinc.com>
-// $Id: xmlrpc.inc,v 1.3 2002/08/11 20:08:41 michelvaldrighi Exp $
+// $Id: xmlrpc.inc,v 1.4 2002/08/11 20:57:25 michelvaldrighi Exp $
 
 
 # additional fixes for case of missing xml extension file by Michel Valdrighi <m@tidakada.com>
@@ -70,7 +70,7 @@ if (!function_exists('xml_parser_create')) {
 	define("CANUSEXMLRPC", 1);
 }
 
-if (constant("CANUSEXMLRPC") == 1) {
+if (CANUSEXMLRPC == 1) {
 
 $xmlrpcI4="i4";
 $xmlrpcInt="int";
