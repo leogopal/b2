@@ -464,7 +464,13 @@ function get_commentdata($comment_ID,$no_cache=0) { // less flexible, but saves 
 		$myrow['comment_date']=$rowc->comment_date;
 		$myrow['comment_content']=$rowc->comment_content;
 		$myrow['comment_karma']=$rowc->comment_karma;
-		$myrow['comment_is_trackback'] = (strstr($myrow['comment_content'], '<trackback />')) ? 1 : 0;
+		if (strstr($myrow['comment_content'], '<trackback />')) {
+			$myrow['comment_type'] = 'trackback';
+		} elseif (strstr($myrow['comment_content'], '<pingback />')) {
+			$myrow['comment_type'] = 'pingback';
+		} else {
+			$myrow['comment_type'] = 'comment';
+		}
 	}
 	return($myrow);
 }
@@ -916,9 +922,9 @@ function pingback($content, $post_ID) {
 		$port = isset($bits['port']) ? $bits['port'] : 80;
 
 		// Try to connect to the server at $host
-		$fp = fsockopen($host, $port, $errno, $errstr, $timelimit);
+		$fp = fsockopen($host, $port, $errno, $errstr, 30);
 		if (!$fp) {
-			debug_fwrite($log, 'Couldn\'t open a conection to '.$host."\n\n");
+			debug_fwrite($log, 'Couldn\'t open a connection to '.$host."\n\n");
 			continue;
 		}
 
