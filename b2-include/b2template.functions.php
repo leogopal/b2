@@ -468,17 +468,19 @@ function dropdown_cats($optionall = 1, $all = "All") {
 }
 
 // out of the b2 loop
-function list_cats($optionall = 1, $all = "All") {
+function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_order = 'asc', $file = 'blah') {
 	global $tablecategories,$querycount;
 	global $pagenow;
-	$query="SELECT * FROM $tablecategories";
+	$file = ($file == 'blah') ? $pagenow;
+	$sort_column = 'cat_'.$sort_column;
+	$query="SELECT * FROM $tablecategories WHERE cat_ID > 0 ORDER BY $sort_column $sort_order";
 	$result=mysql_query($query);
 	$querycount++;
 	if (intval($optionall) == 1) {
-		echo "\t<a href=\"$pagenow?cat=all\">$all</a>\n";
+		echo "\t<a href=\"$file?cat=all\">$all</a><br />\n";
 	}
 	while($row = mysql_fetch_object($result)) {
-		echo "\t<a href=\"$pagenow?cat=".$row->cat_ID."\">";
+		echo "\t<a href=\"$file?cat=".$row->cat_ID."\">";
 		echo stripslashes($row->cat_name)."</a><br />\n";
 	}
 }
@@ -490,7 +492,7 @@ function list_cats($optionall = 1, $all = "All") {
 
 /***** Comment tags *****/
 
-function comments_number($zero="no comment", $one="1 comment", $more="% comments") {
+function comments_number($zero='no comment', $one='1 comment', $more='% comments') {
 	// original hack by dodo@regretless.com
 	global $id,$postdata,$tablecomments,$c,$querycount,$cache_commentsnumber,$use_cache;
 	if (empty($cache_commentsnumber[$id]) OR (!$use_cache)) {
@@ -502,20 +504,49 @@ function comments_number($zero="no comment", $one="1 comment", $more="% comments
 	} else {
 		$number = $cache_commentsnumber[$id];
 	}
-	if($number == 0)	echo $zero;
-	if($number == 1)	echo $one;
-	if($number  > 1) {
-		$n="$number";
-		$more=eregi_replace("\%",$n,$more);
-		echo $more;
+	if ($number == 0) {
+		$blah = $zero;
+	} elseif ($number == 1) {
+		$blah = $one;
+	} elseif ($number  > 1) {
+		$n = $number;
+		$more=str_replace('%', $n, $more);
+		$blah = $more;
 	}
+	echo $blah;
 }
 
-function comments_link($file="") {
+function comments_link($file='') {
 	global $id,$pagenow;
-	if ($file == "")	$file = $pagenow;
-	if ($file == "/")	$file = "";
+	if ($file == '')	$file = $pagenow;
+	if ($file == '/')	$file = '';
 	echo $file."?p=$id&amp;c=1#comments";
+}
+
+function comments_popup_script($width=400, $height=400, $file='b2commentspopup.php') {
+	global $b2commentspopupfile, $b2commentsjavascript;
+	$b2commentspopupfile = $file;
+	$b2commentsjavascript = 1;
+	$javascript = "<script language=\"javascript\" type=\"text/javascript\">\n<!--\nfunction b2comments (macagna) {\n    window.open(macagna, '_blank', 'width=$width,height=$height,scrollbars=yes,status=yes');\n}\n//-->\n</script>\n";
+	echo $javascript;
+}
+
+function comments_popup_link($zero='no comment', $one='1 comment', $more='% comments', $CSSclass='') {
+	global $b2commentspopupfile, $b2commentsjavascript;
+	echo '<a href="';
+	if ($b2commentsjavascript) {
+		comments_link($b2commentspopupfile);
+		echo '" onclick="b2comments(this.href); return false"';
+	} else {
+		// if comments_popup_script() is not in the template, display simple comment link
+		comments_link();
+	}
+	if (!empty($CSSclass)) {
+		echo ' class="'.$CSSclass.'"';
+	}
+	echo '>';
+	comments_number($zero, $one, $more);
+	echo '</a>';
 }
 
 function comment_ID() {
@@ -523,7 +554,7 @@ function comment_ID() {
 }
 
 function comment_author() {
-	global $commentdata;	echo stripslashes($commentdata["comment_author"]);
+	global $commentdata;	echo stripslashes($commentdata['comment_author']);
 }
 
 function comment_author_email() {
