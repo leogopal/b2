@@ -244,14 +244,24 @@ function convert_smilies($content) {
 	return ($content);
 }
 
-function antispambot($emailaddy) {
+function zeroise($number, $threshold) {
+	$l=strlen($number);
+	if ($l<$threshold)
+		for ($i=0; $i<($threshold-$l); $i=$i+1) { $number='0'.$number;	}
+	return($number);
+}
+
+function antispambot($emailaddy, $mailto=0) {
 	$emailNOSPAMaddy = '';
 	srand ((float) microtime() * 1000000);
 	for ($i = 0; $i < strlen($emailaddy); $i = $i + 1) {
-		if (floor(rand(0,1))) {
-			$emailNOSPAMaddy .= "&#".ord(substr($emailaddy,$i,1)).";";
-		} else {
+		$j = floor(rand(0, 1+$mailto));
+		if ($j==0) {
+			$emailNOSPAMaddy .= '&#'.ord(substr($emailaddy,$i,1)).';';
+		} elseif ($j==1) {
 			$emailNOSPAMaddy .= substr($emailaddy,$i,1);
+		} elseif ($j==2) {
+			$emailNOSPAMaddy .= '%'.zeroise(dechex(ord(substr($emailaddy, $i, 1))), 2);
 		}
 	}
 	$emailNOSPAMaddy = str_replace('@','&#64;',$emailNOSPAMaddy);
@@ -613,9 +623,7 @@ function redirect_js($url,$title="...") {
 function pingWeblogs($blog_ID="1") {
 	// original function by Dries Buytaert for Drupal
 	global $use_weblogsping, $blogname,$siteurl,$blogfilename;
-
 	if ((!(($blogname=="my weblog") && ($siteurl=="http://yourdomain.com") && ($blogfilename=="b2.php"))) && (!preg_match("/localhost\//",$siteurl)) && ($use_weblogsping)) {
-
 		$client = new xmlrpc_client("/RPC2", "rpc.weblogs.com", 80);
 		$message = new xmlrpcmsg("weblogUpdates.ping", array(new xmlrpcval($blogname), new xmlrpcval($siteurl."/".$blogfilename)));
 		$result = $client->send($message);
@@ -632,7 +640,6 @@ function pingWeblogs($blog_ID="1") {
 function pingCafelog($cafelogID,$title='',$p='') {
 	global $use_cafelogping, $blogname, $siteurl, $blogfilename;
 	if ((!(($blogname=="my weblog") && ($siteurl=="http://yourdomain.com") && ($blogfilename=="b2.php"))) && (!preg_match("/localhost\//",$siteurl)) && ($use_cafelogping) && ($cafelogID != '')) {
-
 		$client = new xmlrpc_client("/xmlrpc.php", "cafelog.tidakada.com", 80);
 		$message = new xmlrpcmsg("b2.ping", array(new xmlrpcval($cafelogID), new xmlrpcval($title), new xmlrpcval($p)));
 		$result = $client->send($message);
@@ -645,6 +652,25 @@ function pingCafelog($cafelogID,$title='',$p='') {
 	}
 }
 
+// pings Blo.gs
+function pingBlogs($blog_ID="1") {
+	global $use_weblogsping, $blogname,$siteurl,$blogfilename;
+	if ((!(($blogname=='my weblog') && ($siteurl=='http://yourdomain.com') && ($blogfilename=='b2.php'))) && (!preg_match('/localhost\//',$siteurl)) && ($use_weblogsping)) {
+		$client = new xmlrpc_client('/', 'ping.blo.gs', 80);
+		if (@filesize($siteurl.'/b2rss.xml') > 150) {
+			$message = new xmlrpcmsg('weblogUpdates.extendedPing', array(new xmlrpcval($blogname), new xmlrpcval($siteurl.'/'.$blogfilename), new xmlrpcval($siteurl."/".$blogfilename), new xmlrpcval($siteurl.'/b2rss.xml')));
+		} else {
+			$message = new xmlrpcmsg('weblogUpdates.ping', array(new xmlrpcval($blogname), new xmlrpcval($siteurl.'/'.$blogfilename)));
+		}
+		$result = $client->send($message);
+		if (!$result || $result->faultCode()) {
+			return(false);
+		}
+		return(true);
+	} else {
+		return(false);
+	}
+}
 
 
 // updates the RSS feed !
