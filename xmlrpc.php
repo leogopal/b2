@@ -904,7 +904,7 @@ function pingback_ping($m) {
 
 	dbconnect();
 
-	$log = debug_fopen('./xmlrpc.log', 'a');
+	$log = debug_fopen('./xmlrpc.log', 'w');
 
 	$title='';
 
@@ -917,7 +917,7 @@ function pingback_ping($m) {
 	$pagelinkedfrom = str_replace('&amp;', '&', $pagelinkedfrom);
 	$pagelinkedto = preg_replace('#&([^amp\;])#is', '&amp;$1', $pagelinkedto);
 
-	debug_fwrite($log, 'BEGIN '.time()."\n\n");
+	debug_fwrite($log, 'BEGIN '.time().' - '.date('Y-m-d H:i:s')."\n\n");
 	debug_fwrite($log, 'Page linked from: '.$pagelinkedfrom."\n");
 	debug_fwrite($log, 'Page linked to: '.$pagelinkedto."\n");
 
@@ -987,22 +987,26 @@ function pingback_ping($m) {
 
 				$puntero = 4096;
 				while($linea = fread($fp, $puntero)) {
+					$linea = strip_tags($linea, '<title><a>');
+					$linea = strip_all_but_one_link($linea, $pagelinkedto);
 					$linea = preg_replace('#&([^amp\;])#is', '&amp;$1', $linea);
 					if (empty($matchtitle)) {
 						preg_match('|<title>([^<]*?)</title>|is', $linea, $matchtitle);
 					}
-					$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
-					$pos3 = strpos(strip_tags($linea, '<a>'), str_replace('http://www.', 'http://', $pagelinkedto));
-
+					$pos2 = strpos($linea, $pagelinkedto);
+					$pos3 = strpos($linea, str_replace('http://www.', 'http://', $pagelinkedto));
 					if (is_integer($pos2) || is_integer($pos3)) {
+						debug_fwrite($log, 'The page really links to us :)'."\n");
 						$pos4 = (is_integer($pos2)) ? $pos2 : $pos3;
-						$start = $pos4-60;
-						$context = substr(strip_tags($linea, '<a>'), $start, 150);
-						$context = strip_tags($context);
+						$start = $pos4-100;
+						$context = substr($linea, $start, 250);
 						$context = str_replace("\n", ' ', $context);
 						$context = str_replace('&amp;', '&', $context);
+					} else {
+						debug_fwrite($log, 'The page doesn\'t link to us, here\'s an excerpt :'."\n\n".$linea."\n\n");
 					}
 				}
+				debug_fwrite($log, '*****'."\n\n");
 				fclose($fp);
 
 				if (!empty($context)) {
