@@ -83,11 +83,12 @@ $daysinmonth = intval(date('t', mktime(0,0,0,$thismonth,1,$thisyear)));
 $datestartofmonth = $thisyear.'-'.$thismonth.'-01';
 $dateendofmonth = $thisyear.'-'.$thismonth.'-'.$daysinmonth;
 
+// caution: offset bug inside
 $calendarblah = get_weekstartend($datestartofmonth, $start_of_week);
 if (mysql2date('w', $datestartofmonth) == $start_of_week) {
 	$calendarfirst = $calendarblah['start']+1;
 } else {
-	$calendarfirst = $calendarblah['end']-600000;
+	$calendarfirst = $calendarblah['end']-604799;
 }
 
 $calendarblah = get_weekstartend($dateendofmonth, $end_of_week);
@@ -100,6 +101,10 @@ if (mysql2date('w', $dateendofmonth) == $end_of_week) {
 $beforethismonth = zeroise(intval($thismonth)-1,2);
 $afterthismonth = zeroise(intval($thismonth)-1,2);
 
+// here the offset bug is corrected
+if ((intval(date('d', $calendarfirst)) > 1) && (intval(date('m', $calendarfirst)) == intval($thismonth))) {
+	$calendarfirst = $calendarfirst - 604800;
+}
 
 
 // displays everything
