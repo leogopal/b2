@@ -201,8 +201,8 @@ elseif (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
 	$limits = '';
 }
 
-if ((!empty($poststart)) && (!empty($postend)) && ($postend > $poststart)) {
-	if ($what_to_show == 'posts') {
+if ( !empty($postend) && ($postend > $poststart)) {
+	if ($what_to_show == 'posts' || ($what_to_show == 'paged' && (!$page))) {
 		$poststart = intval($poststart);
 		$postend = intval($postend);
 		$posts = $postend - $poststart;

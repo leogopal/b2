@@ -23,11 +23,11 @@ if (!$poststart) {
 	$postend=$posts;
 }
 
-$nextXstart=$postend+1;
+$nextXstart=$postend;
 $nextXend=$postend+$posts;
 
-$previousXstart=($poststart-$posts)-1;
-$previousXend=$poststart-1;
+$previousXstart=($poststart-$posts);
+$previousXend=$poststart;
 if ($previousXstart < 0) {
 	$previousXstart=0;
 	$previousXend=$posts;
