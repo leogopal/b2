@@ -290,12 +290,12 @@ function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file
 
 function link_pages($before='<br />', $after='<br />', $next_or_number='number', $nextpagelink='next page', $previouspagelink='previous page', $pagelink='%', $more_file='') {
 	global $id,$page,$numpages,$multipage,$more;
-	global $HTTP_SERVER_VARS;
+	global $blogfilename;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($more_file != '') {
-		$file=$more_file;
+		$file = $more_file;
 	} else {
-		$file=$HTTP_SERVER_VARS['SCRIPT_NAME'];
+		$file = $blogfilename;
 	}
 	if (($multipage)) { // && ($more)) {
 		echo $before;
@@ -654,7 +654,9 @@ function comment_author_url() {
 	$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
 	// convert & into &amp;
 	$url = preg_replace('#&([^amp\;])#is', '&amp;$1', $url);
-	echo $url;
+	if ($url != 'http://url') {
+		echo $url;
+	}
 }
 
 function comment_author_email_link($linktext='', $before='', $after='') {
@@ -671,8 +673,9 @@ function comment_author_email_link($linktext='', $before='', $after='') {
 function comment_author_url_link($linktext='', $before='', $after='') {
 	global $commentdata;
 	$url = trim(stripslashes($commentdata['comment_author_url']));
+	$url = preg_replace('#&([^amp\;])#is', '&amp;$1', $url);
 	$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
-	if ((!empty($url)) && ($url != 'http://')) {
+	if ((!empty($url)) && ($url != 'http://') && ($url != 'http://url')) {
 		$display = ($linktext != '') ? $linktext : stripslashes($url);
 		echo $before;
 		echo '<a href="'.stripslashes($url).'" target="_blank">'.$display.'</a>';
