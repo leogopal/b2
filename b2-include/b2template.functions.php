@@ -416,20 +416,21 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 
 
 function next_posts() { // original by cfactor at cooltux.org
-	global $poststart, $postend, $blogfilename, $posts, $m, $cat;
-	global $posts_per_page;
+	global $HTTP_SERVER_VARS, $blogfilename, $p, $page, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
-	if (empty($m) && empty($cat)) {
-		$poststart_t = $postend;
-		if (empty($postend)) $poststart_t = $posts_per_page;
-		$postend_t = $poststart_t + $posts_per_page;
-		echo $blogfilename.$querystring_start.'poststart'.$querystring_equal.$poststart_t.$querystring_separator.'postend'.$querystring_equal.$postend_t;
+	if (empty($p) && ($what_to_show == 'paged')) {
+		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
+		$qstr = preg_replace("/&page=\d{0,}/","",$qstr);
+		$qstr = preg_replace("/page=\d{0,}/","",$qstr);
+		$nextpage = intval($page) + 1;
+		echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'page'.$querystring_equal.$nextpage;
 	}
 }
 
 function next_posts_link($label='Next Page >>') {
-	global $m, $cat;
-	if (empty($m) && empty($cat)) {
+	global $p, $result, $posts_per_page, $what_to_show;
+	$num_rows = mysql_num_rows($result);
+	if (empty($p) && ($num_rows >= $posts_per_page) && ($what_to_show == 'paged')) {
 		echo '<a href="';
 		echo next_posts();
 		echo '">'. htmlspecialchars($label) .'</a>';
@@ -438,23 +439,33 @@ function next_posts_link($label='Next Page >>') {
 
 
 function previous_posts() { // original by cfactor at cooltux.org
-	global $poststart, $postend, $blogfilename, $posts, $m, $cat;
-	global $posts_per_page;
+	global $HTTP_SERVER_VARS, $blogfilename, $p, $page, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
-	if (empty($m) && empty($cat)) {
-		$poststart_t = $poststart - $posts_per_page;
-		if ($poststart_t < 0) $poststart_t = 0;
-		$postend_t = $poststart_t + $posts_per_page;
-		echo $blogfilename.$querystring_start.'poststart'.$querystring_equal.$poststart_t.$querystring_separator.'postend'.$querystring_equal.$postend_t;
+	if (empty($p) && ($what_to_show == 'paged')) {
+		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
+		$qstr = preg_replace("/&page=\d{0,}/","",$qstr);
+		$qstr = preg_replace("/page=\d{0,}/","",$qstr);
+		$nextpage = intval($page) - 1;
+		if ($nextpage < 1) $nextpage = 1;
+		echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'page'.$querystring_equal.$nextpage;
 	}
 } 
 
 function previous_posts_link($label='<< Previous Page') {
-	global $poststart, $m, $cat;
-	if (empty($m) && empty($cat) && ($poststart > 0)) {
+	global $p, $page, $what_to_show;
+	if (empty($p)  && ($page > 1) && ($what_to_show == 'paged')) {
 		echo '<a href="';
 		echo previous_posts();
 		echo '">'.  htmlspecialchars($label) .'</a>';
+	}
+}
+
+function posts_nav_link($sep=' :: ', $prelabel='<< Previous Page', $nxtlabel='Next Page >>') {
+	global $p, $what_to_show;
+	if (empty($p) && ($what_to_show == 'paged')) {
+		previous_posts_link($prelabel);
+		echo $sep;
+		next_posts_link($nxtlabel);
 	}
 }
 

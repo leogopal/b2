@@ -89,6 +89,10 @@ default:
 				if ($i == "posts")
 				echo " selected";
 				?>>posts</option>
+				<option value="paged" <?php
+				if ($i == "paged")
+				echo " selected";
+				?>>posts paged</option>
 				</select>
 				</td>
 			</tr>
