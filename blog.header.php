@@ -32,6 +32,12 @@ $b2varstoreset = array('m','p','posts','w','c','withcomments','s','search','exac
 		}
 	}
 
+function addslashes_gpc($gpc) {
+	if (!get_magic_quotes_gpc()) {
+		$gpc = addslashes($gpc);
+	}
+	return($gpc);
+}
 
 /* Connecting to the db */
 dbconnect();
@@ -60,31 +66,35 @@ if ($posts)
 
 // if a month is specified in the querystring, load that month
 if ($m != '') {
-	$where .= ' AND YEAR(post_date)=\''.substr($m,0,4).'\'';
+	$m = ''.intval($m);
+	$where .= ' AND YEAR(post_date)='.substr($m,0,4);
 	if (strlen($m)>5)
-		$where .= ' AND MONTH(post_date)=\''.substr($m,4,2).'\'';
+		$where .= ' AND MONTH(post_date)='.substr($m,4,2);
 	if (strlen($m)>7)
-		$where .= ' AND DAYOFMONTH(post_date)=\''.substr($m,6,2).'\'';
+		$where .= ' AND DAYOFMONTH(post_date)='.substr($m,6,2);
 	if (strlen($m)>9)
-		$where .= ' AND HOUR(post_date)=\''.substr($m,8,2).'\'';
+		$where .= ' AND HOUR(post_date)='.substr($m,8,2);
 	if (strlen($m)>11)
-		$where .= ' AND MINUTE(post_date)=\''.substr($m,10,2).'\'';
+		$where .= ' AND MINUTE(post_date)='.substr($m,10,2);
 	if (strlen($m)>13)
-		$where .= ' AND SECOND(post_date)=\''.substr($m,12,2).'\'';
+		$where .= ' AND SECOND(post_date)='.substr($m,12,2);
 
 }
 
 if ($w != '') {
-	$where .= ' AND WEEK(post_date,1)=\''.$w.'\'';
+	$w = ''.intval($w);
+	$where .= ' AND WEEK(post_date,1)='.$w;
 }
 
 // if a post number is specified, load that post
 if (($p != '') && ($p != 'all')) {
+	$p = intval($p);
 	$where = ' AND ID = '.$p;
 }
 
 // if a search pattern is specified, load the posts that match
 if (isset($s)) {
+	$s = addslashes_gpc($s);
 	$search = ' AND (';
 	// puts spaces instead of commas
 	$s = preg_replace('/, +/', '', $s);
@@ -114,6 +124,7 @@ if ((!isset($cat)) || ($cat == 'all') || ($cat == '0')) {
 	$whichcat='';
 } else {
 	$cat = ''.urldecode($cat).'';
+	$cat = addslashes_gpc($cat);
 	if (stristr($cat,'-')) {
 		$eq = '!=';
 		$andor = 'AND';
@@ -134,16 +145,17 @@ if ((!isset($cat)) || ($cat == 'all') || ($cat == '0')) {
 if ((!isset($author)) || ($author == 'all') || ($cat == '0')) {
 	$whichauthor='';
 } else {
-	if (stristr($author,'-')) {
+	$author = intval($author);
+	if (stristr($author, '-')) {
 		$eq = '!=';
 		$andor = 'AND';
-		$author = explode('-',$author);
+		$author = explode('-', $author);
 		$author = $author[1];
 	} else {
 		$eq = '=';
 		$andor = 'OR';
 	}
-	$author_array = explode(' ',$author);
+	$author_array = explode(' ', $author);
 	$whichauthor .= ' AND post_author '.$eq.' '.$author_array[0];
 	for ($i = 1; $i < (count($author_array)); $i = $i + 1) {
 		$whichauthor .= ' '.$andor.' post_author '.$eq.' '.$author_array[$i];
@@ -152,14 +164,16 @@ if ((!isset($author)) || ($author == 'all') || ($cat == '0')) {
 
 $where .= $search.$whichcat.$whichauthor;
 
-if (!isset($order))
+if ((!isset($order)) || ((strtoupper($order) != 'ASC') && (strtoupper($order) != 'DESC'))) {
 	$order='DESC';
+}
 
 // order by stuff
 if (!isset($orderby)) {
 	$orderby='date '.$order;
 } else {
 	$orderby = urldecode($orderby);
+	$orderby = addslashes_gpc($orderby);
 	$orderby_array = explode(' ',$orderby);
 	$orderby = $orderby_array[0].' '.$order;
 	if (count($orderby_array)>1) {
@@ -182,6 +196,8 @@ if ((!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$postend)) {
 }
 
 if ((isset($poststart)) && (isset($postend)) && ($postend > $poststart)) {
+	$poststart = intval($poststart);
+	$postend = intval($postend);
 	$posts = $postend - $poststart;
 	$limits = ' LIMIT '.$poststart.','.$posts;
 }
