@@ -17,7 +17,7 @@ require_once ($b2blah.$b2inc.'/xmlrpcs.inc');
 
 @header ("X-Pingback: $pathserver/xmlrpc.php");
 
-$b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search','exact','sentence','poststart','postend','preview','debug','calendar','page','paged','more','tb','pb');
+$b2varstoreset = array('m','p','posts','w','c', 'cat','withcomments','search','exact', 'sentence','poststart','postend','preview','debug', 'calendar','page','paged','more','tb', 'pb','author');
 
 	for ($i=0; $i<count($b2varstoreset); $i += 1) {
 		$b2var = $b2varstoreset[$i];
@@ -137,9 +137,9 @@ if ((empty($cat)) || ($cat == 'all') || ($cat == '0')) {
     $whichcat .= ')';
 } 
 // author stuff
-if ((!isset($author)) || ($author == 'all') || ($cat == '0')) {
+if ((!empty($author)) || ($author == 'all') || ($cat == '0')) {
 	$whichauthor='';
-} else {
+} elseif (intval($author)) {
 	$author = intval($author);
 	if (stristr($author, '-')) {
 		$eq = '!=';
