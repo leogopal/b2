@@ -28,7 +28,7 @@ $blog=1; include ("blog.header.php"); while($row = mysql_fetch_object($result)) 
 <?php 
 $comment_author = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "name" : $HTTP_COOKIE_VARS["comment_author"];
 $comment_author_email = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "email" : trim($HTTP_COOKIE_VARS["comment_author_email"]);
-$comment_author_url = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "url" : trim($HTTP_COOKIE_VARS["comment_author_url"]);
+$comment_author_url = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "http://url" : trim($HTTP_COOKIE_VARS["comment_author_url"]);
 
 $queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%' ORDER BY comment_date";
 $resultc = mysql_query($queryc);
@@ -91,7 +91,7 @@ while($rowc = mysql_fetch_object($resultc)) {
 	<p class="commentfield">
 	url<br />
 	<input type="text" name="url" class="textarea" value="<?php echo $comment_author_url ?>" size="20" tabindex="3" 
-	onfocus="this.value=(this.value=='url') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'url' : this.value;" />
+	onfocus="this.value=(this.value=='http://url') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'http://url' : this.value;" />
 	</p>
 
 	<p class="commentfield">
