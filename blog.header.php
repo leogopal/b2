@@ -191,7 +191,7 @@ if ((!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$postend)) {
 		$lastpostdate = mysql2date('Y-m-d 00:00:00',$lastpostdate);
 		$lastpostdate = mysql2date('U',$lastpostdate);
 		$otherdate = date('Y-m-d H:i:s', ($lastpostdate - (($posts_per_page-1) * 86400)));
-		$where .= ' AND post_date > \'$otherdate\'';
+		$where .= ' AND post_date > \''.$otherdate.'\'';
 	}
 }
 
