@@ -895,8 +895,12 @@ $pingback_ping_doc = 'gets a pingback and registers it as a comment prefixed by 
 function pingback_ping($m) {
 	// original code by Mort (http://mort.mine.nu:8080)
 	global $tableposts, $tablecomments, $comments_notify;
-	global $siteurl, $blogfilename, $b2_version;
+	global $siteurl, $blogfilename, $b2_version, $use_pingback;
 	global $HTTP_SERVER_VARS;
+
+	if (!$use_pingback) {
+		return new xmlrpcresp(new xmlrpcval('Sorry, this weblog does not allow you to pingback its posts.'));
+	}
 
 	dbconnect();
 
@@ -1045,7 +1049,7 @@ function pingback_ping($m) {
 			debug_fwrite($log, 'Post doesn\'t exist'."\n");
 		}
 	}
-	return new xmlrpcresp(new xmlrpcval($message));;
+	return new xmlrpcresp(new xmlrpcval($message));
 }
 
 /**** /PingBack functions ****/

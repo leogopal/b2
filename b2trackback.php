@@ -58,6 +58,10 @@ if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!
 	require_once("$b2inc/b2vars.php");
 	require_once("$b2inc/b2functions.php");
 
+	if (!$use_trackback) {
+		die('Sorry, this weblog does not allow you to trackback its posts.');
+	}
+
 	dbconnect();
 
 	$tb_id = $HTTP_GET_VARS['tb_id'];
