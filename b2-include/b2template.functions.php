@@ -626,7 +626,7 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 // generic comments/trackbacks/pingbacks numbering
 function generic_ctp_number($post_id, $mode = 'comments') {
 	global $postdata, $tablecomments, $querycount, $cache_ctp_number, $use_cache;
-	if (empty($cache_ctp_number[$post_id]) || (!$use_cache)) {
+	if (isset($cache_ctp_number[$post_id]) || (!$use_cache)) {
 		$post_id = intval($post_id);
 		$query = "SELECT * FROM $tablecomments WHERE comment_post_ID = $post_id";
 		$result = mysql_query($query) or die('SQL query: '.$query.'<br />MySQL Error: '.mysql_error());
@@ -1055,6 +1055,25 @@ function is_new_day() {
 	} else {
 		return(0);
 	}
+}
+
+function add_filters($tag, $function_to_add) {
+	global $b2_filter;
+	if (isset($b2_filter[$tag])) {
+		$functions = $b2_filter[$tag];
+		if (is_array($functions)) {
+			foreach($functions as $function) {
+				$new_functions[] = $function;
+			}
+		} elseif (is_string($functions)) {
+			$new_functions[] = $functions;
+		}
+		$new_functions[] = $function_to_add;
+		$b2_filter[$tag] = $new_functions;
+	} else {
+		$b2_filter[$tag] = $function_to_add;
+	}
+	return true;
 }
 
 function apply_filters($tag, $string) {
