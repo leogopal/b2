@@ -171,7 +171,7 @@ textarea,input,select {
 
 <tr height="50">
 <td height="50" width="50">
-<a href="http://cafelog.com" target="_blank"><img src="b2-img/b2minilogo.png" border="0" /></a>
+<a href="http://cafelog.com" target="_blank"><img src="b2-img/b2minilogo.png" border="0" alt="visit b2's homepage" /></a>
 </td>
 <td align="right" valign="top">&nbsp;</td>
 </tr>
@@ -298,7 +298,7 @@ textarea,input,select {
 
 <tr height="50">
 <td height="50" width="50">
-<a href="http://cafelog.com" target="_blank"><img src="b2-img/b2minilogo.png" border="0" /></a>
+<a href="http://cafelog.com" target="_blank"><img src="b2-img/b2minilogo.png" border="0" alt="visit b2's homepage" /></a>
 </td>
 <td align="right" valign="top">
 <a href="b2register.php" class="b2menutop">register ?</a><br />
@@ -335,8 +335,6 @@ if ($error) echo "<div align=\"right\" style=\"padding:4px;\"><font color=\"#FF0
 </td>
 </tr>
 </table>
-<!--	<br>
-<a href="b2register.php">register</a>-->
 </td>
 </tr>
 </table>
