@@ -44,9 +44,6 @@ function get_bloginfo($show='') {
 		case "url":
 			$output = $siteurl."/".$blogfilename;
 			break;
-		case "name":
-			$output = $blogname;
-			break;
 		case "description":
 			$output = $blogdescription;
 			break;
@@ -58,6 +55,10 @@ function get_bloginfo($show='') {
 			break;
 		case "admin_email":
 			$output = $admin_email;
+			break;
+		case "name":
+		default:
+			$output = $blogname;
 			break;
 	}
 	return($output);
@@ -930,7 +931,7 @@ function permalink_single($file='') {
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($file=='')
 		$file=$pagenow;
-	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'more'.$querystring_equal."1";
+	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'more'.$querystring_equal.'1'.$querystring_separator.'c'.$querystring_equal.'1';
 }
 
 function permalink_single_rss($file='b2rss.xml') {
