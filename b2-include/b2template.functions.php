@@ -332,7 +332,7 @@ function previous_post($format='%', $previous='previous post: ', $title='yes', $
 			$blah = explode('and', $excluded_categories);
 			foreach($blah as $category) {
 				$category = intval($category);
-				$sql_exclude_cats .= " AND post_category != $category"
+				$sql_exclude_cats .= " AND post_category != $category";
 			}
 		}
 
@@ -375,7 +375,7 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 			$blah = explode('and', $excluded_categories);
 			foreach($blah as $category) {
 				$category = intval($category);
-				$sql_exclude_cats .= " AND post_category != $category"
+				$sql_exclude_cats .= " AND post_category != $category";
 			}
 		}
 
