@@ -135,12 +135,12 @@ if ((!isset($cat)) || ($cat == 'all') || ($cat == '0')) {
 		$andor = 'OR';
 	}
 	$cat_array = explode(' ',$cat);
-	$whichcat .= ' AND post_category '.$eq.' '.$cat_array[0];
-	for ($i = 1; $i < (count($cat_array)); $i = $i + 1) {
-		$whichcat .= ' '.$andor.' post_category '.$eq.' '.$cat_array[$i];
-	}
-}
-
+    $whichcat .= ' AND (post_category '.$eq.' '.$cat_array[0];
+    for ($i = 1; $i < (count($cat_array)); $i = $i + 1) {
+        $whichcat .= ' '.$andor.' post_category '.$eq.' '.$cat_array[$i];
+    }
+    $whichcat .= ')';
+} 
 // author stuff
 if ((!isset($author)) || ($author == 'all') || ($cat == '0')) {
 	$whichauthor='';
