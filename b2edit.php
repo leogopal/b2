@@ -76,6 +76,10 @@ case 'post':
 	
 	$post_ID = mysql_insert_id();
 
+	if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+		sleep($sleep_after_edit);
+	}
+
 	rss_update($blog_ID);
 	pingWeblogs($blog_ID);
 	pingCafelog($cafelogID, $post_title, $post_ID);
@@ -181,6 +185,10 @@ case "editpost":
 	if (!$result)
 	die ("Error in editing... contact the <a href=\"mailto:$admin_email\">webmaster</a>");
 
+	if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+		sleep($sleep_after_edit);
+	}
+
 	rss_update($blog_ID);
 //	pingWeblogs($blog_ID);
 
@@ -213,6 +221,10 @@ case "delete":
 	$result = mysql_query($query) or die("Oops, no comment associated to that post. <a href=\"b2edit.php\">Go back</a> !");
 	if (!$result)
 	die("Error in deleting the comments associated to this post... contact the <a href=\"mailto:$admin_email\">webmaster</a>...");
+
+	if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+		sleep($sleep_after_edit);
+	}
 
 	rss_update($blog_ID);
 //	pingWeblogs($blog_ID);

@@ -59,7 +59,7 @@ function b2newpost($m) {
 	global $xmlrpcerruser; // import user errcode value
 	global $blog_ID,$cache_userdata,$tableposts,$use_rss,$use_weblogsping,$post_autobr;
 	global $post_default_title,$post_default_category;
-	global $cafelogID;
+	global $cafelogID, $sleep_after_edit;
 	$err="";
 
 	dbconnect();
@@ -110,6 +110,10 @@ function b2newpost($m) {
 		$post_ID = mysql_insert_id();
 
 		if (!isset($blog_ID)) { $blog_ID = 1; }
+
+		if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+			sleep($sleep_after_edit);
+		}
 
 		rss_update($blog_ID);
 		pingWeblogs($blog_ID);
@@ -292,7 +296,7 @@ function bloggernewpost($m) {
 	global $xmlrpcerruser; // import user errcode value
 	global $blog_ID,$cache_userdata,$tableposts,$use_rss,$use_weblogsping,$post_autobr;
 	global $post_default_title,$post_default_category;
-	global $cafelogID;
+	global $cafelogID, $sleep_after_edit;
 	$err="";
 
 	dbconnect();
@@ -335,6 +339,10 @@ function bloggernewpost($m) {
 
 		if (!isset($blog_ID)) { $blog_ID = 1; }
 
+		if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+			sleep($sleep_after_edit);
+		}
+
 		rss_update($blog_ID);
 		pingWeblogs($blog_ID);
 		pingCafelog($cafelogID, $post_title, $post_ID);
@@ -363,7 +371,7 @@ function bloggereditpost($m) {
 
 	global $xmlrpcerruser; // import user errcode value
 	global $blog_ID,$cache_userdata,$tableposts,$use_rss,$use_weblogsping,$post_autobr;
-	global $post_default_title,$post_default_category;
+	global $post_default_title,$post_default_category, $sleep_after_edit;
 	$err="";
 
 	dbconnect();
@@ -422,6 +430,10 @@ function bloggereditpost($m) {
 
 		if (!isset($blog_ID)) { $blog_ID = 1; }
 
+		if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+			sleep($sleep_after_edit);
+		}
+
 		rss_update($blog_ID);
 		pingWeblogs($blog_ID);
 
@@ -445,7 +457,7 @@ function bloggerdeletepost($m) {
 
 	global $xmlrpcerruser; // import user errcode value
 	global $blog_ID,$cache_userdata,$tableposts,$use_rss,$use_weblogsping,$post_autobr;
-	global $post_default_title,$post_default_category;
+	global $post_default_title,$post_default_category, $sleep_after_edit;
 	$err="";
 
 	dbconnect();
@@ -495,6 +507,10 @@ function bloggerdeletepost($m) {
            "For some strange yet very annoying reason, the entry couldn't be deleted.");
 
 		if (!isset($blog_ID)) { $blog_ID = 1; }
+
+		if (isset($sleep_after_edit) && $sleep_after_edit > 0) {
+			sleep($sleep_after_edit);
+		}
 
 		rss_update($blog_ID);
 		pingWeblogs($blog_ID);
