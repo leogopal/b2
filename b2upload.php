@@ -131,6 +131,17 @@ if ($img1_name != "") {
 		die("This file type $imgtype is not allowed by the admin of this blog.");
 	}
 	$pathtofile = $fileupload_realpath."/".$img1_name;
+
+	// makes sure not to upload duplicates, rename duplicates
+	$i = 1;
+	while (file_exists($pathtofile)) {
+		$pos = strpos($pathtofile, '.'.$imgtype);
+		$pathtofile_start = substr($pathtofile, 0, $pos);
+		$pathtofile = $pathtofile_start.'_'.zeroise($i, 2).'.'.$imgtype;
+		$img1_name = explode('/', $pathtofile);
+		$img1_name = $img1_name[count($img1_name)-1];
+	}
+
 	move_uploaded_file("$img1" , "$pathtofile") //Path to your images directory, chmod the dir to 777
 	or die("Couldn't Upload Your File to $pathtofile.");
 
