@@ -244,13 +244,6 @@ function convert_smilies($content) {
 	return ($content);
 }
 
-function zeroise($number, $threshold) {
-	$l=strlen($number);
-	if ($l<$threshold)
-		for ($i=0; $i<($threshold-$l); $i=$i+1) { $number='0'.$number;	}
-	return($number);
-}
-
 function antispambot($emailaddy, $mailto=0) {
 	$emailNOSPAMaddy = '';
 	srand ((float) microtime() * 1000000);
