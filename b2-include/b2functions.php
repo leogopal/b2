@@ -960,11 +960,11 @@ function pingback($content, $post_ID) {
 			}
 			if ($pingback_link_offset_dquote || $pingback_link_offset_squote) {
 				$quote = ($pingback_link_offset_dquote) ? '"' : '\'';
-				$pingback_href_pos = strpos($link_content, 'href=', $pingback_link_offset);
+				$pingback_href_pos = strpos($contents, 'href=', $pingback_link_offset);
 				$pingback_href_start = $pingback_href_pos+6;
-				$pingback_href_end = strpos($link_content, $quote, $pingback_href_start);
+				$pingback_href_end = strpos($contents, $quote, $pingback_href_start);
 				$pingback_server_url_len = $pingback_href_end-$pingback_href_start;
-				$pingback_server_url = substr($link_content, $pingback_href_start, $pingback_server_url_len);
+				$pingback_server_url = substr($contents, $pingback_href_start, $pingback_server_url_len);
 				debug_fwrite($log, "Pingback server found from Pingback <link /> tag @ $pingback_server_url\n");
 				$found_pingback_server = 1;
 				break;
