@@ -87,41 +87,60 @@ function single_post_title($prefix = '', $display = 1) {
 
 /***** Date/Time tags *****/
 
-function the_date($d='',$before='',$after='') {
+function the_date($d='', $before='', $after='', $echo = 1) {
 	global $id, $postdata, $day, $previousday,$dateformat,$newday;
+	$the_date = '';
 	if ($day != $previousday) {
-		echo $before;
+		$the_date .= $before;
 		if ($d=='') {
-			echo mysql2date($dateformat, $postdata['Date']);
+			$the_date .= mysql2date($dateformat, $postdata['Date']);
 		} else {
-			echo mysql2date($d, $postdata['Date']);
+			$the_date .= mysql2date($d, $postdata['Date']);
 		}
-		echo $after;
+		$the_date .= $after;
 		$previousday = $day;
+	}
+	$the_date = apply_filters('the_date', $the_date);
+	if ($echo) {
+		echo $the_date;
+	} else {
+		return $the_date;
 	}
 }
 
-function the_time($d='') {
+function the_time($d='', $echo = 1) {
 	global $id,$postdata,$timeformat;
 	if ($d=='') {
-		echo mysql2date($timeformat, $postdata['Date']);
+		$the_time = mysql2date($timeformat, $postdata['Date']);
 	} else {
-		echo mysql2date($d, $postdata['Date']);
+		$the_time = mysql2date($d, $postdata['Date']);
+	}
+	$the_time = apply_filters('the_time', $the_time);
+	if ($echo) {
+		echo $the_time;
+	} else {
+		return $the_time;
 	}
 }
 
 function the_weekday() {
-	global $weekday,$id,$postdata;	echo $weekday[mysql2date('w', $postdata['Date'])];
+	global $weekday,$id,$postdata;
+	$the_weekday = $weekday[mysql2date('w', $postdata['Date'])];
+	$the_weekday = apply_filters('the_weekday', $the_weekday);
+	echo $the_weekday;
 }
 
 function the_weekday_date($before='',$after='') {
 	global $weekday,$id,$postdata,$day,$previousweekday;
+	$the_weekday_date = '';
 	if ($day != $previousweekday) {
-		echo $before;
-		echo $weekday[mysql2date('w', $postdata['Date'])];
-		echo $after;
+		$the_weekday_date .= $before;
+		$the_weekday_date .= $weekday[mysql2date('w', $postdata['Date'])];
+		$the_weekday_date .= $after;
 		$previousweekday = $day;
 	}
+	$the_weekday_date = apply_filters('the_weekday_date', $the_weekday_date);
+	echo $the_weekday_date;
 }
 
 /***** // Date/Time tags *****/
