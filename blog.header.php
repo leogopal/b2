@@ -169,7 +169,7 @@ if (!isset($orderby)) {
 	}
 }
 
-if ((!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$postend)) {
+if ((!$m) && (!$p) && (!$w) && (!$s) && (!$cat) && (!$author) && (!$poststart) && (!$postend)) {
 	if ($what_to_show == 'posts') {
 		$limits = ' LIMIT '.$posts_per_page;
 	} elseif ($what_to_show == 'days') {
@@ -186,7 +186,7 @@ if ((isset($poststart)) && (isset($postend)) && ($postend > $poststart)) {
 	$limits = ' LIMIT '.$poststart.','.$posts;
 }
 
-if (($m) || ($p) || ($w) || ($s) || ($cat) || ($author)) {
+if (($m) || ($p) || ($w) || ($s) || (($cat) && (!$posts)) || ($author)) {
 	$limits = '';
 }
 
