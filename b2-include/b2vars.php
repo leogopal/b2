@@ -131,7 +131,7 @@ $tablebottom = "\t\t</td>\n\t</table>\n\t</td>\n\t</table>\n";
 $blankline = "<img src=\"b2-img/blank.gif\" width=\"10\" height=\"5\" border=\"0\" /><br />\n";
 
 # on which page are we ?
-$PHP_SELF = $HTTP_SERVER_VARS["REQUEST_URI"];
+$PHP_SELF = $HTTP_SERVER_VARS["SCRIPT_FILENAME"];
 $pagenow = explode("/", $PHP_SELF);
 $pagenow = trim($pagenow[(sizeof($pagenow)-1)]);
 $pagenow = explode("?", $pagenow);
