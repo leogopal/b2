@@ -464,7 +464,7 @@ function posts_nav_link($sep=' :: ', $prelabel='<< Previous Page', $nxtlabel='Ne
 	global $p, $what_to_show;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		previous_posts_link($prelabel);
-		echo $sep;
+		echo htmlspecialchars($sep);
 		next_posts_link($nxtlabel);
 	}
 }
