@@ -87,7 +87,7 @@ function single_post_title($prefix = '', $display = 1) {
 
 function single_cat_title($prefix = '', $display = 1 ) {
 	global $cat;
-	if(!empty($cat) || !(strtoupper($cat) == 'ALL')) {
+	if(!empty($cat) && !(strtoupper($cat) == 'ALL')) {
 		$my_cat_name = get_the_category_by_ID($cat);
 		if(!empty($my_cat_name)) {
 			if ($display)
