@@ -46,7 +46,7 @@ case 'post':
 	$post_pingback = intval($HTTP_POST_VARS["post_pingback"]);
 	$content = balanceTags($HTTP_POST_VARS["content"]);
 	$content = format_to_post($content);
-	$post_title = addslashes(addslashes_gpc($HTTP_POST_VARS["post_title"]));
+	$post_title = addslashes($HTTP_POST_VARS["post_title"]);
 	$post_category = intval($HTTP_POST_VARS["post_category"]);
 
 	if ($user_level == 0)
