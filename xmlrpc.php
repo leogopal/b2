@@ -794,10 +794,12 @@ $pingback_ping_doc = 'gets a pingback and registers it as a comment prefixed by 
 function pingback_ping($m) {
 	// original code by Mort (http://mort.mine.nu:8080)
 	global $tableposts, $tablecomments, $comments_notify;
-	global $siteurl, $blogfilename, $b2_version;
+	global $siteurl, $blogfilename, $b2_version, $debug;
 	global $HTTP_SERVER_VARS;
 
 	dbconnect();
+
+	$log = debug_fopen('./xmlrpc.log', 'a');
 
 	$title='';
 
@@ -912,6 +914,7 @@ function pingback_ping($m) {
 			} else {
 				// We already have a Pingback from this URL
 				$message = "Sorry, you already did a pingback to $pagelinkedto from $pagelinkedfrom.";
+			}
 		} else {
 			// Post_ID not found
 			$message = $messages[2];
