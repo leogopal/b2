@@ -33,16 +33,16 @@ $b2varstoreset = array('m','p','posts','w','c','withcomments','s','search','exac
 	}
 
 
-/* Connecting to the db and gzipping the output of the script */
+/* Connecting to the db */
 dbconnect();
 
 /* Getting settings from db */
-$posts_per_page=get_settings("posts_per_page");
-$what_to_show=get_settings("what_to_show");
-$archive_mode=get_settings("archive_mode");
-$dateformat=stripslashes(get_settings("date_format"));
-$timeformat=stripslashes(get_settings("time_format"));
-$autobr=get_settings("AutoBR");
+$posts_per_page = get_settings("posts_per_page");
+$what_to_show = get_settings("what_to_show");
+$archive_mode = get_settings("archive_mode");
+$dateformat = stripslashes(get_settings("date_format"));
+$timeformat = stripslashes(get_settings("time_format"));
+$autobr = get_settings("AutoBR");
 $time_difference = get_settings("time_difference");
 
 /* First let's clear some variables */
@@ -199,7 +199,10 @@ $now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
 if ($pagenow != "b2edit.php") {
 	$where .= " AND post_date < '$now' AND post_category > 0";
 	$distinct = "DISTINCT";
-	if ($use_gzipcompression) { gzip_compression(); }
+	if ($use_gzipcompression) {
+		// gzipping the output of the script
+		gzip_compression();
+	}
 }
 
 $request = " SELECT $distinct * FROM $tableposts WHERE 1=1".$where." ORDER BY post_$orderby $limits";
