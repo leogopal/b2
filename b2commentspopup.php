@@ -14,9 +14,9 @@ $blog=1; include ("blog.header.php"); while($row = mysql_fetch_object($result)) 
 <style type="text/css" media="screen">
 @import url( layout2b.css );
 </style>
-<link rel="stylesheet" type="text/css" media="print" href="b2-include/print.css" />
-<link rel="alternate" type="text/xml" title="XML" href="<?php echo $siteurl ?>/b2rss.php" />
-
+<link rel="stylesheet" type="text/css" media="print" href="print.css" />
+<link rel="alternate" type="application/rdf+xml" title="RDF" href="<?php bloginfo('rdf_url'); ?>" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php bloginfo('rss2_url'); ?>" />
 </head>
 <body>
 <div id="header"><a href="" title="<?php echo $blogname ?>"><?php echo $blogname ?></a></div>
