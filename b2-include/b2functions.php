@@ -490,7 +490,7 @@ function dropdown_categories($blog_ID=1) {
 	$result=mysql_query($query);
 	$querycount++;
 	$width = ($mode=="sidebar") ? "100%" : "170px";
-	echo "<select name=\"post_category\" style=\"width:".$width.";\" tabindex=\"2\">";
+	echo '<select name="post_category" style="width:'.$width.';" tabindex="2" id="category">';
 	while($row = mysql_fetch_object($result)) {
 		echo "<option value=\"".$row->cat_ID."\"";
 		if ($row->cat_ID == $postdata["Category"])
