@@ -307,7 +307,7 @@ function get_lastpostdate() {
 	if ((!isset($cache_lastpostdate)) OR (!$use_cache)) {
 		$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
 		if ($pagenow != 'b2edit.php') {
-			$showcatzero = 'post_category > 0 AND";
+			$showcatzero = 'post_category > 0 AND';
 		} else {
 			$showcatzero = '';
 		}
