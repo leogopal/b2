@@ -40,6 +40,12 @@ function dbconnect() {
 }
 
 
+function mysql_oops($sql_query) {
+	$error  = '<p>Oops, MySQL error!</p><p>Your query:<br />'.$query;
+	$error .= '</p><p>MySQL said:<br />'.mysql_error().'</p>';
+	die($error);
+}
+
 
 /***** Formatting functions *****/
 
