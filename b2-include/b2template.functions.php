@@ -647,22 +647,50 @@ function comment_time($d='') {
 
 /***** Permalink tags *****/
 
-function permalink_anchor() {
-	global $id;	echo '<a name="'.$id.'"></a>';
+function permalink_anchor($mode = 'ID';) {
+	global $id, $postdata;
+	switch($mode) {
+		case 'ID':
+			echo '<a name="'.$id.'"></a>';
+			break;
+		case 'Title':
+			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
+			echo '<a name="'.$title.'"></a>';
+			break;
+		default:
+			echo '<a name="'.$id.'"></a>';
+			break;
+	}
 }
 
-function permalink_link($file='') {
-	global $id,$postdata,$pagenow;
+function permalink_link($file='', $mode = 'ID') {
+	global $id, $postdata, $pagenow;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($file=='')
 		$file=$pagenow;
+	switch($mode) {
+		case 'ID':
+			$anchor = $id;
+			break;
+		case 'Title':
+			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
+			$anchor = $title;
+			break;
+		default:
+			$anchor = $id;
+			break;
+	}
 	$archive_mode = get_settings('archive_mode');
-	if ($archive_mode == 'monthly') {
-		echo $file.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$id;
-	} elseif ($archive_mode == 'weekly') {
-		echo $file.$querystring_start.'w'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$id;
-	} elseif ($archive_mode == 'postbypost') {
-		echo $file.$querystring_start.'p'.$querystring_equal.$id;
+	switch($archive_mode) {
+		case 'monthly':
+			echo $file.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$anchor;
+			break;
+		case 'weekly':
+			echo $file.$querystring_start.'w'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$anchor;
+			break;
+		case 'postbypost':
+			echo $file.$querystring_start.'p'.$querystring_equal.$id;
+			break;
 	}
 }
 
@@ -674,10 +702,10 @@ function permalink_single($file='') {
 	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal."1";
 }
 
-function permalink_single_rss($file="b2rss.xml") {
+function permalink_single_rss($file='b2rss.xml') {
 	global $id,$postdata,$pagenow,$siteurl,$blogfilename;
 	global $querystring_start, $querystring_equal, $querystring_separator;
-		echo $siteurl."/".$blogfilename.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal."1";
+		echo $siteurl.'/'.$blogfilename.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal.'1';
 }
 
 /***** // Permalink tags *****/
