@@ -136,8 +136,8 @@ $pagenow = explode('/', $PHP_SELF);
 $pagenow = trim($pagenow[(sizeof($pagenow)-1)]);
 $pagenow = explode('?', $pagenow);
 $pagenow = $pagenow[0];
-if ($querystring_start == '/') {
-	$pagenow = $siteurl;
+if (($querystring_start == '/') && ($pagenow != 'b2edit.php')) {
+	$pagenow = $siteurl.'/'.$blogfilename;
 }
 
 # browser detection
