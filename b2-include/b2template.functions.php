@@ -679,9 +679,9 @@ function comment_author_IP() {
 
 function comment_text() {
 	global $commentdata;
+	$comment = stripslashes($commentdata['comment_content']);
 	$comment = str_replace('<trackback />', '', $comment);
 	$comment = str_replace('<pingback />', '', $comment);
-	$comment = stripslashes($commentdata['comment_content']);
 	$comment = convert_chars($comment);
 	$comment = convert_bbcode($comment);
 	$comment = convert_gmcode($comment);
