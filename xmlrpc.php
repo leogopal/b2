@@ -29,6 +29,11 @@ function logIO($io,$msg) {
 	return true;
 	}
 
+function starify($string) {
+	$i = strlen($string);
+	return str_repeat('*', $i);
+}
+
 logIO("I",$HTTP_RAW_POST_DATA);
 
 /**** B2 API ****/
@@ -114,7 +119,7 @@ function b2newpost($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -170,7 +175,7 @@ function b2getcategories($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination $username / $password");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -254,7 +259,7 @@ function bloggernewpost($m) {
 	} else {
 		logIO("O","Wrong username/password combination <b>$username / $password</b>");
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -336,7 +341,7 @@ function bloggereditpost($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -410,7 +415,7 @@ function bloggerdeletepost($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination $username / $password");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -482,7 +487,7 @@ function bloggergetuserinfo($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination $username / $password");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -534,7 +539,7 @@ function bloggergetpost($m) {
 		}
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -646,7 +651,7 @@ function bloggergetrecentposts($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -707,7 +712,7 @@ function bloggergettemplate($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
@@ -769,7 +774,7 @@ function bloggersettemplate($m) {
 
 	} else {
 		return new xmlrpcresp(0, $xmlrpcerruser+3, // user error 3
-           "Wrong username/password combination <b>$username / $password</b>");
+           'Wrong username/password combination '.$username.' / '.starify($password));
 	}
 }
 
