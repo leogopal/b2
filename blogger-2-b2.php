@@ -22,6 +22,7 @@ case "step1":
 
 	include("b2config.php");
 	include("$b2inc/b2functions.php");
+	include("$b2inc/b2vars.php");
 	
 ?>
 <html>
@@ -66,7 +67,7 @@ textarea,input,select {
 	
 		$archivefile = "$bgy"."_"."$bgmm"."_01_cafelog.php";
 		
-		if (is_file($archivefile)) {
+		if (file_exists($archivefile)) {
 
 			$f=fopen($archivefile,"r");
 			$archive=fread($f,filesize($archivefile));
