@@ -1,22 +1,18 @@
 	<?php if (!empty($tb)) { ?>
 <!-- you can START editing here -->
 
-<p>
-<br />
-The URL to TrackBack this entry is:<br />
-<em><?php trackback_url() ?></em>
-</p>
-
-
 	<?php // don't touch these 2 lines
 	$queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<trackback />%' ORDER BY comment_date";
 	$resultc = mysql_query($queryc); if ($resultc) {
 	?>
 
-
 <a name="trackbacks"></a>
 <div><strong><span style="color: #0099CC">::</span> trackbacks</strong></div>
 
+<p>
+( The URL to TrackBack this entry is:<br />
+&nbsp;&nbsp;<em><?php trackback_url() ?></em> )
+</p>
 
 	<?php /* this line is b2's motor, do not delete it */ while($rowc = mysql_fetch_object($resultc)) { $commentdata = get_commentdata($rowc->comment_ID); ?>
 	
@@ -105,7 +101,7 @@ if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!
 	if ($comments_notify) {
 
 		$notify_message  = "New trackback on your post #$comment_post_ID.\r\n\r\n";
-		$notify_message .= "author : $comment_author (IP: $user_ip , $user_domain)\r\n";
+		$notify_message .= "website: $comment_author (IP: $user_ip , $user_domain)\r\n";
 		$notify_message .= "url    : $comment_author_url\r\n";
 		$notify_message .= "excerpt: \n".stripslashes($original_comment)."\r\n\r\n";
 		$notify_message .= "You can see all trackbacks on this post there: \r\n";
@@ -114,7 +110,7 @@ if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!
 		$postdata = get_postdata($comment_post_ID);
 		$authordata = get_userdata($postdata["Author_ID"]);
 		$recipient = $authordata["user_email"];
-		$subject = "comment on post #$comment_post_ID \"".$postdata["Title"]."\"";
+		$subject = "trackback on post #$comment_post_ID \"".$postdata["Title"]."\"";
 
 		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.6pre4 - PHP/" . phpversion());
 		
