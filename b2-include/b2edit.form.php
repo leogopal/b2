@@ -8,12 +8,12 @@ switch($action) {
 		$form_action = "post";
 		$form_extra = "";
 		if ($use_pingback) {
-			$form_pingback = '<input type="checkbox" class="checkbox" name="post_pingback" value="1" checked="checked" tabindex="7" /> PingBack the URLs in this post<br />';
+			$form_pingback = '<input type="checkbox" class="checkbox" name="post_pingback" value="1" checked="checked" tabindex="7" id="pingback" /><label for="pingback"> PingBack the URLs in this post</label><br />';
 		} else {
 			$form_pingback = '';
 		}
 		if ($use_trackback) {
-			$form_trackback = '<br /><br /><b>TrackBack</b> an URL:<br /><input type="text" name="trackback_url" style="width: 415px" />';
+			$form_trackback = '<br /><br /><label for="trackback"><b>TrackBack</b> an URL:</label><br /><input type="text" name="trackback_url" style="width: 415px" id="trackback" />';
 		} else {
 			$form_trackback = '';
 		}
@@ -55,11 +55,11 @@ if ($action != "editcomment") {
 	?>>
 	<table height="60" align="left" cellpadding="0" cellspacing="0">
 		<td height="60" width="190">
-		<b>Title :</b> <br />
-		<input type="text" name="post_title" size="20" tabindex="1" style="width: 170px;" value="<?php echo $edited_post_title; ?>" />
+		<label for="title"><b>Title :</b></label><br />
+		<input type="text" name="post_title" size="20" tabindex="1" style="width: 170px;" value="<?php echo $edited_post_title; ?>" id="title" />
 		</td>
 		<td>
-		<b>Category : </b><br /><?php dropdown_categories(); ?>
+		<label for="category"><b>Category :</b></label><br /><?php dropdown_categories(); ?>
 		</td>
 	</table>
 	<?php
@@ -72,14 +72,14 @@ if ($action != "editcomment") {
 
 <tr>
 	<td>
-	<b>Name :</b><br />
-	<input type="text" name="newcomment_author" size="20" value="<?php echo format_to_edit($commentdata["comment_author"]) ?>" tabindex="1" /></td>
+	<label for="name"><b>Name :</b></label><br />
+	<input type="text" name="newcomment_author" size="20" value="<?php echo format_to_edit($commentdata["comment_author"]) ?>" tabindex="1" id="name" /></td>
 	<td>
-	<b>E-mail :</b><br />
-	<input type="text" name="newcomment_author_email" size="20" value="<?php echo format_to_edit($commentdata["comment_author_email"]) ?>" tabindex="2" /></td>
+	<label for="email"><b>E-mail :</b></label><br />
+	<input type="text" name="newcomment_author_email" size="20" value="<?php echo format_to_edit($commentdata["comment_author_email"]) ?>" tabindex="2" id="email" /></td>
 	<td>
-	<b>URL :</b><br />
-	<input type="text" name="newcomment_author_url" size="20" value="<?php echo format_to_edit($commentdata["comment_author_url"]) ?>" tabindex="3" />
+	<label for="URL"><b>URL :</b></label><br />
+	<input type="text" name="newcomment_author_url" size="20" value="<?php echo format_to_edit($commentdata["comment_author_url"]) ?>" tabindex="3" id="URL" />
 	<?php
 	
 }
@@ -92,28 +92,28 @@ if ($action != "editcomment") {
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <td valign="bottom">
 <?php
-if ($action != "editcomment") {
-	echo "<b>Post :</b>";
+if ($action != 'editcomment') {
+	echo '<label for="content"><b>Post :</b></label>';
 } else {
-	echo "<br /><b>Comment :</b>";
+	echo '<br /><label for="content"><b>Comment :</b></label>';
 }
 ?>
 </td>
 <td valign="bottom" align="right">
-<?php if ($use_quicktags) include($b2inc."/b2quicktags.php"); ?>
+<?php if ($use_quicktags) include($b2inc.'/b2quicktags.php'); ?>
 </td>
 </table>
 
-<textarea rows="9" cols="40" style="width:100%" name="content" tabindex="4" wrap="virtual"><?php echo $content ?></textarea><br />
+<textarea rows="9" cols="40" style="width:100%" name="content" tabindex="4" wrap="virtual" id="content"><?php echo $content ?></textarea><br />
 
 <input type="checkbox" class="checkbox" name="post_autobr" value="1" <?php
 if ($autobr)
-echo " checked" ?> tabindex="7" /> Auto-BR (converts line-breaks into &lt;br /> tags)<br />
+echo " checked" ?> tabindex="7" id="autobr" /><label for="autobr"> Auto-BR (converts line-breaks into &lt;br /> tags)</label><br />
 
 <?php echo $form_pingback ?>
 
 <?php if ($use_preview) { ?>
-<input type="button" value="preview" onclick="preview(this.form);" class="search" tabindex="8"/>
+<input type="button" value="preview" onclick="preview(this.form);" class="search" tabindex="8" />
 <?php } ?>
 
 <input type="submit" name="submit" value="<?php echo $submitbutton_text ?>" class="search" style="font-weight: bold;" tabindex="5" /> 
