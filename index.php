@@ -45,6 +45,8 @@
 <?php trackback_popup_link("TrackBack (0)", "TrackBack (1)", "TrackBack (%)") ?> 
 <?php pingback_popup_link("PingBack (0)", "PingBack (1)", "PingBack (%)") ?>
 
+<?php trackback_rdf() ?>
+
 <!-- this includes the comments and a form to add a new comment -->
 <?php include ("b2comments.php"); ?>
 
