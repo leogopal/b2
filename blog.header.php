@@ -1,5 +1,7 @@
 <?php
-
+/*	File version:
+ *	$Id: blog.header.php,v 1.31 2003/05/24 01:07:09 macshack Exp $
+ */
 $use_cache = 1;
 $use_gzipcompression = 1;
 
