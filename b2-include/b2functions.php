@@ -227,11 +227,10 @@ function convert_gmcode($content) {
 }
 
 function convert_smilies($content) {
-	global $b2smiliestrans, $smilies_directory, $use_smilies;
+	global $smilies_directory, $use_smilies;
+	global $b2_smiliessearch, $b2_smiliesreplace;
 	if ($use_smilies) {
-		foreach($b2smiliestrans as $smiley => $img) {
-			$content = str_replace($smiley, "<img src='$smilies_directory/$img' alt='$smiley' />", $content);
-		}
+		$content = str_replace($b2_smiliessearch, $b2_smiliesreplace, $content);
 	}
 	return ($content);
 }
