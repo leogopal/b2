@@ -717,22 +717,69 @@ function pingBlogs($blog_ID="1") {
 }
 
 
-// trackback stuff
+// trackback - send
 function trackback($trackback_url, $title, $excerpt, $ID) {
 	global $siteurl, $blogfilename, $blogname;
 	global $querystring_start, $querystring_equal;
 	$title = urlencode($title);
 	$excerpt = urlencode($excerpt);
 	$blog_name = urlencode($blogname);
-	$url = $siteurl.'/'.$blogfilename.$querystring_start.'p'.$querystring_equal.$ID;
-	$url = urlencode($url);
-	$trackback_url .= "&title=$title&url=$url&blog_name=$blog_name&excerpt=$excerpt";
-	$fp = fopen($trackback_url, 'r');
-	$result = fread($fp, 4096);
-	fclose($fp);
+	$url = urlencode($siteurl.'/'.$blogfilename.$querystring_start.'p'.$querystring_equal.$ID);
+	$query_string = "title=$title&url=$url&blog_name=$blog_name&excerpt=$excerpt";
+	if (strstr($trackback_url, '?')) {
+		$trackback_url .= "&".$query_string;;
+		$fp = @fopen($trackback_url, 'r');
+		$result = @fread($fp, 4096);
+		@fclose($fp);
+/* debug code */
+		$debug_file = 'trackback.log';
+		$fp = fopen($debug_file, 'a');
+		fwrite($fp, "\n*****\nTrackback URL query:\n\n$trackback_url\n\nResponse:\n\n");
+		fwrite($fp, $result);
+		fwrite($fp, "\n\n");
+		fclose($fp);
+/**/
+	} else {
+		$trackback_url = parse_url($trackback_url);
+		$http_request  = 'POST '.$trackback_url['path']." HTTP/1.0\r\n";
+		$http_request .= 'Host: '.$trackback_url['host']."\r\n";
+		$http_request .= 'Content-Type: application/x-www-form-urlencoded'."\r\n";
+		$http_request .= 'Content-Length: '.strlen($query_string)."\r\n";
+		$http_request .= "\r\n";
+		$http_request .= $query_string;
+		$fs = @fsockopen($trackback_url['host'], 80);
+		@fputs($fs, $http_request);
+/* debug code */
+		$debug_file = 'trackback.log';
+		$fp = fopen($debug_file, 'a');
+		fwrite($fp, "\n*****\nRequest:\n\n$http_request\n\nResponse:\n\n");
+		while(!@feof($fs)) {
+			fwrite($fp, @fgets($fs, 4096));
+		}
+		fwrite($fp, "\n\n");
+		fclose($fp);
+/**/
+		@fclose($fs);
+	}
 	return $result;
 }
 
+// trackback - reply
+function trackback_response($error = 0, $error_message = '') {
+	if ($error) {
+		echo '<?xml version="1.0" encoding="iso-8859-1"?'.">\n";
+		echo "<response>\n";
+		echo "<error>1</error>\n";
+		echo "<message>$error_message</message>\n";
+		echo "</response>";
+	} else {
+		echo '<?xml version="1.0" encoding="iso-8859-1"?'.">\n";
+		echo "<response>\n";
+		echo "<error>0</error>\n";
+		echo "</response>";
+	}
+	die();
+}
 
 // updates the RSS feed !
 function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
