@@ -24,7 +24,7 @@
 <a name="c<?php comment_ID() ?>"></a>
 	
 <!-- comment -->
-<p class="trackback<?php comment_is_trackback() ?>">
+<p>
 <b><?php comment_author() ?> <?php comment_author_email_link("email", " - ", "") ?><?php comment_author_url_link("url", " - ", "") ?></b>
 <br />
 <?php comment_text() ?>
