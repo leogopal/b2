@@ -276,10 +276,12 @@ function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file
 		$content = substr($content, 0, $cut).$dotdotdot;
 		$content = balanceTags($content);
 	}
-	if ($encode_html) {
+	if ($encode_html == 1) {
 		$content = htmlspecialchars($content);
-	} else {
+	} elseif ($encode_html == 0) {
 		$content = make_url_footnote($content);
+	} elseif ($encode_html == 2) {
+		$content = strip_tags($content);
 	}
 	echo $content;
 }
@@ -541,7 +543,7 @@ function the_category() {
 	echo convert_chars($category, 'html');
 }
 function the_category_rss() {
-	echo convert_chars(strip_tags(get_the_category(), 'xml'));
+	echo convert_chars(strip_tags(get_the_category()), 'xml');
 }
 function the_category_unicode() {
 	$category = get_the_category();
@@ -1122,7 +1124,7 @@ function add_filter($tag, $function_to_add) {
 				}
 			}
 		} else */if (is_string($function_to_add)) {
-			if (!in_array($function_to_add, $b2_filter[$tag])) {
+			if (!@in_array($function_to_add, $b2_filter[$tag])) {
 				$new_functions[] = $function_to_add;
 			}
 		}
