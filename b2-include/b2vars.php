@@ -190,6 +190,9 @@ $b2_gecko_correction['out'] = array(
 	'&euro;', '&#8201;'
 );
 
+# server detection
+$is_Apache = strstr($HTTP_SERVER_VARS['SERVER_SOFTWARE'], 'Apache') ? 1 : 0;
+$is_IIS = strstr($HTTP_SERVER_VARS['SERVER_SOFTWARE'], 'Microsoft-IIS') ? 1 : 0;
 
 # if the config file does not provide the smilies array, let's define it here
 if (!isset($b2smiliestrans)) {
