@@ -4,7 +4,7 @@
 $mode = "bookmarklet";
 
 $standalone = 1;
-require_once("./b2header.php");
+require("./b2header.php");
 
 if ($user_level == 0)
 die ("Cheatin' uh ?");
@@ -94,6 +94,10 @@ textarea,input,select {
 <?php
 }
 ?>
+textarea {
+	font-family: Verdana, Geneva, Arial, Helvetica;
+	font-size: 0.9em;
+}
 -->
 </style>
 </head>
@@ -166,7 +170,7 @@ preg_match("/\%u[1-9A-F][1-9A-F][1-9A-F][1-9A-F]/is", $text, $stufftofix);
 
 ?>
 
-<textarea rows="<?php echo $rows ?>" cols="48" <?php if (!preg_match("/Gecko/",$HTTP_USER_AGENT)) { ?>style="width:415px;" <?php } ?>name="content" tabindex="2" class="postform"><?php echo "<a href=\"$popupurl\">$popuptitle</a>\n$text" ?></textarea><br />
+<textarea rows="<?php echo $rows ?>" cols="48" style="width:415px;" name="content" tabindex="2" class="postform"><?php echo "<a href=\"$popupurl\">$popuptitle</a>\n$text" ?></textarea><br />
 
 <input type="checkbox" name="post_autobr" value="1" <?php if ($autobr) echo " checked" ?> tabindex="4" class="checkbox" /> Auto-BR<br />
 
@@ -190,6 +194,15 @@ window.focus();
 </script>
 </td>
 </tr>
+<?php if ($trackback) { ?>
+<tr>
+<td width="40">&nbsp;</td>
+<td width="415" align="left" height="40">
+<b>TrackBack</b> an URL:<br />
+<input type="text" name="trackback_url" style="width: 415px" />
+</td>
+</tr>
+<?php } ?>
 </table>
 </div>
 
