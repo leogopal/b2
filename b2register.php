@@ -169,9 +169,6 @@ registration<br />complete
 <tr><td align="right" colspan="2">e-mail: <b><?php echo $user_email ?>&nbsp;</b></td></tr>
 <tr><td width="90">&nbsp;</td>
 <td><form name="login" action="b2login.php" method="post">
-<input type="hidden" name="action" value="login" />
-<input type="hidden" name="redirect_to" value="b2edit.php" />
-<input type="hidden" name="pwd" value="md5:<?php echo md5($pass1) ?>" />
 <input type="hidden" name="log" value="<?php echo $user_login ?>" />
 <input type="submit" class="search" value="Login" name="submit" /></form></td></tr>
 </table>
