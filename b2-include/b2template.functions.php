@@ -371,34 +371,46 @@ function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file
 
 function link_pages($before='<br />', $after='<br />', $next_or_number='number', $nextpagelink='next page', $previouspagelink='previous page', $pagelink='%', $more_file='') {
 	global $id,$page,$numpages,$multipage,$more;
-	global $blogfilename;
+	global $pagenow;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($more_file != '') {
 		$file = $more_file;
 	} else {
-		$file = $blogfilename;
+		$file = $pagenow;
 	}
 	if (($multipage)) { // && ($more)) {
-		echo $before;
 		if ($next_or_number=='number') {
+			echo $before;
 			for ($i = 1; $i < ($numpages+1); $i = $i + 1) {
 				$j=str_replace('%',"$i",$pagelink);
 				echo " ";
 				if (($i != $page) || ((!$more) && ($page==1)))
-					echo '<a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'more'.$querystring_equal.'1'.$querystring_separator.'page'.$querystring_equal.$i.'">';
+					echo '<a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.
+					$querystring_separator.'more'.$querystring_equal.'1'.
+					$querystring_separator.'page'.$querystring_equal.$i.'">';
 				echo $j;
 				if (($i != $page) || ((!$more) && ($page==1)))
 					echo '</a>';
 			}
+			echo $after;
 		} else {
-			$i=$page-1;
-			if ($i)
-				echo ' <a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'page'.$querystring_equal.$i.'">'.$previouspagelink.'</a>';
-			$i=$page+1;
-			if ($i<=$numpages)
-				echo ' <a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'page'.$querystring_equal.$i.'">'.$nextpagelink.'</a>';
+			if ($more) {
+				echo $before;
+				$i=$page-1;
+				if ($i && $more)
+					echo ' <a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.
+					$querystring_separator.'more'.$querystring_equal.'1'.
+					$querystring_separator.'page'.$querystring_equal.$i.'">'.
+					$previouspagelink.'</a>';
+				$i=$page+1;
+				if ($i<=$numpages && $more)
+					echo ' <a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.
+					$querystring_separator.'more'.$querystring_equal.'1'.
+					$querystring_separator.'page'.$querystring_equal.$i.'">'.
+					$nextpagelink.'</a>';
+				echo $after;
+			}
 		}
-		echo $after;
 	}
 }
 
