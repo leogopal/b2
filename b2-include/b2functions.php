@@ -536,13 +536,13 @@ function touch_time($edit=1) {
 			$ii = "$i";
 		}
 		echo ">".$month["$ii"]."</option>\n";
-	}
-	echo "</select>\n";
-	echo "<input type=\"text\" name=\"aa\" value=\"$aa\" size=\"4\" maxlength=\"5\" />\n";
-	echo "  @  ";
-	echo "<input type=\"text\" name=\"hh\" value=\"$hh\" size=\"2\" maxlength=\"2\" />\n : ";
-	echo "<input type=\"text\" name=\"mn\" value=\"$mn\" size=\"2\" maxlength=\"2\" />\n : ";
-	echo "<input type=\"text\" name=\"ss\" value=\"$ss\" size=\"2\" maxlength=\"2\" />\n";
+	} ?>
+</select>
+<input type="text" name="aa" value="<?php echo $aa ?>" size="4" maxlength="5" /> @ 
+<input type="text" name="hh" value="<?php echo $hh ?>" size="2" maxlength="2" /> : 
+<input type="text" name="mn" value="<?php echo $mn ?>" size="2" maxlength="2" /> : 
+<input type="text" name="ss" value="<?php echo $ss ?>" size="2" maxlength="2" />
+	<?php
 }
 
 function gzip_compression() {
