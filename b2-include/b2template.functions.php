@@ -497,7 +497,7 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 
 
 function next_posts($max_page = 0) { // original by cfactor at cooltux.org
-	global $HTTP_SERVER_VARS, $siteurl, $blogfilename, $p, $paged, $what_to_show;
+	global $HTTP_SERVER_VARS, $siteurl, $blogfilename, $p, $paged, $what_to_show, $pagenow;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
@@ -516,7 +516,7 @@ function next_posts($max_page = 0) { // original by cfactor at cooltux.org
 		if (!$paged) $paged = 1;
 		$nextpage = intval($paged) + 1;
 		if (!$max_page || $max_page >= $nextpage) {
-			echo  $siteurl.'/'.$blogfilename.$querystring_start.
+			echo  $pagenow.$querystring_start.
 				($qstr == '' ? '' : $qstr.$querystring_separator) .
 				'paged'.$querystring_equal.$nextpage;
 		}
@@ -547,7 +547,7 @@ function next_posts_link($label='Next Page >>', $max_page=0) {
 
 
 function previous_posts() { // original by cfactor at cooltux.org
-	global $HTTP_SERVER_VARS, $siteurl, $blogfilename, $p, $paged, $what_to_show;
+	global $HTTP_SERVER_VARS, $siteurl, $blogfilename, $p, $paged, $what_to_show, $pagenow;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
@@ -565,7 +565,7 @@ function previous_posts() { // original by cfactor at cooltux.org
 		}
 		$nextpage = intval($paged) - 1;
 		if ($nextpage < 1) $nextpage = 1;
-		echo $siteurl.'/'.$blogfilename.$querystring_start.
+		echo  $pagenow.$querystring_start.
 			($qstr == '' ? '' : $qstr.$querystring_separator) .
 			'paged'.$querystring_equal.$nextpage;
 	}
