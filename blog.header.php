@@ -38,8 +38,10 @@ dbconnect();
 /* Sending HTTP headers */
 $last_modified_header = mysql2date('D, d M Y H:i:s', get_lastpostdate());
 @header ("X-Pingback: $pathserver/xmlrpc.php");
-@header ("Last-Modified: $last_modified_header");
-@header ('ETag: "'.md5($last_modified_header.$pagenow).'"');
+if (!$is_winIE) {
+	@header ("Last-Modified: $last_modified_header");
+	@header ('ETag: "'.md5($last_modified_header.$pagenow).'"');
+}
 
 /* Getting settings from db */
 $posts_per_page = get_settings('posts_per_page');
@@ -244,7 +246,7 @@ $now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
 
 if ($pagenow != 'b2edit.php') {
 	if ((empty($poststart)) || (empty($postend)) || !($postend > $poststart)) {
-		$where .= ' AND post_date < \''.$now.'\'';
+		$where .= ' AND post_date <= \''.$now.'\'';
 	}
 	$where .= ' AND post_category > 0';
 	$distinct = 'DISTINCT';
