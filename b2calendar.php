@@ -54,6 +54,20 @@ if (isset($calendar) && ($calendar != '')) {
 	}
 }
 
+// original arrow hack by Alex King
+$archive_link_m = $siteurl.'/'.$blogfilename.$querystring_start.'m'.$querystring_equal;
+$ak_date = mktime(0,0,0,$thismonth,1,$thisyear);
+$ak_previous_month = date("m", $ak_date - ((date("t", $ak_date) * 86400) + 86400));
+$ak_next_month = date("m", $ak_date + ((date("t", $ak_date) * 86400) + 86400));
+$ak_first_post = mysql_query("SELECT MONTH(MIN(post_date)), YEAR(MIN(post_date)) FROM $tableposts");
+$ak_first_post = mysql_fetch_array($ak_first_post);
+// using text links by default
+$ak_previous_month_dim = '<span>&lt;</span>&nbsp;&nbsp;';
+$ak_previous_month_active = '<a href="'.$archive_link_m.$thisyear.$ak_previous_month.'" style="text-decoration: none;">&lt;</a>&nbsp;&nbsp;';
+$ak_next_month_dim = '&nbsp;&nbsp;<span>&gt;</span>';
+$ak_next_month_active = '&nbsp;&nbsp;<a href="'.$archive_link_m.$thisyear.$ak_next_month.'" style="text-decoration: none;">&gt;</a>';
+$ak_previous_month_link = (mktime(0,0,0,$ak_previous_month,0,$thisyear) < mktime(0,0,0,$ak_first_post[0],0,$ak_first_post[1])) ? $ak_previous_month_dim : $ak_previous_month_active;
+$ak_next_month_link = (mktime(0,0,0,$ak_next_month,0,$thisyear)> mktime()) ? $ak_next_month_dim : $ak_next_month_active;
 
 $end_of_week = (($start_of_week + 7) % 7);
 
@@ -114,7 +128,9 @@ echo $calendartablestart."\n";
 
 if ($calendarmonthdisplay) {
 	echo $calendarmonthstart;
+	echo $ak_previous_month_link;
 	echo date_i18n($calendarmonthformat, mktime(0, 0, 0, $thismonth, 1, $thisyear));
+	echo $ak_next_month_link;
 	echo $calendarmonthend."\n";
 }
 
