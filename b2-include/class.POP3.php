@@ -13,7 +13,7 @@
     *
     * pop3 class
     *
-    * $Id: class.POP3.php,v 1.2 2002/11/30 20:49:51 macshack Exp $
+    * $Id: class.POP3.php,v 1.3 2003/06/27 05:06:17 macshack Exp $
     */
 
 class POP3 {
@@ -106,7 +106,7 @@ class POP3 {
         $this->FP = $fp;
         $this->BANNER = $this->parse_banner($reply);
         $this->RFC1939 = $this->noop();
-        if($this->RFC1939) {
+        if(!$this->RFC1939) {
             $this->ERROR = _("POP3: premature NOOP OK, NOT an RFC 1939 Compliant server");
             $this->quit();
             return false;
