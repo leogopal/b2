@@ -15,6 +15,7 @@ h1 { font-family: georgia,times new roman,serif; font-size: 18px; font-weight: l
 	margin: 5px;
 	margin-left: 20px;
 	margin-right: 80px;
+	font-family: arial,helvetica,sans-serif; font-size:12px;
 }
 ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; }
 -->
@@ -27,14 +28,14 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
   <tr>
 	<td> 
       <p align="center"><img src="b2-img/b2minilogo.png" width="50" height="50"><br />
-        <font size="2" face="Georgia, Times New Roman, Times, serif">0.6pre3<br />
-        20020701</font></p>
+        <font size="2" face="Georgia, Times New Roman, Times, serif">0.6pre4<br />
+        20020730</font></p>
 		
 	  <p align="center">weblog / news publishing tool</p>
 
 	  <p align="center"><a href="#requirements">requirements</a> - <a href="#installation">installation</a> 
         - <a href="#templates">template(s)</a> - <a href="#usage">querystring 
-        usage</a> - <a href="#xmlrpc">xmlrpc (Blogger API)</a> - <a href="#notes">notes</a></p>
+        usage</a> - <a href="#xmlrpc">xmlrpc (Blogger API)</a> - <a href="#postviaemail">post via email</a> - <a href="#notes">notes</a></p>
 
 	  <a name="requirements"></a><h1>requirements:</h1>
 	  <p><strong>PHP4</strong> (version 4.0.5 or higher)<br />
@@ -104,7 +105,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		You can also copy b2.php into a new file and modify that new file, it will work too ;)<br />
 
 	  </blockquote>
-	  <p>Users upgrading from v0.5.x to v0.6pre3:</p>
+	  <p>Users upgrading from v0.5.x to v0.6pre4:</p>
       <blockquote> <strong>1.</strong> Unzip the package in an empty directory, to avoid 
         deleting your existing b2config.php file.<br /><br />
 		<strong>2.</strong> Open the new b2config.php file and your existing b2config.php file. Modify the new b2config.php file in order to use your existing settings there, in addition to the new settings. (There are a lot of additionnal settings, so it's best to edit the new config file than adding on the exisitng one.)<br /><br />
@@ -114,11 +115,11 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         <strong>4.</strong> Edit <u>all</u> your templates and update your template tags 
         to follow the changes to the template tags here, because there have been some 
         modifications, and it would cause some errors if you didn't edit the templates. 
-        Tags noted with an orange asterisk <font color="#009966"><strong><font color="#009966"><strong><font face="Courier New, Courier, mono" color="#FF9900">*</font></strong></font></strong></font> 
+        Tags noted with an orange asterisk <b><font face="Courier New, Courier, mono" color="#FF9900">*</font></b> 
         are tags that were added or modified in v0.6, these are those you got 
         to update in your templates.<br />
 		<strong>5.</strong> Upload the new files, and you're done. :)<br /></blockquote>
-	  <p>Users upgrading from v0.6pre1 or pre2, to v0.6pre3:</p>
+	  <p>Users upgrading from v0.6pre1, pre2, pre3 to v0.6pre4:</p>
       <blockquote> <strong>1.</strong> Unzip the package in an empty directory, to avoid 
         deleting your existing b2config.php file.<br /><br />
 		<strong>2.</strong> Open the new b2config.php file and your existing b2config.php file. Modify the new b2config.php file in order to use your existing settings there, in addition to the new settings. (There are a lot of additionnal settings, so it's best to edit the new config file than adding on the exisitng one.)<br />
@@ -216,11 +217,13 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         the_time(), in that it would appear at every post. Weekdays can be obtained 
         with a custom date format string in the_time() or the_date(), but for 
         non-english weekdays you have to edit b2config.php<br />
+		<strong>Note: this tag is OBSOLETE, the_time() and the_date() now use weekdays/months from b2config.php</strong><br />
         <br />
 
 		<strong>&lt;?php the_weekday_date(</strong><strong>) ?&gt;</strong> <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
         Like the_weekday(), but works like the_date(), in that it would appear 
         only on new days.<br />
+		<strong>Note: this tag is OBSOLETE, the_time() and the_date() now use weekdays/months from b2config.php</strong><br />
 
 		  <div class="params">Parameters:<ul>
 		  <li>string to display before the weekday_date (default is blank)</li>
@@ -360,12 +363,15 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  <br />
 		  <br />
 
-		  <strong>&lt;?php list_cats() ?&gt;<br />
+		  <strong>&lt;?php list_cats() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
 		</strong>this is a special tag, meant to be used in the template, but outside of the b2 loop. it will display a list of the categories, with links to them. like in b2archive.php, each category is on a line, the only way you can change this is by editing b2.template.functions.php<br />
 
 		  <div class="params">Parameters:<ul>
 		  <li>0 or 1, depending if you want to have an option to display all categories (default is 1)</li>
-		  <li>text to display for the option to show all categories (default is "All")</li>
+		  <li>text to display for the option to show all categories (default is 'All')</li>
+		  <li>sort by: possible values are 'name' and 'ID' (default is 'ID')</li>
+		  <li>sorting order: possible values are 'asc' for ascending or 'desc' for descending (default is 'asc')</li>
+		  <li>filename, in case you want to display the categories' posts in another template (default is current template)</li>
 		  </ul>
 		  </div>
 		  <br />
@@ -434,6 +440,34 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		<br />
 		<br />
 		<strong>Tags for comments</strong> are:<br />
+		<br />
+		<strong>&lt;?php comments_popup_script() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
+        This will include the javascript that is required to open comments in a popup window.<br />
+		You should put this tag before the &lt;/head> tag in your template.<br />
+
+		  <div class="params">Parameters:<ul>
+		  <li>width (default is 400)</li>
+		  <li>height (default is 400)</li>
+		  <li>file name, in case you want to use a different template for comments (default is b2commentspopup.php)</li>
+		  </ul>
+		  </div>
+		  <br />
+
+		<br />
+		<strong>&lt;?php comments_popup_link() ?&gt;<span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
+        This will display the link to open comments in a popup window, with the number of comments.<br />
+		To edit the popup window's template, edit the file b2commentspopup.php (it's the default one for comments popup).<br />
+
+		  <div class="params">Parameters:<ul>
+		  <li>string for comment-less posts (default is &quot;no comments&quot;)</li>
+		  <li>string for posts with one comment (default is &quot;1 comment&quot;)</li>
+		  <li>string for posts with 2 or more comments (default is &quot;% comments&quot;)<br />Note here that the sign &quot;%&quot; is then replaced by the number of 
+        comments.</li>
+		  <li>string for CSS class, so you can have a styled link with class="" (default is empty, no CSS class applied)</li>
+		  </ul>
+		  </div>
+		  <br />
+
 		<br />
 		<strong>&lt;?php comments_link() ?&gt;<br />
         </strong> This is a bit like permalink_link, it will display an URL to the 
@@ -623,6 +657,54 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 
 		<br />
 		</p>
+	  <p>&nbsp;</p>
+	  <a name="postviaemail"></a><h1>Post via Email:</h1>
+		<p>You can now post news from an email client !<br />
+		But first you'll have to edit b2config.php, filling the appropriate values for your POP3 email account (this interface doesn't support IMAP yet, only POP3, sorry).<br />
+		<br />
+		Once you have edited the config options, you can make your webserver execute b2mail.php every set amount of time (depending on your host's performance, this script can be resource intensive, so don't make it run every minute or you'll be kicked).<br />
+		You can do it with Cron-jobs, or if your host doesn't support it you can look into the various website-monitoring services, and make them check your b2mail.php URL.<br />
+		<br />
+		<b>Preliminary advice:</b><br />
+		It is strongly advised to send your email as text-only (Outlook and Outlook Express default to 'html', which may cause problems), but HTML email could work (the script would strip all your html tags though...).<br />
+		It is also advised not to use your public email address, but create a new one especially for this script. If you use your public email address and the script goes crazy posting every email on your blog and deleting all your emails, I can't take responsibility for this.<br />
+		Make sure you delete any email sent to your blog in your 'Sent' folder too, just in case (you don't want someone to find your login and password in the 'Sent' folder).<br />
+		<br />
+		The script will <i>delete</i> the emails that were used to post stuff on your weblog if it successfully posted your stuff. If it didn't manage to post, the email is not deleted.<br />
+		<br />
+		<b>How to post:</b><br />
+		Now to post something, here's how your email should look like:</p>
+		<div class="params">
+		<b>To:</b> address@domain.com <span style='color: #999'>(you set it in the config file)</span><br />
+		<b>Subject:</b> blog:the post's title <span style='color: #999'>(you can change 'blog:' in the config file)</span><br />
+		<b>Body:</b><br>
+		login:password <span style='color: #999'>(example: <i>Jack:Starwars</i>)</span><br />
+		The content of the post, blah blah blah.<br />
+		More blah blah. ___
+		</div>
+		<p>
+		Subject must start with 'blog:', or any string you set in the config file (so that the script doesn't check EVERY email in your mailbox).<br />
+		Body's first line must always be login:password, else the script will just skip the email.<br />
+		If you don't use '___' (or any body terminator that you set in the config file), the script will post the whole body, which is not what you want if you send email with Yahoo or Hotmail (you don't want their ads on your blog, do you ?).<br />
+		<br />
+		<b>Special cases for mobile phone email:</b><br />
+		Some mobile phone service providers may allow you to send email with your mobile phone or PDA, but on such devices you can't always include line breaks. In such case, you have to set <i>$use_phoneemail = 1</i> in b2config.php, and then here's how you write the email:</p>
+		<div class="params">
+		<b>To:</b> address@domain.com<br />
+		<b>Subject:</b> blog:the post's title <b>:::</b><br />
+		<b>Body:</b><br>
+		login:password <b>:::</b> The content of the post, blah blah blah.___
+		</div>
+		<p>You will have to append ':::' (or whatever string you set in the config file) after the subject, and after the login:password.<br />
+		<br />
+		Some mobile phone service providers may not allow you to set a subject, and they'll make the subject be the first characters of the body, in which case you would send an email like this:</p>
+		<div class="params">
+		<b>To:</b> address@domain.com<br />
+		<b>Body:</b><br>
+		blog:the post's title <b>:::</b> login:password <b>:::</b> The content of the post, blah blah blah.___
+		</div>
+
+	  <p>&nbsp;</p>
 	  <a name="notes"></a><h1>notes: </h1>
 	  <p>On multi-user:</p>
 	  <blockquote>You don't invite users, they can register on b2register.php.<br />
