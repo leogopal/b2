@@ -101,7 +101,11 @@ case "login":
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Pragma: no-cache");
-		header("Location: b2login.php");
+		if ($is_IIS) {
+			header("Refresh: 0;url=b2login.php");
+		} else {
+			header("Location: b2login.php");
+		}
 		exit();
 	} else {
 		$user_login=$log;
