@@ -342,11 +342,12 @@ function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file
 	global $id,$postdata,$more,$c,$withcomments,$page,$pages,$multipage,$numpages;
 	global $HTTP_SERVER_VARS, $preview;
 	global $querystring_start, $querystring_equal, $querystring_separator;
+    global $pagenow;
 	$output = '';
 	if ($more_file != '') {
 		$file=$more_file;
 	} else {
-		$file=$HTTP_SERVER_VARS['PHP_SELF'];
+		$file=$pagenow; //$HTTP_SERVER_VARS['PHP_SELF'];
 	}
 	$content=$pages[$page-1];
 	$content=explode('<!--more-->', $content);
@@ -798,10 +799,10 @@ function comments_popup_script($width=400, $height=400, $file='b2commentspopup.p
 
 function comments_popup_link($zero='no comment', $one='1 comment', $more='% comments', $CSSclass='') {
 	global $id, $b2commentspopupfile, $b2commentsjavascript;
-	global $querystring_start, $querystring_equal, $querystring_separator;
-	echo '<a href="';
+	global $querystring_start, $querystring_equal, $querystring_separator, $siteurl;
+	echo '<a href="'.$siteurl.'/';
 	if ($b2commentsjavascript) {
-		echo $b2commentspopupfile.'?p='.$id.'&amp;c=1';
+		echo $b2commentspopupfile.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal.'1';
 		echo '" onclick="b2open(this.href); return false"';
 	} else {
 		// if comments_popup_script() is not in the template, display simple comment link
@@ -941,10 +942,10 @@ function trackback_link($file='') {
 
 function trackback_popup_link($zero='no trackback', $one='1 trackback', $more='% trackbacks', $CSSclass='') {
 	global $id, $b2trackbackpopupfile, $b2commentsjavascript;
-	global $querystring_start, $querystring_equal, $querystring_separator;
-	echo '<a href="';
+	global $querystring_start, $querystring_equal, $querystring_separator, $siteurl;
+	echo '<a href="'.$siteurl.'/';
 	if ($b2commentsjavascript) {
-		echo $b2trackbackpopupfile.'?p='.$id.'&amp;tb=1';
+		echo $b2trackbackpopupfile.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'tb'.$querystring_equal.'1';
 		echo '" onclick="b2open(this.href); return false"';
 	} else {
 		// if comments_popup_script() is not in the template, display simple comment link
@@ -973,7 +974,7 @@ function trackback_rdf($timezone=0) {
 		permalink_single();
 		echo '"'."\n";
 		echo '    dc:title="'.addslashes(get_the_title()).'"'."\n";
-		echo '    trackback:ping="'.trackback_url(0).'"'."\n";
+		echo '    trackback:ping="'.trackback_url(0).'"'." />\n";
 		echo '</rdf:RDF>';
 	}
 }
@@ -1009,10 +1010,10 @@ function pingback_link($file='') {
 
 function pingback_popup_link($zero='no pingback', $one='1 pingback', $more='% pingbacks', $CSSclass='') {
 	global $id, $b2pingbackpopupfile, $b2commentsjavascript;
-	global $querystring_start, $querystring_equal, $querystring_separator;
-	echo '<a href="';
+	global $querystring_start, $querystring_equal, $querystring_separator, $siteurl;
+	echo '<a href="'.$siteurl.'/';
 	if ($b2commentsjavascript) {
-		echo $b2pingbackpopupfile.'?p='.$id.'&amp;pb=1';
+		echo $b2pingbackpopupfile.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'pb'.$querystring_equal.'1';
 		echo '" onclick="b2open(this.href); return false"';
 	} else {
 		// if comments_popup_script() is not in the template, display simple comment link
