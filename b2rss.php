@@ -4,6 +4,8 @@ $blog=1; // enter your blog's ID
 include ("blog.header.php");
 Header("Content-type: text/xml");
 if (!isset($rss_language)) { $rss_language = 'en'; }
+if (!isset($rss_encoded_html)) { $rss_encoded_html = 0; }
+if (!isset($rss_excerpt_length) || ($rss_encoded_html == 1)) { $rss_excerpt_length = 0; }
 ?><?php echo "<?xml version=\"1.0\"?".">\n"; ?>
 <!-- generator="b2/<?php echo $b2_version ?>" -->
 <rss version="0.92">
@@ -17,16 +19,16 @@ if (!isset($rss_language)) { $rss_language = 'en'; }
 		<webMaster><?php echo $admin_email ?></webMaster>
 		<language><?php echo $rss_language ?></language>
 
-<?php while($row = mysql_fetch_object($result)) { start_b2(); ?>
+<?php $items_count = 0; while($row = mysql_fetch_object($result)) { start_b2(); ?>
 		<item>
 				<title><?php the_title_rss() ?></title><?php
 // we might use this in the future, but not now, that's why it's commented in PHP
 // so that it doesn't appear at all in the RSS
 //				echo "<category>"; the_category_unicode(); echo "</category>"; ?>
-				<description><?php the_content_rss('', 0, '', 0, 0) ?></description>
+				<description><?php the_content_rss('', 0, '', $rss_excerpt_length, $rss_encoded_html) ?></description>
 				<link><?php permalink_single_rss() ?></link>
 		</item>
-<?php } ?>
+<?php $items_count++; if (($items_count == $posts_per_rss) && empty($m)) { break; } } ?>
 
 	</channel>
 </rss>
