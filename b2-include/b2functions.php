@@ -854,7 +854,7 @@ function debug_fclose($fp) {
 
 function pingback($content, $post_ID) {
 	// original code by Mort (http://mort.mine.nu:8080)
-	global $siteurl, $blogfilename;
+	global $siteurl, $blogfilename, $b2_version;
 	$log = debug_fopen('./pingback.log', 'a');
 	$post_links = array();
 	debug_fwrite($log, 'BEGIN '.time()."\n");
@@ -864,7 +864,9 @@ function pingback($content, $post_ID) {
 	$gunk = '/#~:.?+=&%@!\-';
 	$punc = '.:?\-';
 	$any = $ltrs.$gunk.$punc;
-	$pingback_str = 'rel="pingback"';
+	$pingback_str_dquote = 'rel="pingback"';
+	$pingback_str_squote = 'rel=\'pingback\'';
+	$x_pingback_str = 'x-pingback: ';
 	$pingback_href_original_pos = 27;
 
 	// Step 1
@@ -898,31 +900,75 @@ function pingback($content, $post_ID) {
 	foreach ($post_links as $pagelinkedto){
 		debug_fwrite($log, 'Processing -- '.$pagelinkedto."\n\n");
 
-		$page = fopen($pagelinkedto, 'r');
-		$link_content = fread($page, 3072);
-		$pingback_link_offset = strpos($link_content, $pingback_str);
+		$bits = parse_url($pagelinkedto);
+		if (!isset($bits['host'])) {
+			debug_fwrite($log, 'Couldn\'t find a hostname for '.$pagelinkedto."\n\n");
+			continue;
+		}
+		$host = $bits['host'];
+		$path = isset($bits['path']) ? $bits['path'] : '';
+		if (isset($bits['query'])) {
+			$path .= '?'.$bits['query'];
+		}
+		if (!$path) {
+			$path = '/';
+		}
+		$port = isset($bits['port']) ? $bits['port'] : 80;
 
-		if ($pingback_link_offset === false){
+		// Try to connect to the server at $host
+		$fp = fsockopen($host, $port, $errno, $errstr, $timelimit);
+		if (!$fp) {
+			debug_fwrite($log, 'Couldn\'t open a conection to '.$host."\n\n");
+			continue;
+		}
+
+		// Send the GET request
+		$request = "GET $path HTTP/1.1\r\nHost: $host\r\nUser-Agent: b2/$b2_version PHP/" . phpversion() . "\r\n\r\n";
+		ob_end_flush();
+		fputs($fp, $request);
+
+		// Start receiving headers and content
+		$contents = '';
+		$headers = '';
+		$gettingHeaders = true;
+		$found_pingback_server = 0;
+		while (!feof($fp)) {
+			$line = fgets($fp, 4096);
+			if (trim($line) == '') {
+				$gettingHeaders = false;
+			}
+			if (!$gettingHeaders) {
+				$contents .= trim($line)."\n";
+				$pingback_link_offset_dquote = strpos($contents, $pingback_str_dquote);
+				$pingback_link_offset_squote = strpos($contents, $pingback_str_squote);
+			} else {
+				$headers .= trim($line)."\n";
+				$x_pingback_header_offset = strpos(strtolower($headers), $x_pingback_str);
+			}
+			if ($x_pingback_header_offset) {
+				preg_match('#x-pingback: (.+)#is', $headers, $matches);
+				$pingback_server_url = trim($matches[1]);
+				debug_fwrite($log, "Pingback server found from X-Pingback header @ $pingback_server_url\n");
+				$found_pingback_server = 1;
+				break;
+			}
+			if ($pingback_link_offset_dquote || $pingback_link_offset_squote) {
+				$quote = ($pingback_link_offset_dquote) ? '"' : '\'';
+				$pingback_href_pos = strpos($link_content, 'href=', $pingback_link_offset);
+				$pingback_href_start = $pingback_href_pos+6;
+				$pingback_href_end = strpos($link_content, $quote, $pingback_href_start);
+				$pingback_server_url_len = $pingback_href_end-$pingback_href_start;
+				$pingback_server_url = substr($link_content, $pingback_href_start, $pingback_server_url_len);
+				debug_fwrite($log, "Pingback server found from Pingback <link /> tag @ $pingback_server_url\n");
+				$found_pingback_server = 1;
+				break;
+			}
+		}
+
+		if (!$found_pingback_server) {
 			debug_fwrite($log, "Pingback server not found\n\n*************************\n\n");
-			fclose($page);
+			@fclose($fp);
 		} else {
-			debug_fwrite($log, "Pingback server found @ \n");
-
-			// so, "<rel ="pingback"> is found. Then, look for the string "href="
-			$pingback_href_pos = strpos($link_content, 'href=', $pingback_link_offset);
-
-			// the URL for the server should start 6 chars forward, shouldn't it?
-			$pingback_href_start = $pingback_href_pos+6;
-
-			// the next double quote after that, shuld mark the pingback server URL end
-			$pingback_href_end = strpos($link_content, '"', $pingback_href_start);
-
-			// then end minus start equal server url length and that's about all the math i can grasp :-)
-			$pingback_server_url_len = $pingback_href_end-$pingback_href_start;
-
-			// We know the start, we know the end, time for a clear cut ...
-			$pingback_server_url = substr($link_content, $pingback_href_start, $pingback_server_url_len);
-			debug_fwrite($log, $pingback_server_url);
 			debug_fwrite($log,"\n\nPingback server data\n");
 
 			// Assuming there's a "http://" bit, let's get rid of it
@@ -937,7 +983,7 @@ function pingback($content, $post_ID) {
 			debug_fwrite($log, 'host: '.$host."\n");
 
 			// If we got the server name right, the rest of the string is the server path
-			$path=substr($host_clear,$host_end);
+			$path = substr($host_clear,$host_end);
 			debug_fwrite($log, 'path: '.$path."\n\n");
 
 			 // Now, the RPC call
@@ -966,7 +1012,7 @@ function pingback($content, $post_ID) {
 					}
 				}
 			}
-			fclose($page);
+			@fclose($fp);
 		}
 	}
 
