@@ -4,10 +4,10 @@
 <!-- layout credits goto http://bluerobot.com/web/layouts/layout2.html -->
 
 <head>
-<title><?php echo $blogname ?></title>
+<title><?php bloginfo('name'); ?><?php single_post_title(' ::'); ?></title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta http-equiv="reply-to" content="you@yourdomain.com" />
+<meta http-equiv="reply-to" content="<?php bloginfo('admin_email'); ?>" />
 <meta http-equiv="imagetoolbar" content="no" />
 <meta content="TRUE" name="MSSmartTagsPreventParsing" />
 
@@ -15,12 +15,13 @@
 @import url( layout2b.css );
 </style>
 <link rel="stylesheet" type="text/css" media="print" href="b2-include/print.css" />
-<link rel="alternate" type="text/xml" title="XML" href="<?php echo $siteurl ?>/b2rss.php" />
+<link rel="alternate" type="text/xml" title="RSS 0.92" href="<?php bloginfo('rss_url'); ?>" />
+<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php comments_popup_script() ?>
 
 </head>
 <body>
-<div id="header"><a href="" title="<?php echo $blogname ?>"><?php echo $blogname ?></a></div>
+<div id="header"><a href="" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></div>
 
 <div id="content">
 
