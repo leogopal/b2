@@ -85,14 +85,14 @@ function backslashit($string) {
 }
 
 
-function mysql2date($dateformatstring, $mysqlstring) {
+function mysql2date($dateformatstring, $mysqlstring, $use_b2configmonthsdays = 1) {
 	global $month, $weekday;
 	$m = $mysqlstring;
 	if (empty($m)) {
 		return false;
 	}
 	$i = mktime(substr($m,11,2),substr($m,14,2),substr($m,17,2),substr($m,5,2),substr($m,8,2),substr($m,0,4)); 
-	if ((!empty($month)) && (!empty($weekday))) {
+	if (!empty($month) && !empty($weekday) && $use_b2configmonthsdays) {
 		$datemonth = $month[date('m', $i)];
 		$dateweekday = $weekday[date('w', $i)];
 		$dateformatstring = ' '.$dateformatstring;
