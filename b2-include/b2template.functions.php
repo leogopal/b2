@@ -591,7 +591,10 @@ function comment_author_email() {
 }
 
 function comment_author_url() {
-	global $commentdata;	echo stripslashes($commentdata['comment_author_url']);
+	global $commentdata;
+	$url = trim(stripslashes($commentdata['comment_author_url']));
+	$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
+	echo $url;
 }
 
 function comment_author_email_link($linktext='', $before='', $after='') {
@@ -607,7 +610,8 @@ function comment_author_email_link($linktext='', $before='', $after='') {
 
 function comment_author_url_link($linktext='', $before='', $after='') {
 	global $commentdata;
-	$url=$commentdata['comment_author_url'];
+	$url = trim(stripslashes($commentdata['comment_author_url']));
+	$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
 	if ((!empty($url)) && ($url != 'http://')) {
 		$display = ($linktext != '') ? $linktext : stripslashes($url);
 		echo $before;
