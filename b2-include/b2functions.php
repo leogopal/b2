@@ -324,6 +324,19 @@ function phpcurlme($string, $language = 'en') {
 }
 
 
+function strip_all_but_one_link($text, $mylink) {
+	$match_link = '#(<a.+?href.+?'.'>)(.+?)(</a>)#';
+	preg_match_all($match_link, $text, $matches);
+	$count = count($matches[0]);
+	for ($i=0; $i<$count; $i++) {
+		if (!strstr($matches[0][$i], $mylink)) {
+			$text = str_replace($matches[0][$i], $matches[2][$i], $text);
+		}
+	}
+	return $text;
+}
+
+
 /***** // Formatting functions *****/
 
 
