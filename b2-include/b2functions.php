@@ -850,7 +850,7 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 		$rss .= "\t\t<language>$rss_language</language>\n";
 		
 		$now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
-		$sql = "SELECT * FROM $tableposts WHERE post_date < '$now' AND post_category > 0 ORDER BY post_date DESC LIMIT $num_posts";
+		$sql = "SELECT * FROM $tableposts WHERE post_date <= '$now' AND post_category > 0 ORDER BY post_date DESC LIMIT $num_posts";
 		$result = mysql_query($sql) or die("Your SQL query: <br />$sql<br /><br />MySQL said:<br />".mysql_error());
 
 		while($row = mysql_fetch_object($result)) {
