@@ -1,6 +1,6 @@
 <?php
 
-// $Id: b2calendar.php,v 1.15 2003/05/24 03:32:06 macshack Exp $
+// $Id: b2calendar.php,v 1.16 2003/06/04 02:01:11 macshack Exp $
 // b2 Calendar
 //
 // Contributed work by:
@@ -248,7 +248,7 @@ for($i = $calendarfirst; $i<($calendarlast+86400); $i = $i + 86400) {
 				$ak_day_titles = "";
 				foreach($ak_day_title_array as $post) {
 					if (substr($post[1], 8, 2) == date('d',$i)) {
-						$ak_day_titles = $ak_day_titles.stripslashes($post[0]).$ak_title_separator;
+						$ak_day_titles = $ak_day_titles.htmlspecialchars(stripslashes($post[0])).$ak_title_separator;
 					}
 				}
 				$ak_day_titles = substr($ak_day_titles, 0, strlen($ak_day_titles) - $ak_trim);
