@@ -1,0 +1,24 @@
+<?php
+
+$qsdfgh = $_SERVER['REQUEST_URI'];
+
+$ghjklm_array = array( 'm', 'p', 'posts', 'w', 'c', 'cat', 'withcomments', 's', 'search', 'exact', 'sentence', 'poststart', 'postend', 'preview', 'debug', 'calendar', 'page', 'more'
+);
+
+for ($i=0; $i<count($ghjklm_array); $i += 1) {
+	$b2var = $ghjklm_array[$i];
+	if (preg_match("#/$b2var/(.+?)/#", $qsdfgh, $ghjklm)) {
+		$$b2var = str_replace("/$b2var/", '', $ghjklm[0]);
+		$$b2var = str_replace('/', '', $$b2var);
+	} elseif (preg_match("#/$b2var/(.+)#", $qsdfgh, $ghjklm)) {
+		$$b2var = str_replace("/$b2var/", '', $ghjklm[0]);
+	}
+}
+
+require('./b2config.php');
+if (empty($blogfilename)) {
+	$blogfilename = 'index.php';
+}
+include('./index.php');
+
+?>
