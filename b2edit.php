@@ -90,6 +90,7 @@ case 'post':
 
 	if (!empty($HTTP_POST_VARS['trackback_url'])) {
 		$excerpt = (strlen(strip_tags($content)) > 255) ? substr(strip_tags($content), 0, 252).'...' : strip_tags($content);
+		$excerpt = stripslashes($excerpt);
 		$trackback_urls = explode(',', $HTTP_POST_VARS['trackback_url']);
 		foreach($trackback_urls as $tb_url) {
 			$tb_url = trim($tb_url);
