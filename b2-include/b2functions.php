@@ -59,7 +59,7 @@ function format_to_edit($content) {
 	}
 function format_to_post($content) {
 	global $post_autobr,$comment_autobr;
-	$content = addslashes($content);
+	$content = addslashes(addslashes_gpc($content));
 	if ($post_autobr || $comment_autobr) { $content = autobrize($content); }
 	return($content);
 	}
@@ -512,7 +512,7 @@ function touch_time($edit=1) {
 	$mn = ($edit) ? mysql2date('i', $postdata['Date']) : date('i');
 	$ss = ($edit) ? mysql2date('s', $postdata['Date']) : date('s');
 
-	echo '<input type="text" name="jj" value="$jj" size="2" maxlength="2" />'."\n";
+	echo '<input type="text" name="jj" value="'.$jj.'" size="2" maxlength="2" />'."\n";
 	echo "<select name=\"mm\">\n";
 	for ($i=1; $i < 13; $i=$i+1) {
 		echo "\t\t\t<option value=\"$i\"";
