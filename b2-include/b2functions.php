@@ -13,13 +13,6 @@ function get_currentuserinfo() { // a bit like get_userdata(), on steroids
 	$user_email=$userdata["user_email"];
 	$user_url=$userdata["user_url"];
 	$user_pass_md5=md5($userdata["user_pass"]);
-/*	$pref_usequicktags=$userdata["pref_usequicktags"];
-	$pref_postnavigator=$userdata["pref_postnavigator"];
-	$pref_showinactiveusers=$userdata["pref_showinactiveusers"];
-	$pref_textarearows=$userdata["pref_textarearows"];
-	$pref_confirm=$userdata["pref_confirm"];
-	$pref_usespellchecker=$userdata["pref_usespellchecker"];
-*/	// *** /retrieving
 }
 
 
@@ -123,7 +116,6 @@ function get_weekstartend($mysqlstring, $start_of_week) {
 	$md = substr($mysqlstring,5,2);
 	$day = mktime(0,0,0, $md, $mm, $my);
 	$weekday = date('w',$day);
-#	echo $weekday;
 	$i = 86400;
 	while ($weekday > $start_of_week) {
 		$weekday = date('w',$day);
