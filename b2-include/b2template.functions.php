@@ -709,15 +709,6 @@ function comment_time($d='') {
 	}
 }
 
-function comment_is_trackback($display=1) {
-	global $commentdata;
-	if ($display) {
-		echo $commentdata['comment_is_trackback'];
-	} else {
-		return $commentdata['comment_is_trackback'];
-	}
-}
-
 /***** // Comment tags *****/
 
 
