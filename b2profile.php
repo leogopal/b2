@@ -228,6 +228,10 @@ default:
 	include ("b2header.php");
 	$profiledata=get_userdata($user_ID);
 
+	$bookmarklet_tbpb  = ($use_trackback) ? '&trackback=1' : '';
+	$bookmarklet_tbpb .= ($use_pingback)  ? '&pingback=1'  : '';
+	$bookmarklet_height= ($use_trackback) ? 340 : 300;
+
 	?>
 
 	<form name="form" action="b2profile.php" method="post">
@@ -341,20 +345,20 @@ if ($user_level > 0) {
 <?php
 if ($is_NS4 || $is_gecko) {
 ?>
-<a href="javascript:Q=document.selection?document.selection.createRange().text:document.getSelection();void(window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(Q)+'&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2 bookmarklet','scrollbars=no,width=480,height=300,left=100,top=150,status=yes'));">b2 - <?php echo $blogname ?></a>
+<a href="javascript:Q=document.selection?document.selection.createRange().text:document.getSelection();void(window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(Q)+'<?php echo $bookmarklet_tbpb ?>&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2 bookmarklet','scrollbars=no,width=480,height=<?php echo $bookmarklet_height ?>,left=100,top=150,status=yes'));">b2 - <?php echo $blogname ?></a>
 <?php
 } else if ($is_winIE) {
 ?>
-<a href="javascript:Q='';if(top.frames.length==0)Q=document.selection.createRange().text;void(btw=window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(Q)+'&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2bookmarklet','scrollbars=no,width=480,height=300,left=100,top=150,status=yes'));btw.focus();">b2 - <?php echo $blogname ?></a>
+<a href="javascript:Q='';if(top.frames.length==0)Q=document.selection.createRange().text;void(btw=window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(Q)+'<?php echo $bookmarklet_tbpb ?>&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2bookmarklet','scrollbars=no,width=480,height=<?php echo $bookmarklet_height ?>,left=100,top=150,status=yes'));btw.focus();">b2 - <?php echo $blogname ?></a>
 
 <?php
 } else if ($is_opera) {
 ?>
-<a href="javascript:void(window.open('<?php echo $path ?>/b2bookmarklet.php?popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2bookmarklet','scrollbars=no,width=480,height=300,left=100,top=150,status=yes'));">b2 - <?php echo $blogname ?></a>
+<a href="javascript:void(window.open('<?php echo $path ?>/b2bookmarklet.php?popupurl='+escape(location.href)+'&popuptitle='+escape(document.title)+'<?php echo $bookmarklet_tbpb ?>','b2bookmarklet','scrollbars=no,width=480,height=<?php echo $bookmarklet_height ?>,left=100,top=150,status=yes'));">b2 - <?php echo $blogname ?></a>
 <?php
 } else if ($is_macIE) {
 ?>
-<a href="javascript:Q='';if(top.frames.length==0);void(btw=window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(document.getSelection())+'&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2bookmarklet','scrollbars=no,width=480,height=300,left=100,top=150,status=yes'));btw.focus();">b2 - <?php echo $blogname ?></a> <?php
+<a href="javascript:Q='';if(top.frames.length==0);void(btw=window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(document.getSelection())+'&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title)+'<?php echo $bookmarklet_tbpb ?>','b2bookmarklet','scrollbars=no,width=480,height=<?php echo $bookmarklet_height ?>,left=100,top=150,status=yes'));btw.focus();">b2 - <?php echo $blogname ?></a> <?php
 }
 ?>
 <?php if ($is_gecko) { ?>
