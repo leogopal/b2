@@ -75,25 +75,29 @@ while($rowc = mysql_fetch_object($resultc)) {
 <form action="b2comments.post.php" method="post">
 	<input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
 	<input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($HTTP_SERVER_VARS["REQUEST_URI"]); ?>" />
-	
+
 	<p class="commentfield">
 	name<br />
-	<input type="text" name="author" class="textarea" value="<?php echo $comment_author ?>" size="20" tabindex="1" />
+	<input type="text" name="author" class="textarea" value="<?php echo $comment_author ?>" size="20" tabindex="1" 
+	onfocus="this.value=(this.value=='name') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'name' : this.value;" />
 	</p>
 
 	<p class="commentfield">
 	email<br />
-	<input type="text" name="email" class="textarea" value="<?php echo $comment_author_email ?>" size="20" tabindex="2" />
+	<input type="text" name="email" class="textarea" value="<?php echo $comment_author_email ?>" size="20" tabindex="2" 
+	onfocus="this.value=(this.value=='email') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'email' : this.value;" /> 
 	</p>
 
 	<p class="commentfield">
 	url<br />
-	<input type="text" name="url" class="textarea" value="<?php echo $comment_author_url ?>" size="20" tabindex="3" />
+	<input type="text" name="url" class="textarea" value="<?php echo $comment_author_url ?>" size="20" tabindex="3" 
+	onfocus="this.value=(this.value=='url') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'url' : this.value;" />
 	</p>
 
 	<p class="commentfield">
 	your comment<br />
-	<textarea cols="40" rows="4" name="comment" tabindex="4" class="textarea">comment</textarea>
+	<textarea cols="40" rows="4" name="comment" tabindex="4" class="textarea"
+Ê   onfocus="this.value=(this.value=='comment') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'comment' : this.value;" >comment</textarea> 
 	</p>
 
 	<p class="commentfield">
