@@ -96,7 +96,7 @@ if ($archive_mode == "monthly") {
 			$arc_week = get_weekstartend($arc_ymd, $start_of_week);
 			$arc_week_start = date_i18n($archive_week_start_date_format, $arc_week['start']);
 			$arc_week_end = date_i18n($archive_week_end_date_format, $arc_week['end']);
-			echo "<a href=\"$siteurl/".$blogfilename."?m=$arc_year&w=$arc_w\">";
+			echo "<a href=\"$siteurl/".$blogfilename."?m=$arc_year&amp;w=$arc_w\">";
 			echo $arc_week_start.$archive_week_separator.$arc_week_end;
 			echo "</a>";
 			echo $archive_line_separator."\n";
