@@ -258,6 +258,12 @@ $month['12']='December';
 $b2inc='b2-include';
 
 
+// ** Querystring Configuration ** (don't change if you don't know what you're doing)
+
+$querystring_start = '?';
+$querystring_equal = '=';
+$querystring_separator = '&amp;';
+
 
 
 
