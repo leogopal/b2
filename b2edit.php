@@ -24,7 +24,6 @@ case 'post':
 
 	$standalone = 1;
 	require_once('./b2header.php');
-	require_once('./pingback.php');
 
 	$post_autobr = intval($HTTP_POST_VARS["post_autobr"]);
 	$content = format_to_post($HTTP_POST_VARS["content"]);
