@@ -690,7 +690,8 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 	global $use_rss;
 	global $admin_email,$blogname,$siteurl,$blogfilename,$blogdescription,$posts_per_rss,$rss_language;
 	global $tableposts,$postdata,$row;
-
+	global $querystring_start, $querystring_equal, $querystring_equal, $querystring_separator;
+	
 	if ($rss_language == '') {
 		$rss_language = 'en';
 	}
