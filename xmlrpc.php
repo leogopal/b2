@@ -115,6 +115,7 @@ function b2newpost($m) {
 		pingWeblogs($blog_ID);
 		pingCafelog($cafelogID, $post_title, $post_ID);
 		pingBlogs($blog_ID);
+		pingback($content, $post_ID);
 
 		return new xmlrpcresp(new xmlrpcval("$post_ID"));
 
@@ -253,6 +254,7 @@ function bloggernewpost($m) {
 		pingWeblogs($blog_ID);
 		pingCafelog($cafelogID, $post_title, $post_ID);
 		pingBlogs($blog_ID);
+		pingback($content, $post_ID);
 
 		logIO("O","Posted ! ID: $post_ID");
 		return new xmlrpcresp(new xmlrpcval("$post_ID"));
@@ -860,8 +862,9 @@ function pingback_ping($m) {
 				}
 				$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
 				if (is_integer($pos2)) {
-					$start = $pos2-100;
-					$context = substr(strip_tags($linea, '<a>'), $start, 225);
+					$start = $pos2-50;
+					$context = substr(strip_tags($linea, '<a>'), $start, 125);
+					$context = strip_tags($context);
 				}
 				$puntero = $puntero + 4096;
 			}
@@ -875,7 +878,6 @@ function pingback_ping($m) {
 				$context = format_to_post($context);
 				$original_pagelinkedfrom = $pagelinkedfrom;
 				$pagelinkedfrom = addslashes($pagelinkedfrom);
-				$pagelinkedfrom = htmlspecialchars($pagelinkedfrom);
 				$original_title = $title;
 				$title = addslashes(strip_tags(trim($title)));
 				$sql = "INSERT INTO $tablecomments (comment_post_ID, comment_author, comment_author_url, comment_date, comment_content) VALUES ($post_ID, '$title', '$pagelinkedfrom', NOW(), '$context')";
