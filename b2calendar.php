@@ -140,7 +140,7 @@ for($i = $calendarfirst; $i<($calendarlast+86400); $i = $i + 86400) {
 			break;
 		}
 		echo $calendarrowend."\n";
-		if (($i+86400) < $calendarlast) {
+		if (($i+86400) < ($calendarlast+86400)) {
 			echo $calendarrowstart."\n";
 		}
 		$newrow = 0;
