@@ -120,7 +120,7 @@ if (isset($s)) {
 }
 
 // category stuff
-if ((!isset($cat)) || ($cat == 'all') || ($cat == '0')) {
+if ((empty($cat)) || ($cat == 'all') || ($cat == '0')) {
 	$whichcat='';
 } else {
 	$cat = ''.urldecode($cat).'';
@@ -183,7 +183,7 @@ if (!isset($orderby)) {
 	}
 }
 
-if ((!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$postend)) {
+if ((!$whichcat) && (!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$postend)) {
 	if ($what_to_show == 'posts') {
 		$limits = ' LIMIT '.$posts_per_page;
 	} elseif ($what_to_show == 'days') {
@@ -202,7 +202,7 @@ if ((isset($poststart)) && (isset($postend)) && ($postend > $poststart)) {
 	$limits = ' LIMIT '.$poststart.','.$posts;
 }
 
-if (($m) || ($p) || ($w) || ($s)) {
+if (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
 	$limits = '';
 }
 
