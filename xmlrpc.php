@@ -319,7 +319,7 @@ function bloggernewpost($m) {
            "Sorry, level 0 users can not post");
 		}
 
-		$post_title = xmlrpc_getposttitle($content);
+		$post_title = addslashes(xmlrpc_getposttitle($content));
 		$post_category = xmlrpc_getpostcategory($content);
 
 		$content = xmlrpc_removepostdata($content);
@@ -415,7 +415,7 @@ function bloggereditpost($m) {
 
 		$content = $newcontent;
 
-		$post_title = xmlrpc_getposttitle($content);
+		$post_title = addslashes(xmlrpc_getposttitle($content));
 		$post_category = xmlrpc_getpostcategory($content);
 
 		$content = xmlrpc_removepostdata($content);
