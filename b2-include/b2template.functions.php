@@ -647,6 +647,8 @@ function comment_author_url() {
 	global $commentdata;
 	$url = trim(stripslashes($commentdata['comment_author_url']));
 	$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
+	// convert & into &amp;
+	$url = preg_replace('#&([^amp\;])#is', '&amp;$1', $url);
 	echo $url;
 }
 
