@@ -25,6 +25,7 @@ function bloginfo($show='') {
 	$info = convert_bbcode($info);
 	$info = convert_gmcode($info);
 	$info = convert_smilies($info);
+	$info = apply_filters('bloginfo', $info);
 	echo convert_chars($info, 'html');
 }
 
@@ -68,10 +69,12 @@ function single_post_title($prefix = '', $display = 1) {
 	global $p;
 	if (intval($p)) {
 		$post_data = get_postdata($p);
+		$title = $post_data['Title'];
+		$title = apply_filters('single_post_title', $title);
 		if ($display) {
-			echo $prefix.strip_tags(stripslashes($post_data['Title']));
+			echo $prefix.strip_tags(stripslashes($title));
 		} else {
-			return strip_tags(stripslashes($post_data['Title']));
+			return strip_tags(stripslashes($title));
 		}
 	}
 }
@@ -173,7 +176,7 @@ function the_author_icq() {
 }
 
 function the_author_aim() {
-	global $id,$authordata;	echo $authordata['user_aim'];
+	global $id,$authordata;	echo str_replace(' ', '+', $authordata['user_aim']);
 }
 
 function the_author_yim() {
@@ -205,6 +208,7 @@ function the_title($before='',$after='') {
 	$title = convert_bbcode($title);
 	$title = convert_gmcode($title);
 	$title = convert_smilies($title);
+	$title = apply_filters('the_title', $title);
 	if ($title) {
 		echo convert_chars($before.$title.$after, 'html');
 	}
@@ -222,6 +226,7 @@ function the_title_unicode($before='',$after='') {
 	$title = get_the_title();
 	$title = convert_bbcode($title);
 	$title = convert_gmcode($title);
+	$title = apply_filters('the_title_unicode', $title);
 	if (trim($title)) {
 		echo convert_chars($before.$title.$after, 'unicode');
 	}
@@ -229,6 +234,7 @@ function the_title_unicode($before='',$after='') {
 function get_the_title() {
 	global $id,$postdata;
 	$output = stripslashes($postdata['Title']);
+	$output = apply_filters('the_title', $output);
 	return($output);
 }
 
@@ -238,6 +244,7 @@ function the_content($more_link_text='(more...)', $stripteaser=0, $more_file='')
 	$content = convert_gmcode($content);
 	$content = convert_smilies($content);
 	$content = convert_chars($content, 'html');
+	$content = apply_filters('the_content', $content);
 	echo $content;
 }
 function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file='') {
@@ -252,7 +259,9 @@ function the_content_unicode($more_link_text='(more...)', $stripteaser=0, $more_
 	$content = get_the_content($more_link_text,$stripteaser,$more_file);
 	$content = convert_bbcode($content);
 	$content = convert_gmcode($content);
+	$content = convert_smilies($content);
 	$content = convert_chars($content, 'unicode');
+	$content = apply_filters('the_content_unicode', $content);
 	echo $content;
 }
 function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file='') {
@@ -499,13 +508,17 @@ function posts_nav_link($sep=' :: ', $prelabel='<< Previous Page', $nxtlabel='Ne
 /***** Category tags *****/
 
 function the_category() {
-	echo convert_chars(get_the_category(), 'html');
+	$category = get_the_category();
+	$category = apply_filters('the_category', $category);
+	echo convert_chars($category, 'html');
 }
 function the_category_rss() {
 	echo convert_chars(strip_tags(get_the_category(), 'xml'));
 }
 function the_category_unicode() {
-	echo convert_chars(get_the_category(), 'unicode');
+	$category = get_the_category();
+	$category = apply_filters('the_category_unicode', $category);
+	echo convert_chars($category, 'unicode');
 }
 function get_the_category() {
 	global $id,$postdata,$tablecategories,$querycount,$cache_categories,$use_cache;
@@ -583,11 +596,14 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 	$result=mysql_query($query);
 	$querycount++;
 	if (intval($optionall) == 1) {
+		$all = apply_filters('list_cats', $all);
 		echo "\t<a href=\"".$file.$querystring_start.'cat'.$querystring_equal.'all">'.$all."</a><br />\n";
 	}
 	while($row = mysql_fetch_object($result)) {
+		$cat_name = $row->cat_name;
+		$cat_name = apply_filters('list_cats', $cat_name);
 		echo "\t<a href=\"".$file.$querystring_start.'cat'.$querystring_equal.$row->cat_ID.'">';
-		echo stripslashes($row->cat_name)."</a><br />\n";
+		echo stripslashes($cat_name)."</a><br />\n";
 	}
 }
 
@@ -752,6 +768,7 @@ function comment_text() {
 	$comment = convert_smilies($comment);
 	$comment = make_clickable($comment);
 	$comment = balanceTags($comment);
+	$comment = apply_filters('comment_text', $comment);
 	echo $comment;
 }
 
@@ -836,25 +853,17 @@ function trackback_rdf($timezone=0) {
 	global $pathserver, $id, $HTTP_SERVER_VARS;
 	if (!stristr($HTTP_SERVER_VARS['HTTP_USER_AGENT'], 'W3C_Validator')) {
 		echo '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '."\n";
-		echo '    xmlns:dc="http://purl.org/dc/elements/1.1/">'."\n";
+		echo '    xmlns:dc="http://purl.org/dc/elements/1.1/"'."\n";
+		echo '    xmlns:dc="trackback="http://madskills.com/public/xml/rss/module/trackback/">'."\n";
 		echo '<rdf:Description'."\n";
-		echo '    about="'.$pathserver.'/b2trackback.php?tb_id='.$id.'"'."\n";
-		echo '    dc:title="'.addslashes(get_the_title()).'"'."\n";
+		echo '    rdf:about="';
+		permalink_single();
+		echo '"'."\n";
 		echo '    dc:identifier="';
 		permalink_single();
 		echo '"'."\n";
-		echo '    dc:subject="'.addslashes(get_the_category()).'"'."\n";
-		echo '    dc:description="';
-		$blahblah = strip_tags(str_replace('"', '&quot;', get_the_content()));
-		$blahblah = (strlen($blahblah) > 255) ? substr($blahblah, 0, 252).'...' : $blahblah;
-		echo $blahblah.'"'."\n";
-		echo '    dc:creator="';
-		the_author();
-		echo '"'."\n";
-		echo '    dc:date="';
-		the_time('Y-m-dH:i:s');
-		$sign = ($timezone >= 0) ? '+' : '-';
-		echo $sign.zeroise(intval($timezone),2).':00" />'."\n";
+		echo '    dc:title="'.addslashes(get_the_title()).'"'."\n";
+		echo '    trackback:ping="'.$pathserver.'/b2trackback.php?tb_id='.$id.'"'."\n";
 		echo '</rdf:RDF>';
 	}
 }
@@ -1046,6 +1055,24 @@ function is_new_day() {
 	} else {
 		return(0);
 	}
+}
+
+function apply_filters($tag, $string) {
+	global $b2_filter;
+	if (isset($b2_filter['all'])) {
+		$b2_filter[$tag] = $b2_filter['all'];
+	}
+	if (isset($b2_filter[$tag])) {
+		$functions = $b2_filter[$tag];
+		if (is_array($functions)) {
+			foreach($functions as $function) {
+				$string = $function($string);
+			}
+		} elseif (is_string($functions)) {
+			$string = $functions($string);
+		}
+	}
+	return $string;
 }
 
 ?>
