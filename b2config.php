@@ -146,6 +146,7 @@ $posts_per_rss = 10;
 $rss_language = 'en';
 
 
+
 // ** Weblogs.com ping **
 
 # set this to 1 if you want your site to be listed on http://weblogs.com when you add a new post
@@ -278,7 +279,7 @@ $month['12']='December';
 
 # $b2inc is where the included b2 files are: that's generally the directory b2-include,
 #  so you shouldn't have to change that setting
-$b2inc='b2-include';
+$b2inc = './b2-include';
 
 
 // ** Querystring Configuration ** (don't change if you don't know what you're doing)
