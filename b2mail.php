@@ -1,59 +1,7 @@
 <?php
 
-# I set the cron at 1/6 , is that the right thing for every 10 minutes ?
-
-#exit;
-# This script is taking too many resources
-# You may run this a maximum of every 10 minutes
-# (looks like you have another one running every minute also;
-#  it might have the same problem)
-
 # pop3-2-b2 mail to blog
 # v0.2 20020404
-
-
-
-### Configuration
-
-# mailserver settings
-$mailserver_url = 'mail.indiboi.com';
-$mailserver_login = 'ohblah@indiboi.com';
-$mailserver_pass = 'ohblah';
-$mailserver_port = 110;
-
-# by default posts will have this category
-$default_category = 1;
-
-# subject prefix
-$subjectprefix = 'blog:';
-
-# body terminator string (starting from this string, everything will be ignored, including this string)
-$bodyterminator = "___";
-
-# set this to 1 to run in test mode
-$thisisforfunonly = 0;
-
-
-### /Configuration
-
-
-### Special Configuration for some phone email services
-
-# some mobile phone email services will send identical subject & content on the same line
-# if you use such a service, set $use_phoneemail to 1, and indicate a separator string
-
-$use_phoneemail = 1;
-$phoneemail_separator = ':::';
-
-# when you compose your message, you'll type your subject then the separator string
-# then you can type your login:password, then the separator, then the content
-#
-# example: blog:title ::: login:password ::: hi, this is my blog !
-
-
-### /Special Configuration
-
-
 
 include("b2config.php");
 include($b2inc."/b2vars.php");
