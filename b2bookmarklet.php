@@ -45,6 +45,22 @@ function DoSpell(formname, subject, body) {
 	"toolbar=no,directories=no,location=yes,urlbar=yes,resizable=yes,width=620,height=600,top=100,left=100")
 }
 
+function preview(form) {
+	var preview_date = "<?php echo date("Y-m-d H:i:s"); ?>";
+	var preview_userid = "<?php echo $user_ID ?>";
+	var preview_title = form.post_title.value;
+	var preview_category = form.post_category.value;
+	var preview_content = form.content.value;
+	var preview_autobr = form.post_autobr.value;
+	preview_date = escape(preview_date);
+	preview_userid = escape(preview_userid);
+	preview_title = escape(preview_title);
+	preview_category = escape(preview_category);
+	preview_content = escape(preview_content);
+	preview_autobr = escape(preview_autobr);
+	window.open ("<?php echo "$siteurl/$blogfilename" ?>?preview=1&preview_date="+preview_date +"&preview_userid="+preview_userid +"&preview_title="+preview_title +"&preview_category="+preview_category +"&preview_content="+preview_content +"&preview_autobr="+preview_autobr ,"Preview", "location=0,menubar=1,resizable=1,scrollbars=yes,status=1,toolbar=0");
+}
+
 function launchupload() {
 	window.open ("b2upload.php", "b2upload", "width=380,height=360,location=0,menubar=0,resizable=1,scrollbars=yes,status=1,toolbar=0");
 }
@@ -183,16 +199,20 @@ preg_match("/\%u[1-9A-F][1-9A-F][1-9A-F][1-9A-F]/is", $text, $stufftofix);
 <?php } ?>
 </table>
 
+<?php if ($use_preview) { ?>
+<input type="button" value="preview" onclick="preview(this.form);" class="search" tabindex="8" />
+<?php } ?>
+
 <input type="submit" name="submit" value="Blog this !" class="search" tabindex="3" /> 
 
 <?php if ($use_spellchecker) { ?>
 <!--<input type = "button" value = "Spell Check" onclick="var f=document.forms[0]; doSpell( 'en', f.post_content, '<?php echo $spellchecker_url ?>/sproxy.cgi', true);" class="search" tabindex="5" />-->
-<input type="button" value="Check Spelling" onclick="DoSpell
+<input type="button" value="Spellcheck" onclick="DoSpell
 ('post','content','');" class="search" />
 <?php } ?>
 
 <?php if ( ($use_fileupload) && ($user_level >= $fileupload_minlevel) && ((ereg(" ".$user_login." ", $fileupload_allowedusers)) || (trim($fileupload_allowedusers)=="")) ) { ?>
-<input type="button" value="upload a file/image" onclick="launchupload();" class="search" />
+<input type="button" value="upload a file" onclick="launchupload();" class="search" />
 <?php } ?>
 
 <script language="JavaScript">
