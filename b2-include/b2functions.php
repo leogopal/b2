@@ -28,14 +28,14 @@ function dbconnect() {
 
 
 function autobrize($content) {
-	$content = preg_replace("/<br>\n/","\n",$content);
-	$content = preg_replace("/<br \/>\n/","\n",$content);
-	$content = preg_replace("/(\015\012)|(\015)|(\012)/","<br />\n",$content);
+	$content = preg_replace("/<br>\n/", "\n", $content);
+	$content = preg_replace("/<br \/>\n/", "\n", $content);
+	$content = preg_replace("/(\015\012)|(\015)|(\012)/", "<br />\n", $content);
 	return($content);
 	}
 function unautobrize($content) {
-	$content = eregi_replace("<br />\n","\n",$content);
-	$content = eregi_replace("<br>\n","\n",$content);   //for PHP versions before 4.0.5
+	$content = preg_replace("/<br>\n/", "\n", $content);   //for PHP versions before 4.0.5
+	$content = preg_replace("/<br \/>\n/", "\n", $content);
 	return($content);
 	}
 
@@ -714,10 +714,10 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 
 function xmlrpc_getposttitle($content) {
 	global $post_default_title;
-	if (preg_match("/<title>(.+?)<\/title>/is",$content,$matchtitle)) {
+	if (preg_match('/<title>(.+?)<\/title>/is', $content, $matchtitle)) {
 		$post_title = $matchtitle[0];
-		$post_title = eregi_replace("<title>","",$post_title);
-		$post_title = eregi_replace("</title>","",$post_title);
+		$post_title = preg_replace('/<title>/si', '', $post_title);
+		$post_title = preg_replace('/<\/title>/si', '', $post_title);
 	} else {
 		$post_title = $post_default_title;
 	}
@@ -726,10 +726,10 @@ function xmlrpc_getposttitle($content) {
 	
 function xmlrpc_getpostcategory($content) {
 	global $post_default_category;
-	if (preg_match("/<category>(.+?)<\/category>/is",$content,$matchcat)) {
+	if (preg_match('/<category>(.+?)<\/category>/is', $content, $matchcat)) {
 		$post_category = $matchcat[0];
-		$post_category = eregi_replace("<category>","",$post_category);
-		$post_category = eregi_replace("</category>","",$post_category);
+		$post_category = preg_replace('/<category>/si', '', $post_category);
+		$post_category = preg_replace('/<\/category>/si', '', $post_category);
 
 	} else {
 		$post_category = $post_default_category;
@@ -738,8 +738,8 @@ function xmlrpc_getpostcategory($content) {
 }
 
 function xmlrpc_removepostdata($content) {
-	$content = preg_replace("/<title>(.+?)<\/title>/","",$content);
-	$content = preg_replace("/<category>(.+?)<\/category>/","",$content);
+	$content = preg_replace('/<title>(.+?)<\/title>/si', '', $content);
+	$content = preg_replace('/<category>(.+?)<\/category>/si', '', $content);
 	$content = trim($content);
 	return($content);
 }
