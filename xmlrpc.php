@@ -794,7 +794,7 @@ $pingback_ping_doc = 'gets a pingback and registers it as a comment prefixed by 
 function pingback_ping($m) {
 	// original code by Mort (http://mort.mine.nu:8080)
 	global $tableposts, $tablecomments, $comments_notify;
-	global $siteurl, $blogfilename, $b2_version, $debug;
+	global $siteurl, $blogfilename, $b2_version;
 	global $HTTP_SERVER_VARS;
 
 	dbconnect();
@@ -808,6 +808,10 @@ function pingback_ping($m) {
 
 	$pagelinkedto = $m->getParam(1);
 	$pagelinkedto = $pagelinkedto->scalarval();
+
+	debug_fwrite($log, 'BEGIN '.time()."\n\n");
+	debug_fwrite($log, 'Page linked from: '.$pagelinkedfrom."\n");
+	debug_fwrite($log, 'Page linked to: '.$pagelinkedto."\n");
 
 	$messages = array(
 		htmlentities("Pingback from ".$pagelinkedfrom." to ".$pagelinkedto." registered. Keep the web talking! :-)"),
@@ -848,16 +852,20 @@ function pingback_ping($m) {
 			$post_ID = -1;
 		}
 
+		debug_fwrite($log, 'Found post ID: '.$post_ID."\n");
+
 		$sql = 'SELECT post_author FROM '.$tableposts.' WHERE ID = '.$post_ID;
 		$result = mysql_query($sql);
 
 		if (mysql_num_rows($result)) {
 
+			debug_fwrite($log, 'Post exists'."\n");
+
 			// Let's check that the remote site didn't already pingback this entry
-			$sql = 'SELECT * FROM '.$tablecomments.' WHERE comment_post_ID = '.$post_ID.' AND comment_author_url = \''.$pagelinkedfrom.'\'';
+			$sql = 'SELECT * FROM '.$tablecomments.' WHERE comment_post_ID = '.$post_ID.' AND comment_author_url = \''.$pagelinkedfrom.'\' AND comment_content LIKE \'%<pingback />%\'';
 			$result = mysql_query($sql);
 
-			if (mysql_num_rows($result)) {
+			if (mysql_num_rows($result) || (1==1)) {
 			
 				// Let's check the remote site
 				$fp = @fopen($pagelinkedfrom, 'r');
@@ -872,6 +880,7 @@ function pingback_ping($m) {
 						$start = $pos2-40;
 						$context = substr(strip_tags($linea, '<a>'), $start, 120);
 						$context = strip_tags($context);
+						$context = str_replace("\n", ' ', $context);
 					}
 					$puntero = $puntero + 4096;
 				}
@@ -918,6 +927,7 @@ function pingback_ping($m) {
 		} else {
 			// Post_ID not found
 			$message = $messages[2];
+			debug_fwrite($log, 'Post doesn\'t exist'."\n");
 		}
 	}
 	return new xmlrpcresp(new xmlrpcval($message));;
