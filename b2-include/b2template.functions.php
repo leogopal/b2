@@ -16,15 +16,15 @@ function bloginfo($show="") {
 	$info = convert_gmcode($info);
 	$info = convert_smilies($info);
 	echo convert_chars($info,"html");
-	}
+}
 function bloginfo_rss($show="") {
 	$info = strip_tags(get_bloginfo($show));
 	echo convert_chars($info,"unicode");
-	}
+}
 function bloginfo_unicode($show="") {
 	$info = get_bloginfo($show);
 	echo convert_chars($info,"unicode");
-	}
+}
 function get_bloginfo($show="") {
 	global $siteurl,$blogfilename,$blogname,$blogdescription;
 	switch($show) {
@@ -39,7 +39,7 @@ function get_bloginfo($show="") {
 			break;
 	}
 	return($output);
-	}
+}
 
 /***** // About-the-blog tags *****/
 
@@ -60,7 +60,7 @@ function the_date($d="",$before="",$after="") {
 		echo $after;
 		$previousday = $day;
 	}
-	}
+}
 
 function the_time($d="") {
 	global $id,$postdata,$timeformat;
@@ -69,11 +69,11 @@ function the_time($d="") {
 	} else {
 		echo mysql2date($d, $postdata["Date"]);
 	}
-	}
+}
 
 function the_weekday() {
 	global $weekday,$id,$postdata;	echo $weekday[mysql2date('w', $postdata["Date"])];
-	}
+}
 
 function the_weekday_date($before="",$after="") {
 	global $weekday,$id,$postdata,$day,$previousweekday;
@@ -83,7 +83,7 @@ function the_weekday_date($before="",$after="") {
 		echo $after;
 		$previousweekday = $day;
 	}
-	}
+}
 
 /***** // Date/Time tags *****/
 
@@ -102,55 +102,55 @@ function the_author() {
 	if ($i == "namefl")	echo $authordata["user_firstname"]." ".$authordata["user_lastname"];
 	if ($i == "namelf")	echo $authordata["user_lastname"]." ".$authordata["user_firstname"];
 	if (!$i) echo $authordata["user_nickname"];
-	}
+}
 
 function the_author_login() {
 	global $id,$authordata;	echo $authordata["user_login"];
-	}
+}
 
 function the_author_firstname() {
 	global $id,$authordata;	echo $authordata["user_firstname"];
-	}
+}
 
 function the_author_lastname() {
 	global $id,$authordata;	echo $authordata["user_lastname"];
-	}
+}
 
 function the_author_nickname() {
 	global $id,$authordata;	echo $authordata["user_nickname"];
-	}
+}
 
 function the_author_ID() {
 	global $id,$authordata;	echo $authordata["ID"];
-	}
+}
 
 function the_author_email() {
 	global $id,$authordata;	echo antispambot($authordata["user_email"]);
-	}
+}
 
 function the_author_url() {
 	global $id,$authordata;	echo $authordata["user_url"];
-	}
+}
 
 function the_author_icq() {
 	global $id,$authordata;	echo $authordata["user_icq"];
-	}
+}
 
 function the_author_aim() {
 	global $id,$authordata;	echo $authordata["user_aim"];
-	}
+}
 
 function the_author_yim() {
 	global $id,$authordata;	echo $authordata["user_yim"];
-	}
+}
 
 function the_author_msn() {
 	global $id,$authordata;	echo $authordata["user_msn"];
-	}
+}
 
 function the_author_posts() {
 	global $id,$postdata;	$posts=get_usernumposts($postdata["Author_ID"]);	echo $posts;
-	}
+}
 
 /***** // Author tags *****/
 
@@ -162,7 +162,7 @@ function the_author_posts() {
 function the_ID() {
 	global $id;
 	echo $id;
-	}
+}
 
 function the_title($before="",$after="") {
 	$title = get_the_title();
@@ -172,7 +172,7 @@ function the_title($before="",$after="") {
 	if ($title) {
 		echo convert_chars($before.$title.$after,"html");
 	}
-	}
+}
 function the_title_rss() {
 	$title = get_the_title();
 	$title = convert_bbcode($title);
@@ -181,7 +181,7 @@ function the_title_rss() {
 	if (trim($title)) {
 		echo convert_chars($title,"unicode");
 	}
-	}
+}
 function the_title_unicode($before="",$after="") {
 	$title = get_the_title();
 	$title = convert_bbcode($title);
@@ -189,12 +189,12 @@ function the_title_unicode($before="",$after="") {
 	if (trim($title)) {
 		echo convert_chars($before.$title.$after,"unicode");
 	}
-	}
+}
 function get_the_title() {
 	global $id,$postdata;
 	$output = stripslashes($postdata["Title"]);
 	return($output);
-	}
+}
 
 function the_content($more_link_text="(more...)",$stripteaser="0",$more_file="") {
 	$content = get_the_content($more_link_text,$stripteaser,$more_file);
@@ -203,7 +203,7 @@ function the_content($more_link_text="(more...)",$stripteaser="0",$more_file="")
 	$content = convert_smilies($content);
 	$content = convert_chars($content,"html");
 	echo $content;
-	}
+}
 function the_content_rss($more_link_text="(more...)",$stripteaser="0",$more_file="") {
 	$content = get_the_content($more_link_text,$stripteaser,$more_file);
 	$content = convert_bbcode($content);
@@ -211,14 +211,14 @@ function the_content_rss($more_link_text="(more...)",$stripteaser="0",$more_file
 	$content = convert_chars($content,"unicode");
 	$content = strip_tags($content);
 	echo $content;
-	}
+}
 function the_content_unicode($more_link_text="(more...)",$stripteaser="0",$more_file="") {
 	$content = get_the_content($more_link_text,$stripteaser,$more_file);
 	$content = convert_bbcode($content);
 	$content = convert_gmcode($content);
 	$content = convert_chars($content,"unicode");
 	echo $content;
-	}
+}
 function get_the_content($more_link_text="(more...)",$stripteaser="0",$more_file="") {
 	global $id,$postdata,$more,$c,$withcomments,$page,$pages,$multipage,$numpages;
 	global $HTTP_SERVER_VARS, $preview;
@@ -249,7 +249,7 @@ function get_the_content($more_link_text="(more...)",$stripteaser="0",$more_file
 		$output =  preg_replace("/\%u([0-9A-F]{4,4})/e",  "'&#'.base_convert('\\1',16,10).';'", $output);
 	}
 	return($output);
-	}
+}
 
 function link_pages($before="<br />",$after="<br />",$next_or_number="number",$nextpagelink="next page",$previouspagelink="previous page",$pagelink="%",$more_file="") {
 	global $id,$page,$numpages,$multipage,$more;
@@ -315,7 +315,7 @@ function previous_post($format="%",$previous="previous post: ",$title="yes",$in_
 			echo $format;
 		}
 	}
-	}
+}
 
 function next_post($format="%",$next="next post: ",$title="yes",$in_same_cat="no",$limitnext=1) {
 	global $tableposts, $p, $posts, $id, $postdata, $siteurl, $blogfilename, $querycount;
@@ -349,7 +349,7 @@ function next_post($format="%",$next="next post: ",$title="yes",$in_same_cat="no
 			echo $format;
 		}
 	}
-	}
+}
 
 
 
@@ -395,13 +395,13 @@ function prev_posts() { // original by cfactor at cooltux.org
 
 function the_category() {
 	echo convert_chars(get_the_category(),"html");
-	}
+}
 function the_category_rss() {
 	echo convert_chars(strip_tags(get_the_category(),"xml"));
-	}
+}
 function the_category_unicode() {
 	echo convert_chars(get_the_category(),"unicode");
-	}
+}
 function get_the_category() {
 	global $id,$postdata,$tablecategories,$querycount,$cache_categories,$use_cache;
 	$cat_ID = $postdata["Category"];
@@ -416,7 +416,7 @@ function get_the_category() {
 		$cat_name = $cache_categories[$cat_ID];
 	}
 	return(stripslashes($cat_name));
-	}
+}
 
 function get_the_category_by_ID($cat_ID) {
 	global $id,$tablecategories,$querycount,$cache_categories,$use_cache;
@@ -431,11 +431,11 @@ function get_the_category_by_ID($cat_ID) {
 		$cat_name = $cache_categories[$cat_ID];
 	}
 	return(stripslashes($cat_name));
-	}
+}
 
 function the_category_ID() {
 	global $id,$postdata;	echo $postdata["Category"];
-	}
+}
 
 function the_category_head($before="",$after="") {
 	global $id, $postdata, $currentcat, $previouscat,$dateformat,$newday;
@@ -446,7 +446,7 @@ function the_category_head($before="",$after="") {
 		echo $after;
 		$previouscat = $currentcat;
 	}
-	}
+}
 
 // out of the b2 loop
 function dropdown_cats($optionall = 1, $all = "All") {
@@ -465,7 +465,7 @@ function dropdown_cats($optionall = 1, $all = "All") {
 		echo ">".stripslashes($row->cat_name)."</option>\n";
 	}
 	echo "</select>\n";
-	}
+}
 
 // out of the b2 loop
 function list_cats($optionall = 1, $all = "All") {
@@ -481,7 +481,7 @@ function list_cats($optionall = 1, $all = "All") {
 		echo "\t<a href=\"$pagenow?cat=".$row->cat_ID."\">";
 		echo stripslashes($row->cat_name)."</a><br />\n";
 	}
-	}
+}
 
 /***** // Category tags *****/
 
@@ -502,31 +502,29 @@ function comments_number($zero="no comment", $one="1 comment", $more="% comments
 	} else {
 		$number = $cache_commentsnumber[$id];
 	}
-	if (!$c) {
-		if($number == 0)	echo $zero;
-		if($number == 1)	echo $one;
-		if($number  > 1) {
-			$n="$number";
-			$more=eregi_replace("\%",$n,$more);
-			echo $more;
-		}
+	if($number == 0)	echo $zero;
+	if($number == 1)	echo $one;
+	if($number  > 1) {
+		$n="$number";
+		$more=eregi_replace("\%",$n,$more);
+		echo $more;
 	}
-	}
+}
 
 function comments_link($file="") {
 	global $id,$pagenow;
 	if ($file == "")	$file = $pagenow;
 	if ($file == "/")	$file = "";
 	echo $file."?p=$id&amp;c=1#comments";
-	}
+}
 
 function comment_ID() {
 	global $commentdata;	echo $commentdata["comment_ID"];
-	}
+}
 
 function comment_author() {
 	global $commentdata;	echo stripslashes($commentdata["comment_author"]);
-	}
+}
 
 function comment_author_email() {
 	global $commentdata;	echo antispambot(stripslashes($commentdata["comment_author_email"]));
@@ -545,7 +543,7 @@ function comment_author_email_link($linktext="",$before="",$after="") {
 		echo "<a href=\"mailto:".antispambot(stripslashes($email))."\">$display</a>";
 		echo $after;
 	}
-	}
+}
 
 function comment_author_url_link($linktext="",$before="",$after="") {
 	global $commentdata;
@@ -556,11 +554,11 @@ function comment_author_url_link($linktext="",$before="",$after="") {
 		echo "<a href=\"".stripslashes($url)."\" target=\"_blank\">$display</a>";
 		echo $after;
 	}
-	}
+}
 
 function comment_author_IP() {
 	global $commentdata;	echo stripslashes($commentdata["comment_author_IP"]);
-	}
+}
 
 function comment_text() {
 	global $commentdata;
@@ -572,7 +570,7 @@ function comment_text() {
 	$comment = make_clickable($comment);
 	$comment = balanceTags($comment);
 	echo $comment;
-	}
+}
 
 function comment_date($d="") {
 	global $commentdata,$dateformat;
@@ -581,7 +579,7 @@ function comment_date($d="") {
 	} else {
 		echo mysql2date($d, $commentdata["comment_date"]);
 	}
-	}
+}
 
 function comment_time($d="") {
 	global $commentdata,$timeformat;
@@ -590,7 +588,7 @@ function comment_time($d="") {
 	} else {
 		echo mysql2date($d, $commentdata["comment_date"]);
 	}
-	}
+}
 
 /***** // Comment tags *****/
 
@@ -601,7 +599,7 @@ function comment_time($d="") {
 
 function permalink_anchor() {
 	global $id;	echo "<a name=\"$id\"></a>";
-	}
+}
 
 function permalink_link($file="") {
 	global $id,$postdata,$pagenow;
@@ -615,19 +613,19 @@ function permalink_link($file="") {
 	} elseif ($archive_mode == "postbypost") {
 		echo $file."?p=$id";
 	}
-	}
+}
 
 function permalink_single($file="") {
 	global $id,$postdata,$pagenow;
 	if ($file=="")
 		$file=$pagenow;
 	echo $file."?p=$id&amp;c=1";
-	}
+}
 
 function permalink_single_rss($file="b2rss.xml") {
 	global $id,$postdata,$pagenow,$siteurl,$blogfilename;
 		echo $siteurl."/".$blogfilename."?p=$id&amp;c=1";
-	}
+}
 
 /***** // Permalink tags *****/
 
@@ -656,7 +654,6 @@ function start_b2() {
 			"Clickable" => 1,
 			"Karma" => 0 // this isn't used yet
 			);
-#		echo $preview_date;
 		if (!empty($HTTP_GET_VARS["preview_autobr"])) {
 			$postdata["Content"] = autobrize($postdata["Content"]);
 		}
