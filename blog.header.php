@@ -223,7 +223,7 @@ if ($pagenow != 'b2edit.php') {
 	if ((empty($poststart)) || (empty($postend)) || !($postend > $poststart)) {
 		$where .= ' AND post_date < \''.$now.'\'';
 	}
-	$where .= ' AND post_category > \''.$catmin.'\'';
+	$where .= ' AND post_category > 0';
 	$distinct = 'DISTINCT';
 	if ($use_gzipcompression) {
 		// gzipping the output of the script
