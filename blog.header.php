@@ -186,7 +186,7 @@ if ((isset($poststart)) && (isset($postend)) && ($postend > $poststart)) {
 	$limits = ' LIMIT '.$poststart.','.$posts;
 }
 
-if (($m) || ($p) || ($w) || ($s)) {
+if (($m) || ($p) || ($w) || ($s) || ($cat) || ($author)) {
 	$limits = '';
 }
 
