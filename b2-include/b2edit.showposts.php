@@ -143,6 +143,7 @@ echo " selected";
 			echo "</option>\n";
 		}
 	} elseif ($archive_mode == "daily") {
+		echo "<select name=\"d\" style=\"width:120px;\">";
 		$archive_day_date_format = "Y/m/d";
 		$arc_sql="SELECT DISTINCT YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) FROM $tableposts ORDER BY post_date DESC";
 		$querycount++;
