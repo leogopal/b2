@@ -1,0 +1,71 @@
+RELEASE - 0.6.2
+
+Corrections and changes made to B2 since version 0.6.1
+
+Code changes:
+
+index.php
+	Uses the b2rss.php method to deliver rdf/rss content. The old method required b2 to generate rss/rdf content when a post was made.
+
+class.POP3.php
+	Bug fix - spelling of 'FALSE'
+	
+blog.header.php
+	bug fix - changed the generation of "headers" to fix IE issues
+	bug fix - corrected error in 'author' logic
+	bug fix - corrected issues with select statement generation with $now date
+	
+b2template.functions.php
+	bug fix - get_the_content() - uses $pagenow to generate current url
+	bug fix - link_pages() - uses $pagenow to generate current url
+	bug fix - link_pages() - corrected generation of links	
+	bug fix - link_pages() - corrected generation of links with 'more'
+	bug fix - next_posts() - Change "post paged" logic to use $pagenow
+	bug fix - next_posts_link() - use $pagenow to generate links
+	bug fix - next_posts_link() - correct max page calculation
+	bug fix - previous_posts() - use $pagenow to generate links
+	bug fix - posts_nav_link() - correct max page calculation
+	bug fix - comments_popup_link() - Absolute link fixes for search friendly urls.
+	bug fix - trackback_popup_link() - Absolute link fixes for search friendly urls.
+	bug fix - trackback_rdf() - Absolute link fixes for search friendly urls.
+	bug fix - pingback_popup_link() - Absolute link fixes for search friendly urls.
+	
+b2sidebar.php
+	bug fix - spell check code
+	
+b2rss2.php
+	bug fix - limit number of rss output items to $posts_per_rss 
+	
+b2mail.php
+	bug fix - changed order of includes
+
+b2functions.php
+	bug fix - changed mysql_oops() perameter name to correct value
+	bug fix - changed touch_time() to account for time offset
+	
+b2edit.showposts.php
+	bug fix - The HTML select for daily archives was missing
+	
+b2vars.php
+	update revision number
+	
+b2comments.post.php
+	bug fix - corrected method to obtain remote IP address
+	
+b2calendar.php
+	changes - incorporated functionality by Alex King
+	
+blogger-2-b2.php
+	bug fix - changed 'include' to be 'require'
+
+gm-2-b2.php
+	bug fix - changed 'include' to be 'require'
+	
+b2footer.php
+	(c) date modification
+	
+example.htaccess
+	added example for error reporting level - turn off 'Notices'
+	
+Removed the directory b2-tools.  The files in the b2-tools directory were moved to the
+main B2 directory.
