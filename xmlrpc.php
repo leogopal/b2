@@ -1008,7 +1008,7 @@ function pingback_ping($m) {
 				if (!empty($context)) {
 
 					$pagelinkedfrom = preg_replace('#&([^amp\;])#is', '&amp;$1', $pagelinkedfrom);
-					$title = (!strlen($matchtitle[1])) $pagelinkedfrom : $matchtitle[1];
+					$title = (!strlen($matchtitle[1])) ? $pagelinkedfrom : $matchtitle[1];
 					$original_context = $context;
 					$context = '<pingback />[...] '.addslashes(trim($context)) .' [...]';
 					$context = format_to_post($context);
