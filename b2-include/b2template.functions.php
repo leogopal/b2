@@ -854,7 +854,7 @@ function trackback_rdf($timezone=0) {
 	if (!stristr($HTTP_SERVER_VARS['HTTP_USER_AGENT'], 'W3C_Validator')) {
 		echo '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '."\n";
 		echo '    xmlns:dc="http://purl.org/dc/elements/1.1/"'."\n";
-		echo '    xmlns:dc="trackback="http://madskills.com/public/xml/rss/module/trackback/">'."\n";
+		echo '    xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">'."\n";
 		echo '<rdf:Description'."\n";
 		echo '    rdf:about="';
 		permalink_single();
