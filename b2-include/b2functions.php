@@ -722,7 +722,7 @@ function trackback($trackback_url, $title, $excerpt, $ID) {
 	global $siteurl, $blogfilename, $blogname;
 	global $querystring_start, $querystring_equal;
 	$title = urlencode($title);
-	$excerpt = urlencode($excerpt);
+	$excerpt = urlencode(stripslashes($excerpt));
 	$blog_name = urlencode($blogname);
 	$url = urlencode($siteurl.'/'.$blogfilename.$querystring_start.'p'.$querystring_equal.$ID);
 	$query_string = "title=$title&url=$url&blog_name=$blog_name&excerpt=$excerpt";
