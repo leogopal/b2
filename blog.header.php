@@ -1,6 +1,6 @@
 <?php
 /*	File version:
- *	$Id: blog.header.php,v 1.32 2003/05/24 01:26:05 macshack Exp $
+ *	$Id: blog.header.php,v 1.33 2003/06/04 00:14:54 mikelittle Exp $
  */
 $use_cache = 1;
 $use_gzipcompression = 1;
@@ -66,9 +66,10 @@ $distinct = '';
 
 if ($pagenow != 'b2edit.php') { timer_start(); }
 
-if ($posts)
+if ($posts) {
+    $posts = (int)$posts;
 	$posts_per_page=$posts;
-
+}
 // if a month is specified in the querystring, load that month
 if ($m != '') {
 	$m = ''.intval($m);
