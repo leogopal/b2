@@ -442,7 +442,9 @@ function next_posts_link($label='Next Page >>', $max_page=0) {
 			$numposts = mysql_num_rows($nxt_result);
 			$max_page = intval($numposts / $posts_per_page) +1;
 		}
-		if (empty($p) && (empty($paged) || $paged < $max_page)) {
+		if (!$paged) $paged = 1;
+		$nextpage = intval($paged) + 1;
+		if (empty($p) && (empty($paged) || $nextpage <= $max_page)) {
 			echo '<a href="';
 			echo next_posts($max_page);
 			echo '">'. htmlspecialchars($label) .'</a>';
