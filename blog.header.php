@@ -17,7 +17,7 @@ require_once ($b2blah.$b2inc.'/xmlrpcs.inc');
 
 @header ("X-Pingback: $pathserver/xmlrpc.php");
 
-$b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search','exact','sentence','poststart','postend','preview','debug','calendar','page','more','tb','pb');
+$b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search','exact','sentence','poststart','postend','preview','debug','calendar','page','paged','more','tb','pb');
 
 	for ($i=0; $i<count($b2varstoreset); $i += 1) {
 		$b2var = $b2varstoreset[$i];
@@ -190,8 +190,8 @@ if ((!$whichcat) && (!$m) && (!$p) && (!$w) && (!$s) && empty($poststart) && emp
 	}
 }
 
-if ( !empty($postend) && ($postend > $poststart)) {
-	if ($what_to_show == 'posts' || ($what_to_show == 'paged' && (!$page))) {
+if ( !empty($postend) && ($postend > $poststart) && (!$m) &&(!$w) && (!$whichcat) && (!$s) && (!$p)) {
+	if ($what_to_show == 'posts' || ($what_to_show == 'paged' && (!$paged))) {
 		$poststart = intval($poststart);
 		$postend = intval($postend);
 		$posts = $postend - $poststart;
@@ -207,17 +207,29 @@ if ( !empty($postend) && ($postend > $poststart)) {
 		$otherdate = date('Y-m-d H:i:s', ($lastpostdate - (($postend -1) * 86400)));
 		$where .= ' AND post_date > \''.$otherdate.'\' AND post_date < \''.$startdate.'\'';
 	}
-}
-
-if (($what_to_show == 'paged') && (!$p) && (!$more)) {
-	$pgstrt = '';
-	if ($page) {
-		$pgstrt = (intval($page) -1) * $posts_per_page . ', ';
+} else {
+	if (($what_to_show == 'paged') && (!$p) && (!$more)) {
+		if ($pagenow != 'b2edit.php') {
+			$pgstrt = '';
+			if ($paged) {
+				$pgstrt = (intval($paged) -1) * $posts_per_page . ', ';
+			}
+			$limits = 'LIMIT '.$pgstrt.$posts_per_page;
+		} else {
+			if (($m) || ($p) || ($w) || ($s) || ($whichcat)) {
+				$limits = '';
+			} else {
+				$pgstrt = '';
+				if ($paged) {
+					$pgstrt = (intval($paged) -1) * $posts_per_page . ', ';
+				}
+				$limits = 'LIMIT '.$pgstrt.$posts_per_page;
+			}
+		}
 	}
-	$limits = 'LIMIT '.$pgstrt.$posts_per_page;
-}
-elseif (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
-	$limits = '';
+	elseif (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
+		$limits = '';
+	}
 }
 
 if ($p == 'all') {

@@ -416,30 +416,33 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 
 
 function next_posts($max_page = 0) { // original by cfactor at cooltux.org
-	global $HTTP_SERVER_VARS, $blogfilename, $p, $page, $what_to_show;
+	global $HTTP_SERVER_VARS, $blogfilename, $p, $paged, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
-		$qstr = preg_replace("/&page=\d{0,}/","",$qstr);
-		$qstr = preg_replace("/page=\d{0,}/","",$qstr);
-		$nextpage = intval($page) + 1;
+		$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
+		$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
+		if (!$paged) $paged = 1;
+		$nextpage = intval($paged) + 1;
 		if (!$max_page || $max_page >= $nextpage) {
-			echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'page'.$querystring_equal.$nextpage;
+			echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'paged'.$querystring_equal.$nextpage;
 		}
 	}
 }
 
-function next_posts_link($label='Next Page >>') {
-	global $p, $page, $result, $request, $posts_per_page, $what_to_show;
+function next_posts_link($label='Next Page >>', $max_page=0) {
+	global $p, $paged, $result, $request, $posts_per_page, $what_to_show;
 	if ($what_to_show == 'paged') {
-		$nxt_request = $request;
-		if ($pos = strpos(strtoupper($request), 'LIMIT')) {
-			$nxt_request = substr($request, 0, $pos);
+		if (!$max_page) {
+			$nxt_request = $request;
+			if ($pos = strpos(strtoupper($request), 'LIMIT')) {
+				$nxt_request = substr($request, 0, $pos);
+			}
+			$nxt_result = mysql_query($nxt_request);
+			$numposts = mysql_num_rows($nxt_result);
+			$max_page = intval($numposts / $posts_per_page) +1;
 		}
-		$nxt_result = mysql_query($nxt_request);
-		$numposts = mysql_num_rows($nxt_result);
-		$max_page = $numposts / $posts_per_page;
-		if (empty($p) && (empty($page) || $page < $max_page)) {
+		if (empty($p) && (empty($paged) || $paged < $max_page)) {
 			echo '<a href="';
 			echo next_posts($max_page);
 			echo '">'. htmlspecialchars($label) .'</a>';
@@ -449,21 +452,21 @@ function next_posts_link($label='Next Page >>') {
 
 
 function previous_posts() { // original by cfactor at cooltux.org
-	global $HTTP_SERVER_VARS, $blogfilename, $p, $page, $what_to_show;
+	global $HTTP_SERVER_VARS, $blogfilename, $p, $paged, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
-		$qstr = preg_replace("/&page=\d{0,}/","",$qstr);
-		$qstr = preg_replace("/page=\d{0,}/","",$qstr);
-		$nextpage = intval($page) - 1;
+		$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
+		$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
+		$nextpage = intval($paged) - 1;
 		if ($nextpage < 1) $nextpage = 1;
-		echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'page'.$querystring_equal.$nextpage;
+		echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'paged'.$querystring_equal.$nextpage;
 	}
 } 
 
 function previous_posts_link($label='<< Previous Page') {
-	global $p, $page, $what_to_show;
-	if (empty($p)  && ($page > 1) && ($what_to_show == 'paged')) {
+	global $p, $paged, $what_to_show;
+	if (empty($p)  && ($paged > 1) && ($what_to_show == 'paged')) {
 		echo '<a href="';
 		echo previous_posts();
 		echo '">'.  htmlspecialchars($label) .'</a>';
@@ -471,11 +474,20 @@ function previous_posts_link($label='<< Previous Page') {
 }
 
 function posts_nav_link($sep=' :: ', $prelabel='<< Previous Page', $nxtlabel='Next Page >>') {
-	global $p, $what_to_show;
+	global $p, $what_to_show, $request, $posts_per_page;
 	if (empty($p) && ($what_to_show == 'paged')) {
-		previous_posts_link($prelabel);
-		echo htmlspecialchars($sep);
-		next_posts_link($nxtlabel);
+		$nxt_request = $request;
+		if ($pos = strpos(strtoupper($request), 'LIMIT')) {
+			$nxt_request = substr($request, 0, $pos);
+		}
+		$nxt_result = mysql_query($nxt_request);
+		$numposts = mysql_num_rows($nxt_result);
+		$max_page = intval($numposts / $posts_per_page) +1;
+		if ($max_page > 1) {
+			previous_posts_link($prelabel);
+			echo htmlspecialchars($sep);
+			next_posts_link($nxtlabel, $max_page);
+		}
 	}
 }
 
