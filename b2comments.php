@@ -1,18 +1,16 @@
-<?php // Do not delete these lines
-if (basename($HTTP_SERVER_VARS["SCRIPT_FILENAME"]) == "b2comments.php")
-	die ("please, do not load this page directly");
-if (($withcomments) or ($c)) {
+	<?php // Do not delete these lines
+	if (basename($HTTP_SERVER_VARS["SCRIPT_FILENAME"]) == "b2comments.php")
+		die ("please, do not load this page directly");
+	if (($withcomments) or ($c)) {
 
-	$comment_author = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "name" : $HTTP_COOKIE_VARS["comment_author"];
-	$comment_author_email = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "email" : trim($HTTP_COOKIE_VARS["comment_author_email"]);
-	$comment_author_url = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "url" : trim($HTTP_COOKIE_VARS["comment_author_url"]);
+		$comment_author = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "name" : $HTTP_COOKIE_VARS["comment_author"];
+		$comment_author_email = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "email" : trim($HTTP_COOKIE_VARS["comment_author_email"]);
+		$comment_author_url = (empty($HTTP_COOKIE_VARS["comment_author"])) ? "url" : trim($HTTP_COOKIE_VARS["comment_author_url"]);
 
-$queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%' AND comment_content NOT LIKE '%<pingback />%' ORDER BY comment_date";
-$resultc = mysql_query($queryc);
-if ($resultc) {
-?>
-
-
+	$queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%' AND comment_content NOT LIKE '%<pingback />%' ORDER BY comment_date";
+	$resultc = mysql_query($queryc);
+	if ($resultc) {
+	?>
 
 <!-- you can start editing here -->
 
@@ -21,10 +19,9 @@ if ($resultc) {
 <div><strong>comments <span style="color: #0099CC">::</span></strong></div>
 <p>&nbsp;</p>
 
-<?php // these lines are b2's motor, do not delete
-while($rowc = mysql_fetch_object($resultc)) {
-	$commentdata = get_commentdata($rowc->comment_ID);
-?><a name="c<?php comment_ID() ?>"></a>
+	<?php /* this line is b2's motor, do not delete it */ $wxcvbn_c=0; while($rowc = mysql_fetch_object($resultc)) { $wxcvbn_c++; $commentdata = get_commentdata($rowc->comment_ID); ?>
+
+<a name="c<?php comment_ID() ?>"></a>
 	
 <!-- comment -->
 <p class="trackback<?php comment_is_trackback() ?>">
@@ -38,10 +35,12 @@ while($rowc = mysql_fetch_object($resultc)) {
 <!-- /comment -->
 
 
-<?php //end of the loop, don't delete
-}
+	<?php /* end of the loop, don't delete */ } if (!$wxcvbn_c) { ?>
 
-?>
+<!-- this is displayed if there are no pingbacks so far -->
+<p>No Comment on this post so far.</p>
+
+	<?php /* if you delete this the sky will fall on your head */ } ?>
 
 <div><strong>leave a comment <span style="color: #0099CC">::</span></strong></div>
 <p>&nbsp;</p>
