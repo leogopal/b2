@@ -4,6 +4,7 @@
 #  like this: "b2/$b2inc/b2functions.php"
 
 require("b2config.php");
+require("$b2inc/b2template.functions.php");
 include("$b2inc/b2vars.php");
 include("$b2inc/b2functions.php");
 
@@ -26,10 +27,10 @@ if (!get_magic_quotes_gpc()) {
 	$HTTP_COOKIE_VARS = add_magic_quotes($HTTP_COOKIE_VARS);
 }
 
-$author = $HTTP_POST_VARS["author"];
-$email = $HTTP_POST_VARS["email"];
-$url = $HTTP_POST_VARS["url"];
-$comment = $HTTP_POST_VARS["comment"];
+$author = trim($HTTP_POST_VARS["author"]);
+$email = trim($HTTP_POST_VARS["email"]);
+$url = trim($HTTP_POST_VARS["url"]);
+$comment = trim($HTTP_POST_VARS["comment"]);
 $original_comment = $comment;
 $autobr = $HTTP_POST_VARS["comment_autobr"];
 $comment_post_ID = $HTTP_POST_VARS["comment_post_ID"];

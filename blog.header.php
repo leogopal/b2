@@ -15,9 +15,7 @@ require_once ($b2blah.$b2inc.'/b2functions.php');
 require_once ($b2blah.$b2inc.'/xmlrpc.inc');
 require_once ($b2blah.$b2inc.'/xmlrpcs.inc');
 
-@header ("X-Pingback: $pathserver/xmlrpc.php");
-
-$b2varstoreset = array('m','p','posts','w','c', 'cat','withcomments','search','exact', 'sentence','poststart','postend','preview','debug', 'calendar','page','paged','more','tb', 'pb','author');
+$b2varstoreset = array('m','p','posts','w','c', 'cat','withcomments','s','search','exact', 'sentence','poststart','postend','preview','debug', 'calendar','page','paged','more','tb', 'pb','author','order','orderby');
 
 	for ($i=0; $i<count($b2varstoreset); $i += 1) {
 		$b2var = $b2varstoreset[$i];
@@ -36,6 +34,11 @@ $b2varstoreset = array('m','p','posts','w','c', 'cat','withcomments','search','e
 
 /* Connecting to the db */
 dbconnect();
+
+/* Sending HTTP headers */
+$last_modified_header = mysql2date('D, d M Y H:i:s', get_lastpostdate());
+@header ("X-Pingback: $pathserver/xmlrpc.php");
+@header ("Last-Modified: $last_modified_header");
 
 /* Getting settings from db */
 $posts_per_page = get_settings('posts_per_page');
@@ -88,7 +91,7 @@ if (($p != '') && ($p != 'all')) {
 }
 
 // if a search pattern is specified, load the posts that match
-if (isset($s)) {
+if (!empty($s)) {
 	$s = addslashes_gpc($s);
 	$search = ' AND (';
 	// puts spaces instead of commas
@@ -159,12 +162,12 @@ if ((!empty($author)) || ($author == 'all') || ($cat == '0')) {
 
 $where .= $search.$whichcat.$whichauthor;
 
-if ((!isset($order)) || ((strtoupper($order) != 'ASC') && (strtoupper($order) != 'DESC'))) {
+if ((empty($order)) || ((strtoupper($order) != 'ASC') && (strtoupper($order) != 'DESC'))) {
 	$order='DESC';
 }
 
 // order by stuff
-if (!isset($orderby)) {
+if (empty($orderby)) {
 	$orderby='date '.$order;
 } else {
 	$orderby = urldecode($orderby);

@@ -51,10 +51,26 @@
 	
 } else {
 
+if (!empty($HTTP_GET_VARS['tb_id'])) {
+	// trackback is done by a GET
+	$tb_id = $HTTP_GET_VARS['tb_id'];
+	$url = $HTTP_GET_VARS['url'];
+	$title = $HTTP_GET_VARS['title'];
+	$excerpt = $HTTP_GET_VARS['excerpt'];
+	$blog_name = $HTTP_GET_VARS['blog_name'];
+} elseif (!empty($HTTP_POST_VARS['tb_id'])) {
+	// trackback is done by a POST
+	$tb_id = $HTTP_POST_VARS['tb_id'];
+	$url = $HTTP_POST_VARS['url'];
+	$title = $HTTP_POST_VARS['title'];
+	$excerpt = $HTTP_POST_VARS['excerpt'];
+	$blog_name = $HTTP_POST_VARS['blog_name'];
+}
 
-if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!empty($HTTP_GET_VARS['url']))) {
+if ((strlen(''.$tb_id)) && (empty($HTTP_GET_VARS['__mode'])) && (strlen(''.$url))) {
 
 	require_once("b2config.php");
+	require_once("$b2inc/b2template.functions.php");
 	require_once("$b2inc/b2vars.php");
 	require_once("$b2inc/b2functions.php");
 
@@ -64,14 +80,13 @@ if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!
 
 	dbconnect();
 
-	$tb_id = $HTTP_GET_VARS['tb_id'];
 
-	$url = addslashes($HTTP_GET_VARS['url']);
-	$title = strip_tags($HTTP_GET_VARS['title']);
+	$url = addslashes($url);
+	$title = strip_tags($title);
 	$title = (strlen($title) > 255) ? substr($title, 0, 252).'...' : $title;
-	$excerpt = strip_tags($HTTP_GET_VARS['excerpt']);
+	$excerpt = strip_tags($excerpt);
 	$excerpt = (strlen($excerpt) > 255) ? substr($excerpt, 0, 252).'...' : $excerpt;
-	$blog_name = strip_tags($HTTP_GET_VARS['blog_name']);
+	$blog_name = htmlspecialchars($blog_name);
 	$blog_name = (strlen($blog_name) > 255) ? substr($blog_name, 0, 252).'...' : $blog_name;
 
 	$comment = '<trackback />';
@@ -80,10 +95,10 @@ if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!
 	$author = $blog_name;
 	$email = '';
 	$original_comment = $comment;
-	$comment_post_ID = $HTTP_GET_VARS['tb_id'];
+	$comment_post_ID = $tb_id;
 	$autobr = 1;
 
-	$user_ip = $REMOTE_ADDR;
+	$user_ip = $HTTP_SERVER_VARS['REMOTE_ADDR'];
 	$user_domain = gethostbyaddr($user_ip);
 	$time_difference = get_settings("time_difference");
 	$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
