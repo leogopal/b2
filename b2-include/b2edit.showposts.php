@@ -291,8 +291,7 @@ echo " selected";
 
 					<form action="b2comments.post.php" method="post">
 						<input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
-					<!-- remove the comment tags from the next line if you want your user to be redirected on the main page when they submit the form -->
-					<!-- <input type="hidden" name="redirect_to" value="<?php echo $HTTP_SERVER_VARS["SCRIPT_FILENAME"]; ?>" /> -->
+						<input type="hidden" name="redirect_to" value="<?php echo $HTTP_SERVER_VARS["REQUEST_URI"]; ?>" />
 						<input type="text" name="author" class="textarea" value="<?php echo $user_nickname ?>" size="20" tabindex="1" /><br />
 						<input type="text" name="email" class="textarea" value="<?php echo $user_email ?>" size="20" tabindex="2" /><br />
 						<input type="text" name="url" class="textarea" value="<?php echo $user_url ?>" size="20" tabindex="3" /><br />
