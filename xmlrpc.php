@@ -815,8 +815,8 @@ function pingback_ping($m) {
 
 	$messages = array(
 		htmlentities("Pingback from ".$pagelinkedfrom." to ".$pagelinkedto." registered. Keep the web talking! :-)"),
-		htmlentities("The URL you provided doesn't seem to belong in this site"),
-		htmlentities("We can't find the post you are trying to link to. Please check the post's permalink")
+		htmlentities("We can't find the URL to the post you are trying to link to in your entry. Please check how you wrote the post's permalink in your entry."),
+		htmlentities("We can't find the post you are trying to link to. Please check the post's permalink.")
 	);
 
 	$message = $messages[0];
@@ -876,8 +876,10 @@ function pingback_ping($m) {
 						preg_match('|<title>([^<]*?)</title>|', $linea, $matchtitle);
 					}
 					$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
-					if (is_integer($pos2)) {
-						$start = $pos2-40;
+					$pos3 = strpos(strip_tags($linea, '<a>'), str_replace('http://www.', 'http://', $pagelinkedto));
+					if (is_integer($pos2) || is_integer($pos3)) {
+						$pos4 = (is_integer($pos2)) ? $pos2 : $pos3;
+						$start = $pos4-40;
 						$context = substr(strip_tags($linea, '<a>'), $start, 120);
 						$context = strip_tags($context);
 						$context = str_replace("\n", ' ', $context);
