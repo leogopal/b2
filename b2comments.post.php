@@ -35,7 +35,7 @@ $original_comment = $comment;
 $comment_autobr = $HTTP_POST_VARS["comment_autobr"];
 $comment_post_ID = $HTTP_POST_VARS["comment_post_ID"];
 
-if (($require_name_email) && ($email == "" || $email == "@") || $author == "" || $author == "name") { //original fix by Dodo
+if ($require_name_email && ($email == "" || $email == "@" || $author == "" || $author == "name")) { //original fix by Dodo, and then Drinyth
 	echo "Error: please fill the required fields (name, email)";
 	exit;
 }
@@ -127,7 +127,7 @@ if ($ok) {
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Pragma: no-cache");
-	$location = ((isset($redirect_to) && ($redirect_to != ''))) ? $redirect_to : $HTTP_SERVER_VARS["HTTP_REFERER"];
+	$location = (!empty($HTTP_POST_VARS['redirect_to'])) ? $HTTP_POST_VARS['redirect_to'] : $HTTP_SERVER_VARS["HTTP_REFERER"];
 	header("Location: $location");
 
 } else {
