@@ -5,7 +5,7 @@
 if (!isset($querystring_start)) {
 	$querystring_start = '?';
 	$querystring_equal = '=';
-	$querystring_separator = '&';
+	$querystring_separator = '&amp;';
 }
 
 
@@ -407,11 +407,11 @@ function get_postdata($postid) {
 	$myrow = mysql_fetch_object($result);
 	$postdata = array (
 		'ID' => $myrow->ID, 
-		"Author_ID" => $myrow->post_author, 
-		"Date" => $myrow->post_date, 
-		"Content" => $myrow->post_content, 
-		"Title" => $myrow->post_title, 
-		"Category" => $myrow->post_category, 
+		'Author_ID' => $myrow->post_author, 
+		'Date' => $myrow->post_date, 
+		'Content' => $myrow->post_content, 
+		'Title' => $myrow->post_title, 
+		'Category' => $myrow->post_category, 
 		);
 	return($postdata);
 }
@@ -420,14 +420,14 @@ function get_postdata2($postid=0) { // less flexible, but saves mysql queries
 	global $row;
 	$postdata = array (
 		'ID' => $row->ID, 
-		"Author_ID" => $row->post_author,
-		"Date" => $row->post_date,
-		"Content" => $row->post_content,
-		"Title" => $row->post_title,
-		"Category" => $row->post_category,
-#		"Notify" => $row->post_notifycomments,
-#		"Clickable" => $row->post_make_clickable,
-		"Karma" => $row->post_karma // this isn't used yet
+		'Author_ID' => $row->post_author,
+		'Date' => $row->post_date,
+		'Content' => $row->post_content,
+		'Title' => $row->post_title,
+		'Category' => $row->post_category,
+#		'Notify' => $row->post_notifycomments,
+#		'Clickable' => $row->post_make_clickable,
+		'Karma' => $row->post_karma // this isn't used yet
 		);
 	return($postdata);
 }
@@ -440,15 +440,16 @@ function get_commentdata($comment_ID,$no_cache=0) { // less flexible, but saves 
 		$querycount++;
 		$myrow = mysql_fetch_array($result);
 	} else {
-		$myrow["comment_ID"]=$rowc->comment_ID;
-		$myrow["comment_post_ID"]=$rowc->comment_post_ID;
-		$myrow["comment_author"]=$rowc->comment_author;
-		$myrow["comment_author_email"]=$rowc->comment_author_email;
-		$myrow["comment_author_url"]=$rowc->comment_author_url;
-		$myrow["comment_author_IP"]=$rowc->comment_author_IP;
-		$myrow["comment_date"]=$rowc->comment_date;
-		$myrow["comment_content"]=$rowc->comment_content;
-		$myrow["comment_karma"]=$rowc->comment_karma;
+		$myrow['comment_ID']=$rowc->comment_ID;
+		$myrow['comment_post_ID']=$rowc->comment_post_ID;
+		$myrow['comment_author']=$rowc->comment_author;
+		$myrow['comment_author_email']=$rowc->comment_author_email;
+		$myrow['comment_author_url']=$rowc->comment_author_url;
+		$myrow['comment_author_IP']=$rowc->comment_author_IP;
+		$myrow['comment_date']=$rowc->comment_date;
+		$myrow['comment_content']=$rowc->comment_content;
+		$myrow['comment_karma']=$rowc->comment_karma;
+		$myrow['comment_is_trackback'] = (strstr($myrow['comment_content'], '<trackback />')) ? 1 : 0;
 	}
 	return($myrow);
 }
@@ -457,7 +458,7 @@ function get_catname($cat_ID) {
 	global $tablecategories,$cache_catnames,$use_cache,$querycount;
 	if ((!$cache_catnames) || (!$use_cache)) {
 		$sql = "SELECT * FROM $tablecategories";
-		$result = mysql_query($sql) or die("Oops, couldn't query the db for categories.");
+		$result = mysql_query($sql) or die('Oops, couldn\'t query the db for categories.');
 		$querycount;
 		while ($row = mysql_fetch_object($result)) {
 			$cache_catnames[$row->cat_ID] = $row->cat_name;
@@ -666,6 +667,23 @@ function pingBlogs($blog_ID="1") {
 }
 
 
+// trackback stuff
+function trackback($trackback_url, $title, $excerpt, $ID) {
+	global $siteurl, $blogfilename, $blogname;
+	global $querystring_start, $querystring_equal;
+	$title = urlencode($title);
+	$excerpt = urlencode($excerpt);
+	$blog_name = urlencode($blogname);
+	$url = $siteurl.'/'.$blogfilename.$querystring_start.'p'.$querystring_equal.$ID;
+	$url = urlencode($url);
+	$trackback_url .= "&title=$title&url=$url&blog_name=$blog_name&excerpt=$excerpt";
+	$fp = fopen($trackback_url, 'r');
+	$result = fread($fp, 4096);
+	fclose($fp);
+	return $result;
+}
+
+
 // updates the RSS feed !
 function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 
@@ -825,7 +843,11 @@ function balanceTags($text) {
   $newtext = '';
 
 	# b2 bug fix for comments - in case you REALLY meant to type '< !--'
-	$text = str_replace("< !--","<    !--",$text);
+	$text = str_replace('< !--', '<    !--', $text);
+
+	# b2 bug fix for LOVE <3 (and other situations with '<' before a number)
+	$text = preg_replace('#<([0-9]{1})#', '&lt;$1', $text);
+
 
  	while (preg_match("/<(\/?\w*)\s*([^>]*)>/",$text,$regex)) {
     $newtext = $newtext . $tagqueue;
