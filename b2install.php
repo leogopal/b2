@@ -15,19 +15,28 @@ function mysql_doh($msg,$sql,$error) {
 }
 
 $connexion = mysql_connect($server,$loginsql,$passsql) or die("Can't connect to the database<br>".mysql_error());
+$dbconnexion = mysql_select_db($base, $connexion);
 
-if (!mysql_select_db($base, $connexion)) {
+if (!$dbconnexion) {
 	echo mysql_error();
 	die();
 }
 
 echo "Now creating the necessary tables in the database...<br /><br />";
 
+
+# Note: if you want to start again with a clean b2 database,
+#       just remove the // in this file
+
 // $query = "DROP TABLE IF EXISTS $tableposts";
 // $q = mysql_query($query) or die ("doh, can't drop the table \"$tableposts\" in the database.");
 
 $query = "CREATE TABLE $tableposts ( ID int(10) unsigned NOT NULL auto_increment, post_author int(4) DEFAULT '0' NOT NULL, post_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL, post_content text NOT NULL, post_title text NOT NULL, post_category int(4) DEFAULT '0' NOT NULL, post_karma int(11) DEFAULT '0' NOT NULL, PRIMARY KEY (ID), UNIQUE ID (ID) )";
 $q = mysql_query($query) or mysql_doh("doh, can't create the table \"$tableposts\" in the database.", $query, mysql_error());
+
+$now = date('Y-m-d H:i:s');
+$query = "INSERT INTO $tableposts (post_author, post_date, post_content, post_title, post_category) VALUES ('1', '$now', 'This is the first post. Edit or delete it, then start blogging !', 'Hello world !', '1')";
+$q = mysql_query($query) or mysql_doh("doh, can't insert a first post in the table \"$tableposts\" in the database.", $query, mysql_error());
 
 echo "posts: OK<br />";
 
@@ -50,6 +59,10 @@ echo "b2categories: OK<br />";
 
 $query = "CREATE TABLE $tablecomments ( comment_ID int(11) unsigned NOT NULL auto_increment, comment_post_ID int(11) DEFAULT '0' NOT NULL, comment_author tinytext NOT NULL, comment_author_email varchar(100) NOT NULL, comment_author_url varchar(100) NOT NULL, comment_author_IP varchar(100) NOT NULL, comment_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL, comment_content text NOT NULL, comment_karma int(11) DEFAULT '0' NOT NULL, PRIMARY KEY (comment_ID) )";
 $q = mysql_query($query) or mysql_doh("doh, can't create the table \"$tablecomments\" in the database.", $query, mysql_error());
+
+$now = date('Y-m-d H:i:s');
+$query = "INSERT INTO $tablecomments (comment_post_ID, comment_author, comment_author_email, comment_author_url, comment_author_IP, comment_date, comment_content) VALUES ('1', 'miss b2', 'missb2@example.com', 'http://example.com', '127.0.0.1', '$now', 'Hi, this is a comment.<br />To delete a comment, just log in, and view the posts\' comments, there you will have the option to edit or delete them.')";
+$q = mysql_query($query) or mysql_doh("doh, can't insert a first comment in the table \"$tablecomments\" in the database.", $query, mysql_error());
 
 echo "comments: OK<br />";
 
