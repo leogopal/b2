@@ -40,8 +40,20 @@
 <?php the_content(); ?>
 
 <div class="rightFlush">
-<?php link_pages("<br />Pages: ","<br />","number") ?> <?php comments_popup_link("comments ?", "1 comment", "% comments") ?>
+<?php link_pages("<br />Pages: ","<br />","number") ?> 
+<?php comments_popup_link("Comments (0)", "Comments (1)", "Comments (%)") ?> 
+<?php trackback_popup_link("TrackBack (0)", "TrackBack (1)", "TrackBack (%)") ?> 
+<?php pingback_popup_link("PingBack (0)", "PingBack (1)", "PingBack (%)") ?>
+
+<!-- this includes the comments and a form to add a new comment -->
 <?php include ("b2comments.php"); ?>
+
+<!-- this includes the trackbacks -->
+<?php include ("b2trackback.php"); ?>
+
+<!-- this includes the pingbacks -->
+<?php include ("b2pingbacks.php"); ?>
+
 </div>
 
 </div>
