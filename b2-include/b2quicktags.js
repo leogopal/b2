@@ -156,7 +156,7 @@ function bbstyle(formObj, bbnumber) {
 
 // swirlee's bblink hack, slightly corrected
 function bblink(formObj, bbnumber) {
-	current_url = escape(prompt("URL:","http://"));
+	current_url = prompt("URL:","http://");
 	var re = new RegExp ('http%3A//', 'gi') ;
 	var current_url = current_url.replace(re, 'http://') ;
 	if((current_url == 'null') || (current_url == "http://")) {
@@ -164,7 +164,7 @@ function bblink(formObj, bbnumber) {
 		exit;
 	}
 	if(bbnumber == 16) {
-		current_link_text = prompt("Link text:","link");
+		current_link_text = unescape(prompt("Link text:","link"));
 		if((current_link_text == null) || (current_link_text == "") || (current_link_text == "link")) {
 			link_text = 'link';
 		} else {
