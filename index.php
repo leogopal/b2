@@ -14,8 +14,9 @@
 <style type="text/css" media="screen">
 @import url( layout2b.css );
 </style>
-<link rel="stylesheet" type="text/css" media="print" href="b2-include/print.css" />
-<link rel="alternate" type="text/xml" title="RSS 0.92" href="<?php bloginfo('rss_url'); ?>" />
+<link rel="stylesheet" type="text/css" media="print" href="print.css" />
+<link rel="alternate" type="text/xml" title="RDF" href="<?php bloginfo('rdf_url'); ?>" />
+<link rel="alternate" type="text/xml" title="RSS" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php comments_popup_script() ?>
 
