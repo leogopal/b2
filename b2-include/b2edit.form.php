@@ -108,7 +108,7 @@ echo " checked" ?> tabindex="6" /> Auto-BR (converts line-breaks into &lt;br /> 
 ('post','content','');" class="search" />
 <?php } ?>
 
-<?php if ( ($use_fileupload) && ($user_level >= $fileupload_minlevel) && ((ereg(" ".$user_login." ", $fileupload_allowusers)) || (trim($fileupload_allowedusers)=="")) ) { ?>
+<?php if ( ($use_fileupload) && ($user_level >= $fileupload_minlevel) && ((ereg(" ".$user_login." ", $fileupload_allowedusers)) || (trim($fileupload_allowedusers)=="")) ) { ?>
 <input type="button" value="upload a file/image" onclick="launchupload();" class="search" />
 <?php } ?>
 
