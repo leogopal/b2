@@ -502,17 +502,17 @@ function dropdown_categories($blog_ID=1) {
 
 function touch_time($edit=1) {
 	global $month, $postdata;
-	echo $postdata["Date"];
-	echo "<br /><br /><input type=\"checkbox\" class=\"checkbox\" name=\"edit_date\" value=\"1\" />Edit timestamp ?<br />";
+	echo $postdata['Date'];
+	echo '<br /><br /><input type="checkbox" class="checkbox" name="edit_date" value="1" id="timestamp" /><label for="timestamp"> Edit timestamp</label><br />';
 	
-	$jj = ($edit) ? mysql2date("d", $postdata["Date"]) : date("d");
-	$mm = ($edit) ? mysql2date("m", $postdata["Date"]) : date("m");
-	$aa = ($edit) ? mysql2date("Y", $postdata["Date"]) : date("Y");
-	$hh = ($edit) ? mysql2date("H", $postdata["Date"]) : date("H");
-	$mn = ($edit) ? mysql2date("i", $postdata["Date"]) : date("i");
-	$ss = ($edit) ? mysql2date("s", $postdata["Date"]) : date("s");
+	$jj = ($edit) ? mysql2date('d', $postdata['Date']) : date('d');
+	$mm = ($edit) ? mysql2date('m', $postdata['Date']) : date('m');
+	$aa = ($edit) ? mysql2date('Y', $postdata['Date']) : date('Y');
+	$hh = ($edit) ? mysql2date('H', $postdata['Date']) : date('H');
+	$mn = ($edit) ? mysql2date('i', $postdata['Date']) : date('i');
+	$ss = ($edit) ? mysql2date('s', $postdata['Date']) : date('s');
 
-	echo "<input type=\"text\" name=\"jj\" value=\"$jj\" size=\"2\" maxlength=\"2\" />\n";
+	echo '<input type="text" name="jj" value="$jj" size="2" maxlength="2" />'."\n";
 	echo "<select name=\"mm\">\n";
 	for ($i=1; $i < 13; $i=$i+1) {
 		echo "\t\t\t<option value=\"$i\"";
@@ -729,7 +729,8 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 		$rss .= "\t\t<webMaster>$admin_email</webMaster>\n";
 		$rss .= "\t\t<language>$rss_language</language>\n";
 		
-		$sql = "SELECT * FROM $tableposts ORDER BY post_date DESC LIMIT $num_posts";
+		$now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
+		$sql = "SELECT * FROM $tableposts WHERE post_date < '$now' AND post_category > 0 ORDER BY post_date DESC LIMIT $num_posts";
 		$result = mysql_query($sql) or die("Your SQL query: <br />$sql<br /><br />MySQL said:<br />".mysql_error());
 
 		while($row = mysql_fetch_object($result)) {
