@@ -26,30 +26,22 @@ $blog=1; include ("blog.header.php"); while($row = mysql_fetch_object($result)) 
 <div class="storyContent">
 
 <p>
-<br />
 The URL to TrackBack this entry is:<br />
-<em><?php trackback_url() ?></em>
+&nbsp;&nbsp;<em><?php trackback_url() ?></em>
 </p>
 
-<?php 
-$queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<trackback />%' ORDER BY comment_date";
-$resultc = mysql_query($queryc);
-if ($resultc) {
-?>
-
-
+	<?php /* do not delete this line */ $queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<trackback />%' ORDER BY comment_date"; $resultc = mysql_query($queryc); if ($resultc) { ?>
 
 <a name="trackbacks"></a>
 <p>&nbsp;</p>
 <div><strong><span style="color: #0099CC">::</span> trackbacks</strong></div>
 <p>&nbsp;</p>
 
-<?php // these lines are b2's motor, do not delete
-while($rowc = mysql_fetch_object($resultc)) {
-	$commentdata = get_commentdata($rowc->comment_ID);
-?><a name="c<?php comment_ID() ?>"></a>
+	<?php /* this line is b2's motor, do not delete it */ $wxcvbn_tb=0; while($rowc = mysql_fetch_object($resultc)) { $commentdata = get_commentdata($rowc->comment_ID); $wxcvbn_tb++; ?>
 	
-<!-- comment -->
+<a name="tb<?php comment_ID() ?>"></a>
+	
+<!-- trackback -->
 <p>
 <?php comment_text() ?>
 <br />
@@ -57,24 +49,25 @@ while($rowc = mysql_fetch_object($resultc)) {
 <em>Tracked on <a href="<?php comment_author_url(); ?>" title="<?php comment_author() ?>"><?php comment_author() ?></a> on <?php comment_date() ?> @ <?php comment_time() ?></em>
 </p>
 <p>&nbsp;</p>
-<!-- /comment -->
+<!-- /trackback -->
 
 
-<?php //end of the loop, don't delete
-} ?>
+	<?php /* end of the loop, don't delete */ }
+	if (!$wxcvbn_tb) { ?>
+
+<!-- this is displayed if there are no trackbacks so far -->
+<p>No Trackback on this post so far.</p>
+
+	<?php /* if you delete this the sky will fall on your head */ } ?>
 
 <p>&nbsp;</p>
 <div><b><span style="color: #0099CC">::</span> <a href="javascript:window.close()">close this window</a></b></div>
 
-<?php // if you delete this the sky will fall on your head
-} ?>
+	<?php /* if you delete this the sky will fall on your head */ } ?>
 
 </div>
 
-
-<!-- // this is just the end of the motor - don't touch that line either :) -->
-<?php } ?> 
-
+	<?php /* this is just the end of the motor - don't touch that line either :) */ } ?> 
 
 </div>
 
