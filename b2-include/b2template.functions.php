@@ -27,14 +27,17 @@ function bloginfo($show='') {
 	$info = convert_smilies($info);
 	echo convert_chars($info, 'html');
 }
+
 function bloginfo_rss($show='') {
 	$info = strip_tags(get_bloginfo($show));
 	echo convert_chars($info, 'unicode');
 }
+
 function bloginfo_unicode($show='') {
 	$info = get_bloginfo($show);
 	echo convert_chars($info, 'unicode');
 }
+
 function get_bloginfo($show='') {
 	global $siteurl,$blogfilename,$blogname,$blogdescription;
 	switch($show) {
@@ -50,6 +53,19 @@ function get_bloginfo($show='') {
 	}
 	return($output);
 }
+
+function single_post_title($display = 1) {
+	global $p;
+	if (intval($p)) {
+		$post_data = get_postdata($p);
+		if ($display) {
+			echo strip_tags(stripslashes($post_data['Title']));
+		} else {
+			return strip_tags(stripslashes($post_data['Title']));
+		}
+	}
+}
+
 
 /***** // About-the-blog tags *****/
 
@@ -296,7 +312,7 @@ function link_pages($before='<br />', $after='<br />', $next_or_number='number',
 }
 
 
-function previous_post($format='%', $previous='previous post: ', $title='yes', $in_same_cat='no', $limitprev=1) {
+function previous_post($format='%', $previous='previous post: ', $title='yes', $in_same_cat='no', $limitprev=1, $excluded_categories='') {
 	global $tableposts, $id, $postdata, $siteurl, $blogfilename, $querycount;
 	global $p, $posts, $posts_per_page, $s;
 	global $querystring_start, $querystring_equal, $querystring_separator;
@@ -306,8 +322,18 @@ function previous_post($format='%', $previous='previous post: ', $title='yes', $
 		$current_post_date = $postdata['Date'];
 		$current_category = $postdata['Category'];
 
+		$sqlcat = '';
 		if ($in_same_cat != 'no') {
 			$sqlcat = " AND post_category='$current_category' ";
+		}
+
+		$sql_exclude_cats = '';
+		if (!empty($excluded_categories)) {
+			$blah = explode('and', $excluded_categories);
+			foreach($blah as $category) {
+				$category = intval($category);
+				$sql_exclude_cats .= " AND post_category != $category"
+			}
 		}
 
 		$limitprev--;
@@ -330,7 +356,7 @@ function previous_post($format='%', $previous='previous post: ', $title='yes', $
 	}
 }
 
-function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat='no', $limitnext=1) {
+function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat='no', $limitnext=1, $excluded_categories='') {
 	global $tableposts, $p, $posts, $id, $postdata, $siteurl, $blogfilename, $querycount;
 	global $time_difference;
 	global $querystring_start, $querystring_equal, $querystring_separator;
@@ -339,8 +365,18 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 		$current_post_date = $postdata['Date'];
 		$current_category = $postdata['Category'];
 
-		if ($in_same_cat == 'yes') {
+		$sqlcat = '';
+		if ($in_same_cat != 'no') {
 			$sqlcat = " AND post_category='$current_category' ";
+		}
+
+		$sql_exclude_cats = '';
+		if (!empty($excluded_categories)) {
+			$blah = explode('and', $excluded_categories);
+			foreach($blah as $category) {
+				$category = intval($category);
+				$sql_exclude_cats .= " AND post_category != $category"
+			}
 		}
 
 		$now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
@@ -522,7 +558,7 @@ function comments_number($zero='no comment', $one='1 comment', $more='% comments
 	// original hack by dodo@regretless.com
 	global $id,$postdata,$tablecomments,$c,$querycount,$cache_commentsnumber,$use_cache;
 	if (empty($cache_commentsnumber[$id]) OR (!$use_cache)) {
-		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%'";
+		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%' AND comment_content NOT LIKE '%<pingback />%'";
 		$result=mysql_query($query);
 		$number=mysql_num_rows($result);
 		$querycount++;
@@ -550,10 +586,11 @@ function comments_link($file='') {
 	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal.'1#comments';
 }
 
-function comments_popup_script($width=400, $height=400, $file='b2commentspopup.php', $trackbackfile='b2trackbackpopup.php') {
-	global $b2commentspopupfile, $b2trackbackpopupfile, $b2commentsjavascript;
+function comments_popup_script($width=400, $height=400, $file='b2commentspopup.php', $trackbackfile='b2trackbackpopup.php', $pingbackfile='b2pingbackspopup.php') {
+	global $b2commentspopupfile, $b2trackbackpopupfile, $b2pingbackpopupfile, $b2commentsjavascript;
 	$b2commentspopupfile = $file;
 	$b2trackbackpopupfile = $trackbackfile;
+	$b2pingbackpopupfile = $pingbackfile;
 	$b2commentsjavascript = 1;
 	$javascript = "<script language=\"javascript\" type=\"text/javascript\">\n<!--\nfunction b2open (macagna) {\n    window.open(macagna, '_blank', 'width=$width,height=$height,scrollbars=yes,status=yes');\n}\n//-->\n</script>\n";
 	echo $javascript;
@@ -736,6 +773,75 @@ function trackback_popup_link($zero='no trackback', $one='1 trackback', $more='%
 
 
 /***** // TrackBack tags *****/
+
+
+
+/***** PingBack tags *****/
+
+function pingback_url($display = 1) {
+	global $pathserver, $id;
+	$tb_url = $pathserver.'/b2pingbacks.php?tb_id='.$id;
+	if ($display) {
+		echo $tb_url;
+	} else {
+		return $tb_url;
+	}
+}
+
+function pingback_number($zero='no pingback', $one='1 pingback', $more='% pingbacks') {
+	global $id, $tablecomments, $tb, $querycount, $cache_pingbacknumber, $use_cache;
+	if (empty($cache_pingbacknumber[$id]) OR (!$use_cache)) {
+		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<pingback />%'";
+		$result=mysql_query($query);
+		$number=mysql_num_rows($result);
+		$querycount++;
+		$cache_pingbacknumber[$id] = $number;
+	} else {
+		$number = $cache_pingbacknumber[$id];
+	}
+	if ($number == 0) {
+		$blah = $zero;
+	} elseif ($number == 1) {
+		$blah = $one;
+	} elseif ($number  > 1) {
+		$n = $number;
+		$more=str_replace('%', $n, $more);
+		$blah = $more;
+	}
+	echo $blah;
+}
+
+function pingback_link($file='') {
+	global $id,$pagenow;
+	global $querystring_start, $querystring_equal, $querystring_separator;
+	if ($file == '')	$file = $pagenow;
+	if ($file == '/')	$file = '';
+	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'tb'.$querystring_equal.'1#pingbacks';
+}
+
+function pingback_popup_link($zero='no pingback', $one='1 pingback', $more='% pingbacks', $CSSclass='') {
+	global $id, $b2pingbackpopupfile, $b2commentsjavascript;
+	global $querystring_start, $querystring_equal, $querystring_separator;
+	echo '<a href="';
+	if ($b2commentsjavascript) {
+		echo $b2pingbackpopupfile.'?p='.$id.'&tb=1';
+		echo '" onclick="b2open(this.href); return false"';
+	} else {
+		// if comments_popup_script() is not in the template, display simple comment link
+		pingback_link();
+		echo '"';
+	}
+	if (!empty($CSSclass)) {
+		echo ' class="'.$CSSclass.'"';
+	}
+	echo '>';
+	pingback_number($zero, $one, $more);
+	echo '</a>';
+}
+
+
+
+/***** // PingBack tags *****/
 
 
 
