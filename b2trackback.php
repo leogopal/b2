@@ -1,19 +1,70 @@
+	<?php if (!empty($tb)) { ?>
+<!-- you can START editing here -->
+
+<p>
+<br />
+The URL to TrackBack this entry is:<br />
+<em><?php trackback_url() ?></em>
+</p>
+
+
+	<?php // don't touch these 2 lines
+	$queryc = "SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<trackback />%' ORDER BY comment_date";
+	$resultc = mysql_query($queryc); if ($resultc) {
+	?>
+
+
+<a name="trackbacks"></a>
+<div><strong><span style="color: #0099CC">::</span> trackbacks</strong></div>
+
+
+	<?php /* this line is b2's motor, do not delete it */ while($rowc = mysql_fetch_object($resultc)) { $commentdata = get_commentdata($rowc->comment_ID); ?>
+	
+
+<a name="tb<?php comment_ID() ?>"></a>
+	
+
+<!-- trackback -->
+<p>
+<?php comment_text() ?>
+<br />
+<strong><span style="color: #0099CC">&middot;</span></strong>
+<em>Tracked on <a href="<?php comment_author_url(); ?>" title="<?php comment_author() ?>"><?php comment_author() ?></a> on <?php comment_date() ?> @ <?php comment_time() ?></em>
+</p>
+<p>&nbsp;</p>
+<!-- /trackback -->
+
+
+	<?php /* end of the loop, don't delete */ } ?>
+
+
+<p>&nbsp;</p>
+<div><b><a href="javascript:history.go(-1)">return to the blog</a> <span style="color: #0099CC">::</span></b></div>
+
+
+	<?php /* if you delete this the sky will fall on your head */ } ?>
+
+
+</div>
+
+
+
+<!-- STOP editing there -->
+
 <?php
-
-require("b2config.php");
-require("$b2inc/b2vars.php");
-require("$b2inc/b2functions.php");
-
-dbconnect();
-
-if (empty($HTTP_GET_VARS['tb_id'])) {
-	die('blah');
-}
-
-$tb_id = $HTTP_GET_VARS['tb_id'];
+	
+} else {
 
 
-if ((empty($HTTP_GET_VARS['__mode'])) && (!empty($HTTP_GET_VARS['url']))) {
+if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!empty($HTTP_GET_VARS['url']))) {
+
+	require_once("b2config.php");
+	require_once("$b2inc/b2vars.php");
+	require_once("$b2inc/b2functions.php");
+
+	dbconnect();
+
+	$tb_id = $HTTP_GET_VARS['tb_id'];
 
 	$url = addslashes($HTTP_GET_VARS['url']);
 	$title = strip_tags($HTTP_GET_VARS['title']);
@@ -24,7 +75,7 @@ if ((empty($HTTP_GET_VARS['__mode'])) && (!empty($HTTP_GET_VARS['url']))) {
 	$blog_name = (strlen($blog_name) > 255) ? substr($blog_name, 0, 252).'...' : $blog_name;
 
 	$comment = '<trackback />';
-	$comment .= "<a href=\"$url\">$title</a><br />$excerpt";
+	$comment .= "<b>$title</b><br />$excerpt";
 
 	$author = $blog_name;
 	$email = '';
@@ -53,13 +104,12 @@ if ((empty($HTTP_GET_VARS['__mode'])) && (!empty($HTTP_GET_VARS['url']))) {
 
 	if ($comments_notify) {
 
-		$notify_message  = "New comment on your post #$comment_post_ID.\r\n\r\n";
+		$notify_message  = "New trackback on your post #$comment_post_ID.\r\n\r\n";
 		$notify_message .= "author : $comment_author (IP: $user_ip , $user_domain)\r\n";
-		$notify_message .= "e-mail : $comment_author_email\r\n";
 		$notify_message .= "url    : $comment_author_url\r\n";
-		$notify_message .= "comment: \n".stripslashes($original_comment)."\r\n\r\n";
-		$notify_message .= "You can see all comments on this post there: \r\n";
-		$notify_message .= "$siteurl/$blogfilename?p=$comment_post_ID&c=1\r\n\r\n";
+		$notify_message .= "excerpt: \n".stripslashes($original_comment)."\r\n\r\n";
+		$notify_message .= "You can see all trackbacks on this post there: \r\n";
+		$notify_message .= "$siteurl/$blogfilename?p=$comment_post_ID&tb=1\r\n\r\n";
 
 		$postdata = get_postdata($comment_post_ID);
 		$authordata = get_userdata($postdata["Author_ID"]);
@@ -74,12 +124,15 @@ if ((empty($HTTP_GET_VARS['__mode'])) && (!empty($HTTP_GET_VARS['url']))) {
 	echo "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?".">\n<response>\n<error>0</error>\n</response>";
 	die();
 
-} elseif (empty($HTTP_GET_VARS['__mode'])) {
+}/* elseif (empty($HTTP_GET_VARS['__mode'])) {
 
 	header('Content-type: application/xml');
 	echo "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?".">\n<response>\n<error>1</error>\n";
 	echo "<message>Tell me a lie. \nOr just a __mode or url parameter ?</message>\n";
 	echo "</response>";
+
+}*/
+
 
 }
 
