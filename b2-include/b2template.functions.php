@@ -266,12 +266,21 @@ function the_content($more_link_text='(more...)', $stripteaser=0, $more_file='')
 	$content = apply_filters('the_content', $content);
 	echo $content;
 }
-function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file='') {
+function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file='', $cut = 0, $encode_html = 0) {
 	$content = get_the_content($more_link_text,$stripteaser,$more_file);
 	$content = convert_bbcode($content);
 	$content = convert_gmcode($content);
 	$content = convert_chars($content, 'unicode');
-	$content = make_url_footnote($content);
+	if ($cut) {
+		$dotdotdot = ($cut < strlen($content)) ? '...' : '';
+		$content = substr($content, 0, $cut).$dotdotdot;
+		$content = balanceTags($content);
+	}
+	if ($encode_html) {
+		$content = htmlspecialchars($content);
+	} else {
+		$content = make_url_footnote($content);
+	}
 	echo $content;
 }
 function the_content_unicode($more_link_text='(more...)', $stripteaser=0, $more_file='') {
