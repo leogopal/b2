@@ -1,6 +1,6 @@
 <?php
 
-// $Id: b2calendar.php,v 1.14 2003/02/16 21:29:09 macshack Exp $
+// $Id: b2calendar.php,v 1.15 2003/05/24 03:32:06 macshack Exp $
 // b2 Calendar
 //
 // Contributed work by:
@@ -13,7 +13,7 @@
 // Fred Cooper for querystring bugfix
 // http://frcooper.com/journal/
 //
-// b2 is copyright (c) 2001, 2002 by Michel Valdrighi - m@tidakada.com
+// b2 is copyright (c) 2001, 2002, 2003 by Michel Valdrighi - m@tidakada.com
 //
 // Contributed portions copyright (c) various authors with permission
 //
