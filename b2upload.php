@@ -134,10 +134,11 @@ if ($img1_name != "") {
 
 	// makes sure not to upload duplicates, rename duplicates
 	$i = 1;
+	$tmppathtofile = $pathtofile;
 	while (file_exists($pathtofile)) {
-		$pos = strpos($pathtofile, '.'.$imgtype);
-		$pathtofile_start = substr($pathtofile, 0, $pos);
-		$pathtofile = $pathtofile_start.'_'.zeroise($i, 2).'.'.$imgtype;
+		$pos = strpos($tmppathtofile, '.'.trim($imgtype));
+		$pathtofile_start = substr($tmppathtofile, 0, $pos);
+		$pathtofile = $pathtofile_start.'_'.zeroise($i++, 2).'.'.trim($imgtype);
 		$img1_name = explode('/', $pathtofile);
 		$img1_name = $img1_name[count($img1_name)-1];
 	}
