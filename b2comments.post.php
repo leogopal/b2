@@ -3,7 +3,7 @@
 # if you want to change the paths here, remember to put your new path BEFORE $b2inc,
 #  like this: "b2/$b2inc/b2functions.php"
 
-include("b2config.php");
+require("b2config.php");
 include("$b2inc/b2vars.php");
 include("$b2inc/b2functions.php");
 
@@ -12,8 +12,8 @@ dbconnect();
 $author = $HTTP_POST_VARS["author"];
 $email = $HTTP_POST_VARS["email"];
 $url = $HTTP_POST_VARS["url"];
-$original_comment = $comment;
 $comment = $HTTP_POST_VARS["comment"];
+$original_comment = $comment;
 $autobr = $HTTP_POST_VARS["comment_autobr"];
 $comment_post_ID = $HTTP_POST_VARS["comment_post_ID"];
 
@@ -90,7 +90,7 @@ if ($ok) {
 		$recipient = $authordata["user_email"];
 		$subject = "comment on post #$comment_post_ID \"".$postdata["Title"]."\"";
 
-		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.5.2 - PHP/" . phpversion());
+		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.6 - PHP/" . phpversion());
 		
 	}
 
