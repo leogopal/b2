@@ -10,8 +10,8 @@ require_once($b2inc."/xmlrpcs.inc");
 
 if (!isset($use_cache))	$use_cache=1;
 if (!isset($blogID))	$blog_ID=1;
+if (!isset($debug))		$debug=0;
 timer_start();
-$debug=0;
 
 get_currentuserinfo();
 
