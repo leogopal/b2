@@ -647,13 +647,13 @@ function comment_time($d='') {
 
 /***** Permalink tags *****/
 
-function permalink_anchor($mode = 'ID';) {
+function permalink_anchor($mode = 'id') {
 	global $id, $postdata;
-	switch($mode) {
-		case 'ID':
+	switch(strtolower($mode)) {
+		case 'id':
 			echo '<a name="'.$id.'"></a>';
 			break;
-		case 'Title':
+		case 'title':
 			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
 			echo '<a name="'.$title.'"></a>';
 			break;
@@ -663,16 +663,16 @@ function permalink_anchor($mode = 'ID';) {
 	}
 }
 
-function permalink_link($file='', $mode = 'ID') {
-	global $id, $postdata, $pagenow;
+function permalink_link($file='', $mode = 'id') {
+	global $id, $postdata, $pagenow, $cacheweekly;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($file=='')
 		$file=$pagenow;
-	switch($mode) {
-		case 'ID':
+	switch(strtolower($mode)) {
+		case 'id':
 			$anchor = $id;
 			break;
-		case 'Title':
+		case 'title':
 			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
 			$anchor = $title;
 			break;
@@ -686,7 +686,13 @@ function permalink_link($file='', $mode = 'ID') {
 			echo $file.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$anchor;
 			break;
 		case 'weekly':
-			echo $file.$querystring_start.'w'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$anchor;
+			if((!isset($cacheweekly)) || (empty($cacheweekly[$postdata['Date']]))) {
+				$sql = "SELECT WEEK('".$postdata['Date']."')";
+				$result = mysql_query($sql);
+				$row = mysql_fetch_row($result);
+				$cacheweekly[$postdata['Date']] = $row[0];
+			}
+			echo $file.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).$querystring_separator.'w'.$querystring_equal.$cacheweekly[$postdata['Date']].'#'.$anchor;
 			break;
 		case 'postbypost':
 			echo $file.$querystring_start.'p'.$querystring_equal.$id;
