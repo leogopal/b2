@@ -8,6 +8,12 @@ if (!isset($querystring_start)) {
 	$querystring_separator = '&amp;';
 }
 
+if (!function_exists('_')) {
+	function _($string) {
+		return $string;
+	}
+}
+
 
 /* functions... */
 
