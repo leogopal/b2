@@ -269,7 +269,7 @@ function link_pages($before='<br />', $after='<br />', $next_or_number='number',
 	if ($more_file != '') {
 		$file=$more_file;
 	} else {
-		$file=$HTTP_SERVER_VARS['SCRIPT_FILENAME'];
+		$file=$HTTP_SERVER_VARS['SCRIPT_NAME'];
 	}
 	if (($multipage)) { // && ($more)) {
 		echo $before;
