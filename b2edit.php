@@ -26,6 +26,7 @@ case 'post':
 	require_once('./b2header.php');
 
 	$post_autobr = intval($HTTP_POST_VARS["post_autobr"]);
+	$post_pingback = intval($HTTP_POST_VARS["post_pingback"]);
 	$content = format_to_post($HTTP_POST_VARS["content"]);
 	$content = balanceTags($content);
 	$post_title = addslashes($HTTP_POST_VARS["post_title"]);
@@ -62,12 +63,13 @@ case 'post':
 	pingWeblogs($blog_ID);
 	pingCafelog($cafelogID, $post_title, $post_ID);
 	pingBlogs($blog_ID);
-	$debug=1;
-	pingback($content, $post_ID);
+	if ($post_pingback) {
+		pingback($content, $post_ID);
+	}
 
-	if ($trackback_url) {
+	if (!empty($HTTP_POST_VARS['trackback_url']) {
 		$excerpt = (strlen(strip_tags($content)) > 255) ? substr(strip_tags($content), 0, 252).'...' : strip_tags($content);
-		trackback($trackback_url, stripslashes($post_title), $excerpt, $post_ID);
+		trackback($HTTP_POST_VARS['trackback_url'], stripslashes($post_title), $excerpt, $post_ID);
 	}
 
 	if (!empty($HTTP_POST_VARS["mode"])) {
