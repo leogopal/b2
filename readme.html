@@ -28,8 +28,8 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
   <tr>
 	<td> 
       <p align="center"><img src="b2-img/b2minilogo.png" width="50" height="50"><br />
-        <font size="2" face="Georgia, Times New Roman, Times, serif">0.6pre4<br />
-        20020811</font></p>
+        <font size="2" face="Georgia, Times New Roman, Times, serif">0.6pre5<br />
+        20020922</font></p>
 		
 	  <p align="center">weblog / news publishing tool</p>
 
@@ -105,7 +105,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		You can also copy b2.php into a new file and modify that new file, it will work too ;)<br />
 
 	  </blockquote>
-	  <p>Users upgrading from v0.5.x to v0.6pre4:</p>
+	  <p>Users upgrading from v0.5.x to v0.6pre5:</p>
       <blockquote> <strong>1.</strong> Unzip the package in an empty directory, to avoid 
         deleting your existing b2config.php file.<br /><br />
 		<strong>2.</strong> Open the new b2config.php file and your existing b2config.php file. Modify the new b2config.php file in order to use your existing settings there, in addition to the new settings. (There are a lot of additionnal settings, so it's best to edit the new config file than adding on the exisitng one.)<br /><br />
@@ -119,11 +119,12 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         are tags that were added or modified in v0.6, these are those you got 
         to update in your templates.<br />
 		<strong>5.</strong> Upload the new files, and you're done. :)<br /></blockquote>
-	  <p>Users upgrading from v0.6pre1, pre2, pre3 to v0.6pre4:</p>
+	  <p>Users upgrading from v0.6pre1, pre2, pre3, pre4 to v0.6pre5:</p>
       <blockquote> <strong>1.</strong> Unzip the package in an empty directory, to avoid 
         deleting your existing b2config.php file.<br /><br />
-		<strong>2.</strong> Open the new b2config.php file and your existing b2config.php file. Modify the new b2config.php file in order to use your existing settings there, in addition to the new settings. (There are a lot of additionnal settings, so it's best to edit the new config file than adding on the exisitng one.)<br />
-		<strong>3.</strong> Upload the new files, and you're done. :)<br />
+		<strong>2.</strong> Open the new b2config.php file and your existing b2config.php file. Modify the new b2config.php file in order to use your existing settings there, in addition to the new settings. (There are a lot of additionnal settings, so it's best to edit the new config file than adding on the existing one.)<br />
+		<strong>3.</strong> Upload the new files, and you're done. :) (Generally, this means every file but your template file index.php/b2.php)<br />
+		<strong>4.</strong> To add support of the new TrackBack and Pingback functionnalities, you may want to check the Template tags section for the appropriate new tags, and the default index.php to see how they are used :)<br />
         </blockquote>
       <p>&nbsp;</p>
 	  <a name="templates"></a><h1>template(s):</h1>
@@ -171,7 +172,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 
 	  <blockquote>
 	  
-	    <strong>&lt;?php the_date(</strong><strong>) ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
+	    <strong>&lt;?php the_date() ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
 		  the date of the post. example: 03.07.01 (default is dd.mm.yy).<br />
 		  the date is displayed only on new days. for example if you got 10 posts 
 		  on the same day, the date for this day is displayed only once.<br />
@@ -184,7 +185,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  </div>
 		  <br />
 
-		<strong>&lt;?php the_time(</strong><strong>) ?&gt;</strong><br />
+		<strong>&lt;?php the_time() ?&gt;</strong><br />
 		  the time of the post. example: 18:37:00 (default is hh:mm:ss)<br />
 
 		  <div class="params">Parameters:<ul>
@@ -212,7 +213,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		of the day.<br />
 		<br />
 
-		<strong>&lt;?php the_weekday(</strong><strong>) ?&gt;</strong><br />
+		<strong>&lt;?php the_weekday() ?&gt;</strong><br />
         This displays the day of the week when the post was made. It works like 
         the_time(), in that it would appear at every post. Weekdays can be obtained 
         with a custom date format string in the_time() or the_date(), but for 
@@ -220,7 +221,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		<strong>Note: this tag is OBSOLETE, the_time() and the_date() now use weekdays/months from b2config.php</strong><br />
         <br />
 
-		<strong>&lt;?php the_weekday_date(</strong><strong>) ?&gt;</strong> <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+		<strong>&lt;?php the_weekday_date() ?&gt;</strong> <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
         Like the_weekday(), but works like the_date(), in that it would appear 
         only on new days.<br />
 		<strong>Note: this tag is OBSOLETE, the_time() and the_date() now use weekdays/months from b2config.php</strong><br />
@@ -310,7 +311,54 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  </div>
 		  <br /><br />
 
-		<strong>&lt;?php link_pages() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+		<strong>&lt;?php next_posts() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+	</strong>Return the URL portion of a link to the next posts. <br />
+
+	Generally you would use this in a template to navigate to the next "set" of posts or days
+	depending on the "Options" settings for the site.  The returned string can then be used to 
+	construct a link.  When the site options are set to 'Post", the next and previous functions will display the next or previous number of posts as set in the "post" options value.  When 
+	the site option is set to "Days", that number of consecutive days will be displayed.  In 
+	situations where there are not any post for those days, no output will be produced.<br />
+	  <div class="params">Parameters:<ul>
+	  <li>No parameters.</li>
+	  </ul>
+	  </div>
+	  <br /><br />
+	
+	<strong>&lt;?php next_posts_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+
+	</strong>
+	Displays a full link to the next "set" of posts or days.<br />
+	  <div class="params">Parameters:<ul>
+	  <li>A user supplied string. Default "Next &gt;&gt;"</li>
+	  </ul>
+	  </div>
+	  <br /><br />
+
+	  
+	<strong>&lt;?php previous_posts() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+	</strong>Returns the URL portion of a link to the previous posts.<br />
+	Generally you would use this in a template to navigate to the next "set" of posts or days
+	depending on the "Options" settings for the site.  The returned string can then be used to construct
+	a link for example.<br />
+	  <div class="params">Parameters:<ul>
+	  <li>No parameters.</li>
+
+	  </ul>
+	  </div>
+	  <br /><br />
+	
+	<strong>&lt;?php previous_posts_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+	</strong>
+	Displays a full link to the previous "set" of posts or days if there are any, otherwise nothing is displayed.<br />
+	  <div class="params">Parameters:<ul>
+
+	  <li>A user supplied string. Default "&lt;&lt; Previous"</li>
+	  </ul>
+	  </div>
+	  <br /><br />
+	  
+	  <strong>&lt;?php link_pages() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
         </strong>Displays links to the pages of the post if it's a multiple pages post.<br />
 
 		  <div class="params">Parameters:<ul>
@@ -345,6 +393,11 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         or a css style.<br />
 		  <br />
 
+		  <strong>&lt;?php trackback_rdf() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
+        This will include the RDF data that can be used by some weblog tools to locate your posts' trackback URLs.<br />
+		You should put this tag after the &lt;?php the_content() ?&gt; tag in your template, or just before the end of the loop.<br />
+		  <br />
+
 		  <strong>&lt;?php dropdown_cats() ?&gt;<br />
 		</strong>this is a special tag, meant to be used in the template, but outside of the b2 loop. it will display a list of &lt;option name="<em>x</em>"><em>category-name</em>&lt;/option>, where <em>x</em> is the number of the category and <em>category-name</em> is the name of it.<br />
 
@@ -372,6 +425,27 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  <li>sort by: possible values are 'name' and 'ID' (default is 'ID')</li>
 		  <li>sorting order: possible values are 'asc' for ascending or 'desc' for descending (default is 'asc')</li>
 		  <li>filename, in case you want to display the categories' posts in another template (default is current template)</li>
+		  </ul>
+		  </div>
+		  <br />
+
+	    <strong>&lt;?php bloginfo() ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
+		  This tag is out of the b2 loop.<br />
+		  It outputs info about your weblog.<br />
+
+		  <div class="params">Parameters:<ul>
+		  <li>string: can be 'name' to display the name of your weblog (you set it in b2config.php), 'url', 'description', 'admin_email', 'rss_url' to display the URL of your b2rss.xml file, 'pingback_url' to display the URL of your xmlrpc.php file<br /> (default string is 'name')</li>
+		  </ul>
+		  </div>
+		  <br />
+
+	    <strong>&lt;?php single_post_title() ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
+		  This tag is out of the b2 loop.<br />
+		  It outputs the title of the post when you load the page with ?p= (see 'Usage' section for explanation). When the weblog page is loaded without ?p=, this tag doesn't display anything. Generally, you could use it like that:<br />
+		  &nbsp; &nbsp;&lt;title&gt;&lt;?php bloginfo('name') ?&gt;&lt;?php single_post_title() ?&gt;&lt;/title&gt;<br />
+
+		  <div class="params">Parameters:<ul>
+		  <li>prefix string that will appear before the post's title (default is ' :: ')</li>
 		  </ul>
 		  </div>
 		  <br />
@@ -405,12 +479,18 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         Tags for permalinks</strong> are:<br />
 		<br />
 	
-		<strong>&lt;?php permalink_anchor() ?&gt;<br />
-		</strong> this will display &lt;a name=&quot;...&quot;&gt;&lt;/a&gt;, replacing 
-		&quot;...&quot; with the ID of the post in the database.<br />
+		<strong>&lt;?php permalink_anchor() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
+		this will display &lt;a name=&quot;...&quot;&gt;&lt;/a&gt;, replacing 
+		&quot;...&quot; with the ID or the title of the post in the database.<br />
 		<br />
 
-		<strong>&lt;?php permalink_link(</strong><strong>) ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+		  <div class="params">Parameters:<ul>
+		  <li>string for kind of anchor: either 'id' that displays '50', or 'title' that displays 'title_of_post_50' (default is 'id')</li>
+		  </ul>
+		  </div>
+		  <br />
+
+		<strong>&lt;?php permalink_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
         </strong>this will display the name of the file followed by #ID to link to 
         the post, in the month archive if archive-mode is "monthly".<br />
         note: this tag does not display the link, for this you've got to type 
@@ -419,14 +499,15 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 
 		  <div class="params">Parameters:<ul>
 		  <li>file name, in case you want to link the archive to a different template (default is the current template)</li>
+		  <li>string for kind of link: either 'id' that appends '#50' to the link, or 'title' that appends '#title_of_post_50' (default is 'id')</li>
 		  </ul>
 		  </div>
 		  <br />
 
         <br />
-        <strong>&lt;?php permalink_single(</strong><strong>) ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
+        <strong>&lt;?php permalink_single() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
         </strong>this will display the name of the file followed by #ID to link to 
-        the entire post (the linked page will also show the comments on that post).<br />
+        the entire post (the linked page will also show the extended text on that post if it is an extended entry, and the comments).<br />
         note: this tag does not display the link, for this you've got to type 
         &lt;a href=&quot;&lt;?php permalink_single() ?&gt;&quot;&gt;text of the 
         link&lt;/a&gt;.<br />
@@ -439,16 +520,19 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 
 		<br />
 		<br />
-		<strong>Tags for comments</strong> are:<br />
+		<strong>Tags for comments, trackback, and pingback</strong> are:<br />
 		<br />
+
 		<strong>&lt;?php comments_popup_script() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
-        This will include the javascript that is required to open comments in a popup window.<br />
+        This will include the javascript that is required to open comments, trackback and pingback in popup windows.<br />
 		You should put this tag before the &lt;/head> tag in your template.<br />
 
 		  <div class="params">Parameters:<ul>
 		  <li>width (default is 400)</li>
 		  <li>height (default is 400)</li>
 		  <li>file name, in case you want to use a different template for comments (default is b2commentspopup.php)</li>
+		  <li>file name, in case you want to use a different template for TrackBacks (default is b2trackbackpopup.php)</li>
+		  <li>file name, in case you want to use a different template for Pingbacks (default is b2pingbackspopup.php)</li>
 		  </ul>
 		  </div>
 		  <br />
@@ -457,6 +541,10 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		<strong>&lt;?php comments_popup_link() ?&gt;<span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
         This will display the link to open comments in a popup window, with the number of comments.<br />
 		To edit the popup window's template, edit the file b2commentspopup.php (it's the default one for comments popup).<br />
+		<br />
+		Note:<br />
+		The same tags exist for TrackBack and Pingback, respectively named '<b>trackback_popup_link()</b>' and '<b>pingback_popup_link()</b>'. They take the same parameters.<br />
+		<br />
 
 		  <div class="params">Parameters:<ul>
 		  <li>string for comment-less posts (default is &quot;no comments&quot;)</li>
@@ -472,6 +560,10 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		<strong>&lt;?php comments_link() ?&gt;<br />
         </strong> This is a bit like permalink_link, it will display an URL to the 
         comments page, but again you'll have to create the link tag.<br />
+		<br />
+		Note:<br />
+		The same tags exist for TrackBack and Pingback, respectively named '<b>trackback_link()</b>' and '<b>pingback_link()</b>'. They take the same parameters.<br />
+		<br />
 
 		  <div class="params">Parameters:<ul>
 		  <li>file name, in case you want to use a different template for comments (default is the current template)</li>
@@ -480,10 +572,13 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  <br />
 
 		<br />
-        <strong>&lt;?php comments_number(</strong><strong>) ?&gt;</strong> <br />
+        <strong>&lt;?php comments_number() ?&gt;</strong> <br />
         This displays the number of comments that have been posted on this post. 
         Example: &quot;5 comments&quot;.<br />
-        <br />
+		<br />
+		Note:<br />
+		The same tags exist for TrackBack and Pingback, respectively named '<b>trackback_number()</b>' and '<b>pingback_number()</b>'. They take the same parameters.<br />
+		<br />
 
 		  <div class="params">Parameters:<ul>
 		  <li>string for comment-less posts (default is &quot;no comments&quot;)</li>
@@ -501,14 +596,26 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         display a number, not a text with it, so you could have terrible things 
         like &quot;1 comments&quot; (doh !)<br />
 		<br />
-		<strong>Necessary: &lt;?php include(&quot;b2comments.php&quot;) ?&gt;<br />
-		</strong>you'll put this line where you want the comments to be placed on your 
+		<strong>Necessary: &lt;?php include(&quot;b2comments.php&quot;) ?&gt;</strong><br />
+		you'll put this line where you want the comments to be placed on your 
 		page.<br />
         typically, under the post itself. don't worry, the comments only appear 
         if the page is called in the comments mode. (like this: url?c=1)<br />
 		<br />
+		<strong>Necessary: &lt;?php include(&quot;b2trackback.php&quot;) ?&gt;</strong><br />
+		you'll put this line where you want the TrackBacks to be placed on your 
+		page.<br />
+        typically, under the post itself. don't worry, the TrackBacks only appear 
+        if the page is called in the TrackBacks mode. (like this: url?tb=1)<br />
 		<br />
-		<strong>Tags that go in b2comments.php:</strong> (these are easy too)<br />
+		<strong>Necessary: &lt;?php include(&quot;b2pingbacks.php&quot;) ?&gt;</strong><br />
+		you'll put this line where you want the Pingbacks to be placed on your 
+		page.<br />
+        typically, under the post itself. don't worry, the Pingbacks only appear 
+        if the page is called in the Pingbacks mode. (like this: url?pb=1)<br />
+		<br />
+		<br />
+		<strong>Tags that go in b2comments.php, b2trackback.php, b2pingbacks.php:</strong> (these are easy too)<br />
 		<br />
 		<strong>&lt;?php comment_author() ?&gt;</strong><br />
 		<strong>&lt;?php comment_author_email() ?&gt; </strong> - displays the e-mail address, but not the link<br />
@@ -530,9 +637,9 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		<strong>&lt;?php comment_author_IP() ?&gt;</strong>  
         - displays the IP of the comment's author<br />
         <strong>&lt;?php comment_text() ?&gt;<br />
-        &lt;?php comment_date(</strong><strong>) ?&gt; </strong>- unlike the_date(), this tag 
+        &lt;?php comment_date() ?&gt; </strong>- unlike the_date(), this tag 
         appears on every comment<strong><br />
-        &lt;?php comment_time(</strong><strong>) ?&gt;</strong><br />
+        &lt;?php comment_time() ?&gt;</strong><br />
 
 		  <div class="params">Parameters for <strong>comment_date()</strong> and <strong>comment_time()</strong>:<ul>
 		  <li>format string (default is "d.m.y"/"H:i:s" depending on the tag)</li>
@@ -540,8 +647,18 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  </div>
 		  <br />
 
+		<strong>&lt;?php trackback_url() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span></strong><br />
+        This tag is out of the b2 TrackBacks loop.<br />
+		It will output the URL to TrackBack the post, that other people can copy and use in b2's posting interface to trackback this post.<br />
+
+		  <div class="params">Parameters:<ul>
+		  <li>no parameter</li>
+		  </ul>
+		  </div>
+		  <br />
+
 		<br />
-		In b2comments.php, like in the main template file, please keep the first 
+		In b2comments.php b2trackback.php and b2pingbacks.php, like in the main template file, please keep the first 
 		PHP lines, the &quot;while&quot; lines, and the &quot;}&quot; lines.<br />
         You can modify the form, but do not remove &quot;&lt;?php echo ... ?&gt;&quot; 
         and all the name=&quot;...&quot; attributes.<br />
@@ -610,6 +727,12 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
         and a form to add a comment below the post.<br />
         you should use this variable only with <strong>p=</strong>, example: index.php<strong>?p=50&amp;c=1</strong>.<br />
         <br />
+        index.php<strong>?p=50&tb=1</strong> will display the TrackBacks to the post #50.<br />
+        you should use this variable only with <strong>p=</strong>, example: index.php<strong>?p=50&amp;tb=1</strong>.<br />
+        <br />
+        index.php<strong>?p=50&pb=1</strong> will display the Pingbacks to the post #50.<br />
+        you should use this variable only with <strong>p=</strong>, example: index.php<strong>?p=50&amp;pb=1</strong>.<br />
+        <br />
         index.php<strong>?p=50&more=1</strong> will display the extended entries' text. this, 
         too, should be used only with <strong>p=</strong>, for individual entries.<br />
 		  <br />
@@ -659,7 +782,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		</p>
 	  <p>&nbsp;</p>
 	  <a name="postviaemail"></a><h1>Post via Email:</h1>
-		<p>You can now post news from an email client !<br />
+		<p>You can post news from an email client !<br />
 		But first you'll have to edit b2config.php, filling the appropriate values for your POP3 email account (this interface doesn't support IMAP yet, only POP3, sorry).<br />
 		<br />
 		Once you have edited the config options, you can make your webserver execute b2mail.php every set amount of time (depending on your host's performance, this script can be resource intensive, so don't make it run every minute or you'll be kicked).<br />
@@ -712,6 +835,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		user-list, to upgrade their level to 1 or more, so they can post. If you 
 		don't want an user to post anymore, just click &quot;-&quot; until their 
 		level is 0.<br />
+		Note: you can now disable users registration altogether from the config file.<br />
 		<strong>Levels</strong> are these:<br />
 		0 - new user: can't post.<br />
 		1 - user: can post &amp; edit/delete their own posts.<br />
@@ -733,7 +857,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 	  <blockquote>b2 is functionnal, but a lot of coding and code clean-up remain 
         to be done.<br />
         If you've got suggestions, ideas, or comments, or if you found a bug, 
-        why not joining us in the <a href="http://tidakada.com/board">Forums</a> 
+        why not joining us in the <a href="http://tidakada.com/board/">Forums</a> 
         ?<br />
         If you can code in PHP, you'll see the structure of b2 is flexible enough 
         to allow for more functions and sections to be added.</blockquote>
