@@ -184,6 +184,7 @@ preg_match("/\%u[1-9A-F][1-9A-F][1-9A-F][1-9A-F]/is", $text, $stufftofix);
 
 <script language="JavaScript">
 <!--
+window.focus();
 //				document.blog.post_content.focus();
 //-->
 </script>
