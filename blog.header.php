@@ -190,17 +190,6 @@ if ((!$whichcat) && (!$m) && (!$p) && (!$w) && (!$s) && empty($poststart) && emp
 	}
 }
 
-if (($what_to_show == 'paged') && (!$p) && (!$more)) {
-	$pgstrt = '';
-	if ($page) {
-		$pgstrt = (intval($page) -1) * $posts_per_page . ', ';
-	}
-	$limits = 'LIMIT '.$pgstrt.$posts_per_page;
-}
-elseif (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
-	$limits = '';
-}
-
 if ( !empty($postend) && ($postend > $poststart)) {
 	if ($what_to_show == 'posts' || ($what_to_show == 'paged' && (!$page))) {
 		$poststart = intval($poststart);
@@ -218,6 +207,17 @@ if ( !empty($postend) && ($postend > $poststart)) {
 		$otherdate = date('Y-m-d H:i:s', ($lastpostdate - (($postend -1) * 86400)));
 		$where .= ' AND post_date > \''.$otherdate.'\' AND post_date < \''.$startdate.'\'';
 	}
+}
+
+if (($what_to_show == 'paged') && (!$p) && (!$more)) {
+	$pgstrt = '';
+	if ($page) {
+		$pgstrt = (intval($page) -1) * $posts_per_page . ', ';
+	}
+	$limits = 'LIMIT '.$pgstrt.$posts_per_page;
+}
+elseif (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
+	$limits = '';
 }
 
 if ($p == 'all') {
