@@ -86,9 +86,9 @@ $dateendofmonth = $thisyear.'-'.$thismonth.'-'.$daysinmonth;
 // caution: offset bug inside
 $calendarblah = get_weekstartend($datestartofmonth, $start_of_week);
 if (mysql2date('w', $datestartofmonth) == $start_of_week) {
-	$calendarfirst = $calendarblah['start']+1;
+	$calendarfirst = $calendarblah['start']+1+3600;	//	adjust for daylight savings time
 } else {
-	$calendarfirst = $calendarblah['end']-604799;
+	$calendarfirst = $calendarblah['end']-604799+3600;	//	adjust for daylight savings time
 }
 
 $calendarblah = get_weekstartend($dateendofmonth, $end_of_week);
