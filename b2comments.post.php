@@ -9,6 +9,23 @@ include("$b2inc/b2functions.php");
 
 dbconnect();
 
+function add_magic_quotes($array) {
+	foreach ($array as $k => $v) {
+		if (is_array($v)) {
+			$array[$k] = add_magic_quotes($v);
+		} else {
+			$array[$k] = addslashes($v);
+		}
+	}
+	return $array;
+} 
+
+if (!get_magic_quotes_gpc()) {
+	$HTTP_GET_VARS    = add_magic_quotes($HTTP_GET_VARS);
+	$HTTP_POST_VARS   = add_magic_quotes($HTTP_POST_VARS);
+	$HTTP_COOKIE_VARS = add_magic_quotes($HTTP_COOKIE_VARS);
+}
+
 $author = $HTTP_POST_VARS["author"];
 $email = $HTTP_POST_VARS["email"];
 $url = $HTTP_POST_VARS["url"];
@@ -37,7 +54,7 @@ if (strlen($email) < 6) {
 	$email = '';
 }
 $url = trim(strip_tags($url));
-$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
+$url = ((!stristr($url, '://')) && ($url != '')) ? 'http://'.$url : $url;
 if (strlen($url) < 7) {
 	$url = '';
 }

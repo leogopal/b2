@@ -2,6 +2,23 @@
 $title = "Post / Edit";
 /* <Edit> */
 
+function add_magic_quotes($array) {
+	foreach ($array as $k => $v) {
+		if (is_array($v)) {
+			$array[$k] = add_magic_quotes($v);
+		} else {
+			$array[$k] = addslashes($v);
+		}
+	}
+	return $array;
+} 
+
+if (!get_magic_quotes_gpc()) {
+	$HTTP_GET_VARS    = add_magic_quotes($HTTP_GET_VARS);
+	$HTTP_POST_VARS   = add_magic_quotes($HTTP_POST_VARS);
+	$HTTP_COOKIE_VARS = add_magic_quotes($HTTP_COOKIE_VARS);
+}
+
 $b2varstoreset = array('action','safe_mode','withcomments','c','posts','poststart','content','edited_post_title','comment_error','profile', 'trackback_url');
 for ($i=0; $i<count($b2varstoreset); $i += 1) {
 	$b2var = $b2varstoreset[$i];
@@ -27,9 +44,9 @@ case 'post':
 
 	$post_autobr = intval($HTTP_POST_VARS["post_autobr"]);
 	$post_pingback = intval($HTTP_POST_VARS["post_pingback"]);
-	$content = format_to_post($HTTP_POST_VARS["content"]);
-	$content = balanceTags($content);
-	$post_title = addslashes($HTTP_POST_VARS["post_title"]);
+	$content = balanceTags($HTTP_POST_VARS["content"]);
+	$content = format_to_post($content);
+	$post_title = addslashes(addslashes_gpc($HTTP_POST_VARS["post_title"]));
 	$post_category = intval($HTTP_POST_VARS["post_category"]);
 
 	if ($user_level == 0)
