@@ -1,5 +1,14 @@
 <?php
 
+/* new and improved ! now with more querystring stuff ! */
+
+if (!isset($querystring_start)) {
+	$querystring_start = '?';
+	$querystring_equal = '=';
+	$querystring_separator = '&';
+}
+
+
 /* functions... */
 
 function get_currentuserinfo() { // a bit like get_userdata(), on steroids
@@ -8,7 +17,7 @@ function get_currentuserinfo() { // a bit like get_userdata(), on steroids
 	$user_login = $HTTP_COOKIE_VARS["cafeloguser"];
 	$userdata = get_userdatabylogin($user_login);
 	$user_level = $userdata["user_level"];
-	$user_ID=$userdata["ID"];
+	$user_ID=$userdata['ID'];
 	$user_nickname=$userdata["user_nickname"];
 	$user_email=$userdata["user_email"];
 	$user_url=$userdata["user_url"];
@@ -58,7 +67,7 @@ function format_to_post($content) {
 function zeroise($number,$threshold) { // function to add leading zeros when necessary
 	$l=strlen($number);
 	if ($l<$threshold)
-		for ($i=0; $i<($threshold-$l); $i=$i+1) { $number="0".$number;	}
+		for ($i=0; $i<($threshold-$l); $i=$i+1) { $number='0'.$number;	}
 	return($number);
 	}
 
@@ -321,7 +330,7 @@ function get_userdata($userid) {
 
 function get_userdata2($userid) { // for team-listing
 	global $tableusers,$row;
-	$user_data["ID"] = $userid;
+	$user_data['ID'] = $userid;
 	$user_data["user_login"] = $row->user_login;
 	$user_data["user_firstname"] = $row->user_firstname;
 	$user_data["user_lastname"] = $row->user_lastname;
@@ -393,7 +402,7 @@ function get_postdata($postid) {
 	$querycount++;
 	$myrow = mysql_fetch_object($result);
 	$postdata = array (
-		"ID" => $myrow->ID, 
+		'ID' => $myrow->ID, 
 		"Author_ID" => $myrow->post_author, 
 		"Date" => $myrow->post_date, 
 		"Content" => $myrow->post_content, 
@@ -406,7 +415,7 @@ function get_postdata($postid) {
 function get_postdata2($postid=0) { // less flexible, but saves mysql queries
 	global $row;
 	$postdata = array (
-		"ID" => $row->ID, 
+		'ID' => $row->ID, 
 		"Author_ID" => $row->post_author,
 		"Date" => $row->post_date,
 		"Content" => $row->post_content,
@@ -689,7 +698,7 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 			$content = $content[0];
 			$rss .= "\t\t\t<description>".convert_chars(strip_tags($content),"unicode")."</description>\n";
 
-			$rss .= "\t\t\t<link>".htmlentities("$siteurl/$blogfilename?p=".$row->ID."&c=1")."</link>\n";
+			$rss .= "\t\t\t<link>".htmlentities("$siteurl/$blogfilename".$querystring_start.'p'.$querystring_equal.$row->ID.$querystring_separator.'c'.$querystring_equal.'1')."</link>\n";
 			$rss .= "\t\t</item>\n";
 
 		}
