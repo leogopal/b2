@@ -3,7 +3,7 @@
 /* This file sets various arrays and variables for use in b2 */
 
 #b2 version
-$b2_version = '0.6.1';
+$b2_version = '0.6.2';
 
 #BBcode search and replace arrays
 $b2_bbcode['in'] = array(
