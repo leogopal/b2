@@ -228,7 +228,7 @@ function get_the_content($more_link_text="(more...)",$stripteaser="0",$more_file
 	if ($more_file != "") {
 		$file=$more_file;
 	} else {
-		$file=$HTTP_SERVER_VARS["SCRIPT_NAME"];
+		$file=$HTTP_SERVER_VARS["PHP_SELF"];
 	}
 	$content=$pages[$page-1];
 	$content=explode("<!--more-->",$content);
