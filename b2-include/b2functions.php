@@ -415,16 +415,20 @@ function get_postdata($postid) {
 	$sql = "SELECT * FROM $tableposts WHERE ID = $postid";
 	$result = mysql_query($sql) or die("Your SQL query: <br />$sql<br /><br />MySQL said:<br />".mysql_error());
 	$querycount++;
-	$myrow = mysql_fetch_object($result);
-	$postdata = array (
-		'ID' => $myrow->ID, 
-		'Author_ID' => $myrow->post_author, 
-		'Date' => $myrow->post_date, 
-		'Content' => $myrow->post_content, 
-		'Title' => $myrow->post_title, 
-		'Category' => $myrow->post_category, 
-		);
-	return($postdata);
+	if (mysql_num_rows($result)) {
+		$myrow = mysql_fetch_object($result);
+		$postdata = array (
+			'ID' => $myrow->ID, 
+			'Author_ID' => $myrow->post_author, 
+			'Date' => $myrow->post_date, 
+			'Content' => $myrow->post_content, 
+			'Title' => $myrow->post_title, 
+			'Category' => $myrow->post_category, 
+			);
+		return($postdata);
+	} else {
+		return false;
+	}
 }
 
 function get_postdata2($postid=0) { // less flexible, but saves mysql queries
