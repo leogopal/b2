@@ -1,6 +1,5 @@
 <?php // Do not delete these lines
-$pagenow = basename($HTTP_SERVER_VARS["SCRIPT_FILENAME"]);
-if ($pagenow == "b2comments.php")
+if (basename($HTTP_SERVER_VARS["SCRIPT_FILENAME"]) == "b2comments.php")
 	die ("please, do not load this page directly");
 if (($withcomments) or ($c)) {
 
@@ -50,7 +49,7 @@ while($rowc = mysql_fetch_object($resultc)) {
 
 <!-- form to add a comment -->
 
-<form action="b2comments.post.php" method="post">
+<form action="<?php echo $siteurl; ?>/b2comments.post.php" method="post">
 	<input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
 	<input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($HTTP_SERVER_VARS["REQUEST_URI"]); ?>" />
 
