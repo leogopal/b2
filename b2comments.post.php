@@ -34,13 +34,14 @@ $now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
 $author = strip_tags($author);
 $email = strip_tags($email);
 if (strlen($email) < 6) {
-	$email = "";
+	$email = '';
 }
-$url = strip_tags($url);
+$url = trim(strip_tags($url));
+$url = (stristr($url, '://')) ? 'http://'.$url : $url;
 if (strlen($url) < 7) {
-	$url = "";
+	$url = '';
 }
-$comment = strip_tags($comment,$comment_allowed_tags);
+$comment = strip_tags($comment, $comment_allowed_tags);
 $comment = balanceTags($comment);
 $comment = convert_chars($comment);
 $comment = format_to_post($comment);
