@@ -54,12 +54,12 @@ function get_bloginfo($show='') {
 	return($output);
 }
 
-function single_post_title($display = 1) {
+function single_post_title($prefix = '', $display = 1) {
 	global $p;
 	if (intval($p)) {
 		$post_data = get_postdata($p);
 		if ($display) {
-			echo strip_tags(stripslashes($post_data['Title']));
+			echo $prefix.strip_tags(stripslashes($post_data['Title']));
 		} else {
 			return strip_tags(stripslashes($post_data['Title']));
 		}
@@ -337,7 +337,7 @@ function previous_post($format='%', $previous='previous post: ', $title='yes', $
 		}
 
 		$limitprev--;
-		$sql = "SELECT ID,post_title FROM $tableposts WHERE post_date < '$current_post_date' $sqlcat $sql_exclude_cats ORDER BY post_date DESC LIMIT $limitprev,1";
+		$sql = "SELECT ID,post_title FROM $tableposts WHERE post_date < '$current_post_date' AND post_category > 0 $sqlcat $sql_exclude_cats ORDER BY post_date DESC LIMIT $limitprev,1";
 
 		$query = @mysql_query($sql);
 		$querycount++;
@@ -382,7 +382,7 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 		$now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
 
 		$limitnext--;
-		$sql = "SELECT ID,post_title FROM $tableposts WHERE post_date > '$current_post_date' AND post_date < '$now' $sqlcat $sql_exclude_cats ORDER BY post_date ASC LIMIT $limitnext,1";
+		$sql = "SELECT ID,post_title FROM $tableposts WHERE post_date > '$current_post_date' AND post_date < '$now' AND post_category > 0 $sqlcat $sql_exclude_cats ORDER BY post_date ASC LIMIT $limitnext,1";
 
 		$query = @mysql_query($sql);
 		$querycount++;
