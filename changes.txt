@@ -1,3 +1,40 @@
+RELEASE - 0.6.2.1
+
+Corrections and changes made to B2 since version 0.6.2
+
+These were several minor changes and two security fixes to correct vunuralbilities in the code.
+
+b2calendar.php
+	correction to handle html special characters in "title" links.
+	
+b2comments.php, b2commetnspopup.php
+	added feature to auto-clear comments form fields when tabbed into
+
+b2comments.post.php
+	bug fix: added test for 'IIS' in handling 'redirects'
+	
+b2functions.php:balanceTags()
+	security fix: sanitize HTML attributes, remove frame/applet tags
+	
+b2minutop.php
+	security fix: Prevent $b2inc being maliciously set on url.
+	
+blog.header.php
+	security fix: prevent $post from being used to inject sql statements
+	
+b2vars.php
+	updated revision value to 0.6.2.1
+
+index.php
+	bug fix: image url for 'valid xml gif' corrected
+	
+readme.html
+	updated release number and release date
+
+<->-<-><->-<-><->-<-><->-<-><->-<-><->-<-><->-<-><->-<-><->-<-><->-<-><->-<-><->-<->
+
+
+
 RELEASE - 0.6.2
 
 Corrections and changes made to B2 since version 0.6.1
