@@ -143,7 +143,7 @@ if ((empty($cat)) || ($cat == 'all') || ($cat == '0')) {
     $whichcat .= ')';
 } 
 // author stuff
-if ((!empty($author)) || ($author == 'all') || ($cat == '0')) {
+if ((empty($author)) || ($author == 'all') || ($cat == '0')) {
 	$whichauthor='';
 } elseif (intval($author)) {
 	$author = intval($author);
