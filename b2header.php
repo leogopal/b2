@@ -164,7 +164,7 @@ if ($profile==0) {
 <td valign="top">
 <?php include($b2inc."/b2menutop.php") ?>
 </td>
-</tr></tr>
+</tr><tr>
 <?php
 }
 ?>
