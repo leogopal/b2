@@ -406,50 +406,45 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 
 
 function next_posts() { // original by cfactor at cooltux.org
-	global $poststart, $postend, $blogfilename, $posts, $m;
+	global $poststart, $postend, $blogfilename, $posts, $m, $cat;
 	global $posts_per_page;
 	global $querystring_start, $querystring_equal, $querystring_separator;
-	if (!$m) {
+	if (empty($m) && empty($cat)) {
 		$poststart_t = $postend;
 		if (empty($postend)) $poststart_t = $posts_per_page;
 		$postend_t = $poststart_t + $posts_per_page;
-		return $blogfilename.$querystring_start.'poststart'.$querystring_equal.$poststart_t.$querystring_separator.'postend'.$querystring_equal.$postend_t;
-	} elseif (($m % 100) > 11) {
-		$m_t = $m + 89;
-		return $blogfilename.$querystring_start.'m'.$querystring_equal.$m_t;
-	} else {
-		$m_t = $m + 1;
-		return $blogfilename.$querystring_start.'m'.$querystring_equal.$m_t;
+		echo $blogfilename.$querystring_start.'poststart'.$querystring_equal.$poststart_t.$querystring_separator.'postend'.$querystring_equal.$postend_t;
 	}
 }
 
-function next_posts_link($label='Next &gt;&gt;') { 
-	echo '<a href="' . next_posts() . '">'. $label.'</a>';
+function next_posts_link($label='Next Page >>') {
+	global $m, $cat;
+	if (empty($m) && empty($cat)) {
+		echo '<a href="';
+		echo next_posts();
+		echo '">'. htmlspecialchars($label) .'</a>';
+	}
 }
 
 
 function previous_posts() { // original by cfactor at cooltux.org
-	global $poststart, $postend, $blogfilename, $posts, $m;
+	global $poststart, $postend, $blogfilename, $posts, $m, $cat;
 	global $posts_per_page;
 	global $querystring_start, $querystring_equal, $querystring_separator;
-	if (!$m) {
+	if (empty($m) && empty($cat)) {
 		$poststart_t = $poststart - $posts_per_page;
 		if ($poststart_t < 0) $poststart_t = 0;
 		$postend_t = $poststart_t + $posts_per_page;
-		return $blogfilename.$querystring_start.'poststart'.$querystring_equal.$poststart_t.$querystring_separator.'postend'.$querystring_equal.$postend_t;
-	} elseif (($m % 100) < 2) {
-		$m_t = $m - 89;
-		return $blogfilename.$querystring_start.'m'.$querystring_equal.$m_t;
-	} else {
-		$m_t = $m - 1;
-		return $blogfilename.$querystring_start.'m'.$querystring_equal.$m_t;
+		echo $blogfilename.$querystring_start.'poststart'.$querystring_equal.$poststart_t.$querystring_separator.'postend'.$querystring_equal.$postend_t;
 	}
 } 
 
-function previous_posts_link($label='&lt;&lt; Previous') {
-	global $poststart;
-	if ($poststart > 0) {
-		echo '<a href="' . previous_posts() . '">'. $label.'</a>';
+function previous_posts_link($label='<< Previous Page') {
+	global $poststart, $m, $cat;
+	if (empty($m) && empty($cat) && ($poststart > 0)) {
+		echo '<a href="';
+		echo previous_posts();
+		echo '">'.  htmlspecialchars($label) .'</a>';
 	}
 }
 
