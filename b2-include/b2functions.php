@@ -699,7 +699,7 @@ function trackback($trackback_url, $title, $excerpt, $ID) {
 // updates the RSS feed !
 function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 
-	global $use_rss;
+	global $use_rss, $b2_version, $querystring_start, $querystring_equal, $querystring_separator;
 	global $admin_email,$blogname,$siteurl,$blogfilename,$blogdescription,$posts_per_rss,$rss_language;
 	global $tableposts,$postdata,$row;
 
@@ -717,7 +717,7 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 		$rss = '';
 
 		$rss .= '<?xml version="1.0"?'.">\n";
-		$rss .= "<!-- generator=\"b2/0.6pre3\" -->\n";
+		$rss .= "<!-- generator=\"b2/$b2_version\" -->\n";
 		$rss .= "<rss version=\"0.92\">\n";
 		$rss .= "\t<channel>\n";
 		$rss .= "\t\t<title>".convert_chars(strip_tags(get_bloginfo("name")),"unicode")."</title>\n";
