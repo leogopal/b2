@@ -185,7 +185,7 @@ function the_author_msn() {
 }
 
 function the_author_posts() {
-	global $id,$postdata;	$posts=get_usernumposts($postdata['ID']);	echo $posts;
+	global $id,$postdata;	$posts=get_usernumposts($postdata['Author_ID']);	echo $posts;
 }
 
 /***** // Author tags *****/
