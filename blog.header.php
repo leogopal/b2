@@ -1,6 +1,6 @@
 <?php
 /*	File version:
- *	$Id: blog.header.php,v 1.31 2003/05/24 01:07:09 macshack Exp $
+ *	$Id: blog.header.php,v 1.32 2003/05/24 01:26:05 macshack Exp $
  */
 $use_cache = 1;
 $use_gzipcompression = 1;
@@ -38,12 +38,14 @@ $b2varstoreset = array('m','p','posts','w','c', 'cat','withcomments','s','search
 dbconnect();
 
 /* Sending HTTP headers */
-$last_modified_header = mysql2date('D, d M Y H:i:s', get_lastpostdate());
+@header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); 				// Date in the past 
+@header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // always modified 
+@header("Cache-Control: no-store, no-cache, must-revalidate"); 	// HTTP/1.1 
+@header("Cache-Control: post-check=0, pre-check=0", false); 
+@header("Pragma: no-cache"); 									// HTTP/1.0 
 @header ("X-Pingback: $pathserver/xmlrpc.php");
-if (!$is_winIE) {
-	@header ("Last-Modified: $last_modified_header");
-	@header ('ETag: "'.md5($last_modified_header.$pagenow).'"');
-}
+
+
 
 /* Getting settings from db */
 $posts_per_page = get_settings('posts_per_page');
