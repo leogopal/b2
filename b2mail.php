@@ -93,9 +93,8 @@ for ($iCount=1; $iCount<=$Count; $iCount++) {
 			if (preg_match('/Date: /', $line)) { // of the form '20 Mar 2002 20:32:37'
 				$ddate = trim($line);
 				$ddate = str_replace('Date: ', '', $ddate);
-				$j = substr($ddate,0,1);
-				if ( ($j == 'M') || ($j == 'T') || ($j == 'W') || ($j == 'F') || ($j == 'S') ) {
-					$ddate = substr($ddate, 5, strlen($ddate)-5);
+				if (strpos($ddate, ',')) {
+					$ddate = trim(substr($ddate, strpos($ddate, ',')+1, strlen($ddate)));
 				}
 				$date_arr = explode(' ', $ddate);
 				$date_time = explode(':', $date_arr[3]);

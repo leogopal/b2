@@ -1,8 +1,8 @@
-<?php /* These first lines are the first part of a CaféLog template.
-         In every template you do, you got to copy them before the CaféLog 'loop' */
+<?php /* These first lines are the first part of a CafÃ©Log template.
+         In every template you do, you got to copy them before the CafÃ©Log 'loop' */
 $blog=1; // enter your blog's ID
+header("Content-type: text/xml");
 include ("blog.header.php");
-Header("Content-type: text/xml");
 if (!isset($rss_language)) { $rss_language = 'en'; }
 if (!isset($rss_encoded_html)) { $rss_encoded_html = 0; }
 if (!isset($rss_excerpt_length) || ($rss_encoded_html == 1)) { $rss_excerpt_length = 0; }

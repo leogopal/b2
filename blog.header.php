@@ -1,7 +1,7 @@
 <?php
 
-$use_cache=1;
-$use_gzipcompression=1;
+$use_cache = 1;
+$use_gzipcompression = 1;
 
 /* Including config and functions files */
 require_once (dirname(__FILE__).'/b2config.php');
@@ -39,6 +39,7 @@ dbconnect();
 $last_modified_header = mysql2date('D, d M Y H:i:s', get_lastpostdate());
 @header ("X-Pingback: $pathserver/xmlrpc.php");
 @header ("Last-Modified: $last_modified_header");
+@header ('ETag: "'.md5($last_modified_header.$pagenow).'"');
 
 /* Getting settings from db */
 $posts_per_page = get_settings('posts_per_page');

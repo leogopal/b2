@@ -676,12 +676,28 @@ function redirect_js($url,$title="...") {
 
 
 // pings Weblogs.com
-function pingWeblogs($blog_ID="1") {
+function pingWeblogs($blog_ID = 1) {
 	// original function by Dries Buytaert for Drupal
 	global $use_weblogsping, $blogname,$siteurl,$blogfilename;
-	if ((!(($blogname=="my weblog") && ($siteurl=="http://yourdomain.com") && ($blogfilename=="b2.php"))) && (!preg_match("/localhost\//",$siteurl)) && ($use_weblogsping)) {
+	if ((!(($blogname=="my weblog") && ($siteurl=="http://example.com") && ($blogfilename=="b2.php"))) && (!preg_match("/localhost\//",$siteurl)) && ($use_weblogsping)) {
 		$client = new xmlrpc_client("/RPC2", "rpc.weblogs.com", 80);
 		$message = new xmlrpcmsg("weblogUpdates.ping", array(new xmlrpcval($blogname), new xmlrpcval($siteurl."/".$blogfilename)));
+		$result = $client->send($message);
+		if (!$result || $result->faultCode()) {
+			return(false);
+		}
+		return(true);
+	} else {
+		return(false);
+	}
+}
+
+// pings Weblogs.com/rssUpdates
+function pingWeblogsRss($blog_ID = 1, $rss_url) {
+	global $use_weblogsrssping, $blogname, $rss_url;
+	if ($blogname != 'my weblog' && $rss_url != 'http://example.com/b2rdf.php' && $use_weblogsrssping) {
+		$client = new xmlrpc_client('/RPC2', 'rssrpc.weblogs.com', 80);
+		$message = new xmlrpcmsg('rssUpdate', array(new xmlrpcval($blogname), new xmlrpcval($rss_url)));
 		$result = $client->send($message);
 		if (!$result || $result->faultCode()) {
 			return(false);
@@ -695,7 +711,7 @@ function pingWeblogs($blog_ID="1") {
 // pings CaféLog.com
 function pingCafelog($cafelogID,$title='',$p='') {
 	global $use_cafelogping, $blogname, $siteurl, $blogfilename;
-	if ((!(($blogname=="my weblog") && ($siteurl=="http://yourdomain.com") && ($blogfilename=="b2.php"))) && (!preg_match("/localhost\//",$siteurl)) && ($use_cafelogping) && ($cafelogID != '')) {
+	if ((!(($blogname=="my weblog") && ($siteurl=="http://example.com") && ($blogfilename=="b2.php"))) && (!preg_match("/localhost\//",$siteurl)) && ($use_cafelogping) && ($cafelogID != '')) {
 		$client = new xmlrpc_client("/xmlrpc.php", "cafelog.tidakada.com", 80);
 		$message = new xmlrpcmsg("b2.ping", array(new xmlrpcval($cafelogID), new xmlrpcval($title), new xmlrpcval($p)));
 		$result = $client->send($message);
