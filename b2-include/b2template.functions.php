@@ -219,7 +219,7 @@ function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file
 	$content = convert_bbcode($content);
 	$content = convert_gmcode($content);
 	$content = convert_chars($content, 'unicode');
-	$content = strip_tags($content);
+	$content = make_url_footnote($content);
 	echo $content;
 }
 function the_content_unicode($more_link_text='(more...)', $stripteaser=0, $more_file='') {
@@ -667,8 +667,7 @@ function permalink_anchor($mode = 'id') {
 function permalink_link($file='', $mode = 'id') {
 	global $id, $postdata, $pagenow, $cacheweekly;
 	global $querystring_start, $querystring_equal, $querystring_separator;
-	if ($file=='')
-		$file=$pagenow;
+	$file = ($file=='') ? $pagenow : $file;
 	switch(strtolower($mode)) {
 		case 'id':
 			$anchor = $id;
