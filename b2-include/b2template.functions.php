@@ -39,7 +39,7 @@ function bloginfo_unicode($show='') {
 }
 
 function get_bloginfo($show='') {
-	global $siteurl,$blogfilename,$blogname,$blogdescription;
+	global $siteurl, $blogfilename, $blogname, $blogdescription, $pathserver, $admin_email;
 	switch($show) {
 		case "url":
 			$output = $siteurl."/".$blogfilename;
@@ -49,6 +49,15 @@ function get_bloginfo($show='') {
 			break;
 		case "description":
 			$output = $blogdescription;
+			break;
+		case "rss_url":
+			$output = $siteurl.'/b2rss.xml';
+			break;
+		case "pingback_url":
+			$output = $pathserver.'/xmlrpc.php';
+			break;
+		case "admin_email":
+			$output = $admin_email;
 			break;
 	}
 	return($output);
