@@ -27,7 +27,7 @@ while($rowc = mysql_fetch_object($resultc)) {
 ?><a name="c<?php comment_ID() ?>"></a>
 	
 <!-- comment -->
-<p>
+<p class="trackback<?php comment_is_trackback() ?>">
 <b><?php comment_author() ?> <?php comment_author_email_link("email", " - ", "") ?><?php comment_author_url_link("url", " - ", "") ?></b>
 <br />
 <?php comment_text() ?>
