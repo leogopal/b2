@@ -172,7 +172,16 @@ preg_match("/\%u[1-9A-F][1-9A-F][1-9A-F][1-9A-F]/is", $text, $stufftofix);
 
 <textarea rows="<?php echo $rows ?>" cols="48" style="width:415px;" name="content" tabindex="2" class="postform"><?php echo "<a href=\"$popupurl\">$popuptitle</a>\n$text" ?></textarea><br />
 
-<input type="checkbox" name="post_autobr" value="1" <?php if ($autobr) echo " checked" ?> tabindex="4" class="checkbox" /> Auto-BR<br />
+<table cellpadding="0" cellspacing="0">
+<td align="left" width="90">
+<input type="checkbox" name="post_autobr" value="1" <?php if ($autobr) echo " checked" ?> tabindex="4" class="checkbox" id="autobr" /><label for="autobr"> Auto-BR</label>
+</td>
+<?php if ($pingback) { ?>
+<td align="left">
+<input type="checkbox" class="checkbox" name="post_pingback" value="1" checked="checked" tabindex="7" id="pingback" /><label for="pingback"> PingBack</label>
+</td>
+<?php } ?>
+</table>
 
 <input type="submit" name="submit" value="Blog this !" class="search" tabindex="3" /> 
 
