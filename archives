@@ -2,7 +2,7 @@
 
 $qsdfgh = $_SERVER['REQUEST_URI'];
 
-$ghjklm_array = array( 'm', 'p', 'posts', 'w', 'c', 'cat', 'withcomments', 's', 'search', 'exact', 'sentence', 'poststart', 'postend', 'preview', 'debug', 'calendar', 'page', 'more'
+$ghjklm_array = array( 'm', 'p', 'posts', 'w', 'c', 'cat', 'withcomments', 's', 'search', 'exact', 'sentence', 'poststart', 'postend', 'preview', 'debug', 'calendar', 'page', 'more', 'tb'
 );
 
 for ($i=0; $i<count($ghjklm_array); $i += 1) {
