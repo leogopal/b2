@@ -466,7 +466,7 @@ function the_category_head($before='',$after='') {
 
 // out of the b2 loop
 function dropdown_cats($optionall = 1, $all = 'All') {
-	global $tablecategories,$querycount;
+	global $cat, $tablecategories, $querycount;
 	$query="SELECT * FROM $tablecategories";
 	$result=mysql_query($query);
 	$querycount++;
@@ -477,7 +477,7 @@ function dropdown_cats($optionall = 1, $all = 'All') {
 	while($row = mysql_fetch_object($result)) {
 		echo "\t<option value=\"".$row->cat_ID."\"";
 		if ($row->cat_ID == $cat)
-			echo ' selected';
+			echo ' selected="selected"';
 		echo '>'.stripslashes($row->cat_name)."</option>\n";
 	}
 	echo "</select>\n";
@@ -522,7 +522,7 @@ function comments_number($zero='no comment', $one='1 comment', $more='% comments
 	// original hack by dodo@regretless.com
 	global $id,$postdata,$tablecomments,$c,$querycount,$cache_commentsnumber,$use_cache;
 	if (empty($cache_commentsnumber[$id]) OR (!$use_cache)) {
-		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id";
+		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%'";
 		$result=mysql_query($query);
 		$number=mysql_num_rows($result);
 		$querycount++;
@@ -550,21 +550,22 @@ function comments_link($file='') {
 	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal.'1#comments';
 }
 
-function comments_popup_script($width=400, $height=400, $file='b2commentspopup.php') {
-	global $b2commentspopupfile, $b2commentsjavascript;
+function comments_popup_script($width=400, $height=400, $file='b2commentspopup.php', $trackbackfile='b2trackbackpopup.php') {
+	global $b2commentspopupfile, $b2trackbackpopupfile, $b2commentsjavascript;
 	$b2commentspopupfile = $file;
+	$b2trackbackpopupfile = $trackbackfile;
 	$b2commentsjavascript = 1;
-	$javascript = "<script language=\"javascript\" type=\"text/javascript\">\n<!--\nfunction b2comments (macagna) {\n    window.open(macagna, '_blank', 'width=$width,height=$height,scrollbars=yes,status=yes');\n}\n//-->\n</script>\n";
+	$javascript = "<script language=\"javascript\" type=\"text/javascript\">\n<!--\nfunction b2open (macagna) {\n    window.open(macagna, '_blank', 'width=$width,height=$height,scrollbars=yes,status=yes');\n}\n//-->\n</script>\n";
 	echo $javascript;
 }
 
 function comments_popup_link($zero='no comment', $one='1 comment', $more='% comments', $CSSclass='') {
-	global $b2commentspopupfile, $b2commentsjavascript;
+	global $id, $b2commentspopupfile, $b2commentsjavascript;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	echo '<a href="';
 	if ($b2commentsjavascript) {
-		comments_link($b2commentspopupfile);
-		echo '" onclick="b2comments(this.href); return false"';
+		echo $b2commentspopupfile.'?p='.$id.'&c=1';
+		echo '" onclick="b2open(this.href); return false"';
 	} else {
 		// if comments_popup_script() is not in the template, display simple comment link
 		comments_link();
@@ -627,6 +628,7 @@ function comment_author_IP() {
 function comment_text() {
 	global $commentdata;
 	$comment = str_replace('<trackback />', '', $comment);
+	$comment = str_replace('<pingback />', '', $comment);
 	$comment = stripslashes($commentdata['comment_content']);
 	$comment = convert_chars($comment);
 	$comment = convert_bbcode($comment);
@@ -666,6 +668,74 @@ function comment_is_trackback($display=1) {
 
 /***** // Comment tags *****/
 
+
+
+/***** TrackBack tags *****/
+
+function trackback_url($display = 1) {
+	global $pathserver, $id;
+	$tb_url = $pathserver.'/b2trackback.php?tb_id='.$id;
+	if ($display) {
+		echo $tb_url;
+	} else {
+		return $tb_url;
+	}
+}
+
+function trackback_number($zero='no trackback', $one='1 trackback', $more='% trackbacks') {
+	global $id, $tablecomments, $tb, $querycount, $cache_trackbacknumber, $use_cache;
+	if (empty($cache_trackbacknumber[$id]) OR (!$use_cache)) {
+		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<trackback />%'";
+		$result=mysql_query($query);
+		$number=mysql_num_rows($result);
+		$querycount++;
+		$cache_trackbacknumber[$id] = $number;
+	} else {
+		$number = $cache_trackbacknumber[$id];
+	}
+	if ($number == 0) {
+		$blah = $zero;
+	} elseif ($number == 1) {
+		$blah = $one;
+	} elseif ($number  > 1) {
+		$n = $number;
+		$more=str_replace('%', $n, $more);
+		$blah = $more;
+	}
+	echo $blah;
+}
+
+function trackback_link($file='') {
+	global $id,$pagenow;
+	global $querystring_start, $querystring_equal, $querystring_separator;
+	if ($file == '')	$file = $pagenow;
+	if ($file == '/')	$file = '';
+	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'tb'.$querystring_equal.'1#trackback';
+}
+
+function trackback_popup_link($zero='no trackback', $one='1 trackback', $more='% trackbacks', $CSSclass='') {
+	global $id, $b2trackbackpopupfile, $b2commentsjavascript;
+	global $querystring_start, $querystring_equal, $querystring_separator;
+	echo '<a href="';
+	if ($b2commentsjavascript) {
+		echo $b2trackbackpopupfile.'?p='.$id.'&tb=1';
+		echo '" onclick="b2open(this.href); return false"';
+	} else {
+		// if comments_popup_script() is not in the template, display simple comment link
+		trackback_link();
+		echo '"';
+	}
+	if (!empty($CSSclass)) {
+		echo ' class="'.$CSSclass.'"';
+	}
+	echo '>';
+	trackback_number($zero, $one, $more);
+	echo '</a>';
+}
+
+
+
+/***** // TrackBack tags *****/
 
 
 
