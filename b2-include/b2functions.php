@@ -765,6 +765,11 @@ function xmlrpc_removepostdata($content) {
 */
 
 function balanceTags($text) {
+  global $use_balanceTags;
+  if ($use_balanceTags = 0) {
+	  return($text);
+  } else {
+
   $tagstack = array();
   $stacksize = 0;
   $tagqueue = '';
@@ -853,6 +858,8 @@ function balanceTags($text) {
 	$newtext = str_replace("<    !--","< !--",$newtext);
 
   return $newtext;
+
+  }
 }
 
 

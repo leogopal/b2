@@ -92,6 +92,9 @@ $use_quicktags = 1;	// buttons for HTML tags (they won't work on IE Mac yet)
 #                                           or other double-bytes languages
 $use_htmltrans = 1;
 
+# this could help balance your HTML code. if it gives bad results, set it to 0
+$use_balanceTags = 1;
+
 
 
 // ** Image upload **
