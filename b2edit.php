@@ -60,6 +60,7 @@ case "post":
 	rss_update($blog_ID);
 	pingWeblogs($blog_ID);
 	pingCafelog($cafelogID, $post_title, $post_ID);
+	pingBlogs($blog_ID);
 
 	if (!empty($HTTP_POST_VARS["mode"])) {
 		switch($HTTP_POST_VARS["mode"]) {

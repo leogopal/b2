@@ -114,6 +114,8 @@ function b2newpost($m) {
 
 		rss_update($blog_ID);
 		pingWeblogs($blog_ID);
+		pingCafelog($cafelogID, $post_title, $post_ID);
+		pingBlogs($blog_ID);
 
 		return new xmlrpcresp(new xmlrpcval("$post_ID"));
 
@@ -252,6 +254,8 @@ function bloggernewpost($m) {
 
 		rss_update($blog_ID);
 		pingWeblogs($blog_ID);
+		pingCafelog($cafelogID, $post_title, $post_ID);
+		pingBlogs($blog_ID);
 
 		logIO("O","Posted ! ID: $post_ID");
 		return new xmlrpcresp(new xmlrpcval("$post_ID"));
