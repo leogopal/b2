@@ -157,7 +157,7 @@ for($i = $calendarfirst; $i<($calendarlast+86400); $i = $i + 86400) {
 		$calendartoday = (date('Ymd',$i) == date('Ymd', (time() + ($time_difference * 3600))));
 
 		if ($calendarthereisapost) {
-			echo '<a href="'.$siteurl.'/'.$blogfilename.'?m='.$thisyear.$thismonth.date('d',$i).'" class="b2calendarlinkpost">';
+			echo '<a href="'.$siteurl.'/'.$blogfilename.$querystring_start.'m'.$querystring_equal.$thisyear.$thismonth.date('d',$i).'" class="b2calendarlinkpost">';
 		}
 		if ($calendartoday) {
 			echo '<span class="b2calendartoday">';
