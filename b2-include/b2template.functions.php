@@ -785,7 +785,31 @@ function trackback_popup_link($zero='no trackback', $one='1 trackback', $more='%
 	echo '</a>';
 }
 
-
+function trackback_rdf($timezone=0) {
+	global $pathserver, $id, $HTTP_SERVER_VARS;
+	if (!stristr($HTTP_SERVER_VARS['HTTP_USER_AGENT'], 'W3C_Validator')) {
+		echo '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" '."\n";
+		echo '    xmlns:dc="http://purl.org/dc/elements/1.1/">'."\n";
+		echo '<rdf:Description'."\n";
+		echo '    about="'.$pathserver.'/b2trackback.php?tb_id='.$id.'"'."\n";
+		echo '    dc:title="'.addslashes(get_the_title()).'"'."\n";
+		echo '    dc:identifier="';
+		permalink_single();
+		echo '"'."\n";
+		echo '    dc:subject="'.addslashes(get_the_category()).'"'."\n";
+		echo '    dc:description="';
+		$blahblah = strip_tags(get_the_content());
+		$blahblah = (strlen($blahblah) > 255) ? substr(addslashes($blahblah), 0, 252).'...' : $blahblah;
+		echo $blahblah.'"'."\n";
+		echo '    dc:creator="';
+		the_author();
+		echo '"'."\n";
+		echo '    dc:date="';
+		the_time('Y-m-dH:i:s');
+		echo zeroise(intval($timezone),2).':00" />'."\n";
+		echo '</rdf:RDF>';
+	}
+}
 
 /***** // TrackBack tags *****/
 
@@ -915,7 +939,7 @@ function permalink_single($file='') {
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if ($file=='')
 		$file=$pagenow;
-	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'c'.$querystring_equal."1";
+	echo $file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'more'.$querystring_equal."1";
 }
 
 function permalink_single_rss($file='b2rss.xml') {
