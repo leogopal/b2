@@ -872,7 +872,7 @@ function comment_time($d='') {
 
 function trackback_url($display = 1) {
 	global $pathserver, $id;
-	$tb_url = $pathserver.'/b2trackback.php?tb_id='.$id;
+	$tb_url = $pathserver.'/b2trackback.php/'.$id;
 	if ($display) {
 		echo $tb_url;
 	} else {
@@ -937,7 +937,7 @@ function trackback_rdf($timezone=0) {
 		permalink_single();
 		echo '"'."\n";
 		echo '    dc:title="'.addslashes(get_the_title()).'"'."\n";
-		echo '    trackback:ping="'.$pathserver.'/b2trackback.php?tb_id='.$id.'"'."\n";
+		echo '    trackback:ping="'.trackback_url(0).'"'."\n";
 		echo '</rdf:RDF>';
 	}
 }
