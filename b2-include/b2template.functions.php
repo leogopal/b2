@@ -587,8 +587,8 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 
 // generic comments/trackbacks/pingbacks numbering
 function generic_ctp_number($post_id, $mode = 'comments') {
-	global $postdata, $tablecomments, $c, $querycount, $cache_ctp_number, $use_cache;
-	if (empty($cache_ctp_number[$id]) || (!$use_cache)) {
+	global $postdata, $tablecomments, $querycount, $cache_ctp_number, $use_cache;
+	if (empty($cache_ctp_number[$post_id]) || (!$use_cache)) {
 		$post_id = intval($post_id);
 		$query = "SELECT * FROM $tablecomments WHERE comment_post_ID = $post_id";
 		$result = mysql_query($query) or die('SQL query: '.$query.'<br />MySQL Error: '.mysql_error());
@@ -604,9 +604,9 @@ function generic_ctp_number($post_id, $mode = 'comments') {
 			}
 			$ctp_number['ctp']++;
 		}
-		$cache_ctp_number[$id] = $ctp_number;
+		$cache_ctp_number[$post_id] = $ctp_number;
 	} else {
-		$ctp_number = $cache_ctp_number[$id][$mode];
+		$ctp_number = $cache_ctp_number[$post_id][$mode];
 	}
 	if (($mode != 'comments') && ($mode != 'trackbacks') && ($mode != 'pingbacks') && ($mode != 'ctp')) {
 		$mode = 'ctp';
