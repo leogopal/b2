@@ -731,14 +731,14 @@ function trackback($trackback_url, $title, $excerpt, $ID) {
 		$fp = @fopen($trackback_url, 'r');
 		$result = @fread($fp, 4096);
 		@fclose($fp);
-/* debug code */
+/* debug code
 		$debug_file = 'trackback.log';
 		$fp = fopen($debug_file, 'a');
 		fwrite($fp, "\n*****\nTrackback URL query:\n\n$trackback_url\n\nResponse:\n\n");
 		fwrite($fp, $result);
 		fwrite($fp, "\n\n");
 		fclose($fp);
-/**/
+*/
 	} else {
 		$trackback_url = parse_url($trackback_url);
 		$http_request  = 'POST '.$trackback_url['path']." HTTP/1.0\r\n";
@@ -749,7 +749,7 @@ function trackback($trackback_url, $title, $excerpt, $ID) {
 		$http_request .= $query_string;
 		$fs = @fsockopen($trackback_url['host'], 80);
 		@fputs($fs, $http_request);
-/* debug code */
+/* debug code
 		$debug_file = 'trackback.log';
 		$fp = fopen($debug_file, 'a');
 		fwrite($fp, "\n*****\nRequest:\n\n$http_request\n\nResponse:\n\n");
@@ -758,7 +758,7 @@ function trackback($trackback_url, $title, $excerpt, $ID) {
 		}
 		fwrite($fp, "\n\n");
 		fclose($fp);
-/**/
+*/
 		@fclose($fs);
 	}
 	return $result;
