@@ -471,7 +471,7 @@ function dropdown_cats($optionall = 1, $all = "All") {
 function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_order = 'asc', $file = 'blah') {
 	global $tablecategories,$querycount;
 	global $pagenow;
-	$file = ($file == 'blah') ? $pagenow;
+	$file = ($file == 'blah') ? $pagenow : $file;
 	$sort_column = 'cat_'.$sort_column;
 	$query="SELECT * FROM $tablecategories WHERE cat_ID > 0 ORDER BY $sort_column $sort_order";
 	$result=mysql_query($query);
