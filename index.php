@@ -4,7 +4,7 @@
 <!-- layout credits goto http://bluerobot.com/web/layouts/layout2.html -->
 
 <head>
-<title><?php bloginfo('name'); ?><?php single_post_title(' :: '); ?></title>
+<title><?php bloginfo('name') ?><?php single_post_title(' :: ') ?><?php single_cat_title(' :: ') ?><?php single_month_title(' :: ') ?></title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="reply-to" content="<?php bloginfo('admin_email'); ?>" />

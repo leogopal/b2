@@ -85,6 +85,30 @@ function single_post_title($prefix = '', $display = 1) {
 	}
 }
 
+function single_cat_title($prefix = '', $display = 1 ) {
+	global $cat;
+	if(!empty($cat) || !(strtoupper($cat) == 'ALL')) {
+		$my_cat_name = get_the_category_by_ID($cat);
+		if(!empty($my_cat_name)) {
+			if ($display)
+				echo $prefix.strip_tags(stripslashes($my_cat_name));
+			else
+				return strip_tags(stripslashes($my_cat_name));
+		}
+	}
+}
+
+function single_month_title($prefix = '', $display = 1 ) {
+	global $m, $month;
+	if(!empty($m)) {
+		$my_year = substr($m,0,4);
+		$my_month = $month[substr($m,4,2)];
+		if ($display)
+			echo $prefix.$my_month.$prefix.$my_year;
+		else
+			return $m;
+	}
+}
 
 /***** // About-the-blog tags *****/
 

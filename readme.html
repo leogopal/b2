@@ -455,7 +455,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 
 	    <strong>&lt;?php single_post_title() ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
 		  This tag is out of the b2 loop.<br />
-		  It outputs the title of the post when you load the page with ?p= (see 'Usage' section for explanation). When the weblog page is loaded without ?p=, this tag doesn't display anything. Generally, you could use it like that:<br />
+		  It outputs the title of the post when you load the page with ?p= (see 'Usage' section for explanation). When the weblog page is loaded without ?p=, this tag doesn't display anything. Generally, you could use it like this:<br />
 		  &nbsp; &nbsp;&lt;title&gt;&lt;?php bloginfo('name') ?&gt;&lt;?php single_post_title() ?&gt;&lt;/title&gt;<br />
 
 		  <div class="params">Parameters:<ul>
@@ -463,7 +463,30 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 		  </ul>
 		  </div>
 		  <br />
+	    <strong>&lt;?php single_cat_title() ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
+		  This tag is out of the b2 loop.<br />
+		  It outputs the title of the category when you load the page with ?cat= (see 'Usage' section for explanation). When the weblog page is loaded without ?cat=, this tag doesn't display anything. Generally, you could use it like this:<br />
+		  &nbsp; &nbsp;&lt;title&gt;&lt;?php bloginfo('name') ?&gt;&lt;?php single_cat_title() ?&gt;&lt;/title&gt;<br />
 
+		  <div class="params">Parameters:<ul>
+		  <li>prefix string that will appear before the category's title (default is ' :: ')</li>
+		  </ul>
+		  </div>
+		  <br />
+	    <strong>&lt;?php single_month_title() ?&gt;</strong> <span style="font-family: 'Courier New',Courrier,mono; color: #ff9900; font-weight: bold;">*</span><br />
+		  This tag is out of the b2 loop.<br />
+		  It outputs the name of the month when you load the page with ?m= (see 'Usage' section for explanation). When the weblog page is loaded without ?m=, this tag doesn't display anything. Generally, you could use it like this:<br />
+		  &nbsp; &nbsp;&lt;title&gt;&lt;?php bloginfo('name') ?&gt;&lt;?php single_month_title() ?&gt;&lt;/title&gt;<br />
+
+		  <div class="params">Parameters:<ul>
+		  <li>prefix string that will appear before the month's name (default is ' :: ')</li>
+		  </ul>
+		  </div>
+		  <br />
+		  <strong>Note:</strong> The above three functions can be used together to produce the Title of the page:<br>
+		  &nbsp; &nbsp;&lt;title&gt;&lt;?php bloginfo('name') ?&gt;&lt;?php single_post_title(' :: ') ?&gt;&lt;?php single_cat_title(' :: ') ?&gt;&lt;?php single_month_title(' :: ') ?&gt;&lt;/title&gt;<br />
+          Only one, if any, of these functions will produce output, thus the page Title can be customize to the task being done.
+          <br />
 		<br />
 		<br />
 		<strong>More about the author</strong> of the post ? Here goes:<br />
