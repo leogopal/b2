@@ -292,7 +292,7 @@ textarea,input,select {
 <h3>First step: install b2</h3>
 <p>Install the b2 blog as explained in the <a href="readme.html" target="_blank">ReadMe</a>, then immediately come back here.</p>
 
-<form name="stepOne" action="<?php echo $HTTP_SERVER_VARS["SCRIPT_FILENAME"] ?>" method="get">
+<form name="stepOne" method="get">
 <input type="hidden" name="action" value="step1" />
 <h3>Second step: GreyMatter details:</h3>
 <p><table cellpadding="0">

@@ -211,7 +211,7 @@ Go to the Templates. Replace your existing template with this line (copy and pas
 Go to the Archives, and click 'republish all'.<br />
 Check in your FTP that you've got the archive files published. They should look like this example: <i>2001_10_01_cafelog.php</i>. If they aren't there, redo the republish process.<br /><br />You're done with the hard part. :)</p>
 
-<form name="stepOne" action="<?php echo $HTTP_SERVER_VARS["SCRIPT_FILENAME"] ?>" method="get">
+<form name="stepOne" method="get">
 <input type="hidden" name="action" value="step1" />
 <h3>Third step: w00t, let's click OK:</h3>
 <p>When you're ready, click OK to start importing: <input type="submit" name="submit" value="OK" class="search" /><br /><br />
