@@ -3,10 +3,13 @@
 # pop3-2-b2 mail to blog
 # v0.3 20020716
 
-include('b2config.php');
-include($b2inc.'/b2vars.php');
-include($b2inc.'/class.POP3.php3');
-include($b2inc.'/b2functions.php');
+require('b2config.php');
+require($b2inc.'/b2vars.php');
+require($b2inc.'/class.POP3.php3');
+require($b2inc.'/b2functions.php');
+require($b2inc."/b2template.functions.php");
+require($b2inc."/xmlrpc.inc");
+require($b2inc."/xmlrpcs.inc");
 
 dbconnect();
 timer_start();
@@ -210,6 +213,9 @@ for ($iCount=1; $iCount<=$Count; $iCount++) {
 				$content = addslashes(trim($content));
 				$sql = "INSERT INTO $tableposts (post_author, post_date, post_content, post_title, post_category) VALUES ($post_author, '$post_date', '$content', '$post_title', $post_category)";
 				$result = mysql_query($sql) or die('Couldn\'t add post: '.mysql_error());
+				pingWeblogs($blog_ID);
+				pingCafelog($cafelogID, $post_title, $post_ID);
+				pingBlogs($blog_ID);
 			}
 			echo "\n<p><b>Posted title:</b> $post_title<br />";
 			echo "\n<b>Posted content:</b><br /><xmp>".$content.'</xmp></p>';
