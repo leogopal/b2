@@ -1,7 +1,7 @@
 <?php
 // by Edd Dumbill (C) 1999-2001
 // <edd@usefulinc.com>
-// $Id: xmlrpcs.inc,v 1.1 2002/07/16 15:59:51 michelvaldrighi Exp $
+// $Id: xmlrpcs.inc,v 1.2 2002/08/11 20:04:25 michelvaldrighi Exp $
 
 
 # additional fixes for case of missing xml extension file by Michel Valdrighi <m@tidakada.com>
