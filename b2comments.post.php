@@ -59,7 +59,7 @@ if (strlen($url) < 7) {
 	$url = '';
 }
 $comment = strip_tags($comment, $comment_allowed_tags);
-$comment = balanceTags($comment);
+$comment = balanceTags($comment, 1);
 $comment = convert_chars($comment);
 $comment = format_to_post($comment);
 
