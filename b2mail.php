@@ -38,6 +38,7 @@ if(!$pop3->connect($mailserver_url, $mailserver_port)) {
 $Count = $pop3->login($mailserver_login, $mailserver_pass);
 if((!$Count) || ($Count == -1)) {
 	echo "<h1>Login Failed: $pop3->ERROR</h1>\n";
+	$pop3->quit();
 	exit;
 }
 
@@ -50,6 +51,7 @@ for ($iCount=1; $iCount<=$Count; $iCount++) {
 	$MsgOne = $pop3->get($iCount);
 	if((!$MsgOne) || (gettype($MsgOne) != 'array')) {
 		echo "oops, $pop3->ERROR<br />\n";
+		$pop3->quit();
 		exit;
 	}
 
