@@ -907,6 +907,9 @@ function permalink_link($file='', $mode = 'id') {
 	}
 	$archive_mode = get_settings('archive_mode');
 	switch($archive_mode) {
+		case 'daily':
+			echo $file.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).substr($postdata['Date'],8,2).'#'.$anchor;
+			break;
 		case 'monthly':
 			echo $file.$querystring_start.'m'.$querystring_equal.substr($postdata['Date'],0,4).substr($postdata['Date'],5,2).'#'.$anchor;
 			break;
