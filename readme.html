@@ -319,7 +319,7 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 	string can be used to construct a link.  When the site options are not set to 'posts paged", 
 	the next and previous functions will display nothing.<br />
 	  <div class="params">Parameters:<ul>
-	  <li>No parameters.</li>
+	  <li>Max page number to use. Default "0"; no limit</li>
 	  </ul>
 	  </div>
 	  <br /><br />
@@ -327,7 +327,8 @@ ul,ol { margin: 0px; padding: 0px; padding-left: 20px; padding-top: 5px; padding
 	<strong>&lt;?php next_posts_link() ?&gt; <span style="font-family: Courier New, Courrier, mono; color: #ff9900; font-weight:bold;">*</span><br />
 
 	</strong>
-	Displays a full link to the next "set" of posts only if show options set to "posts paged"<br />
+	Displays a full link to the next "set" of posts only if show options set to "posts paged"
+	and only if there is another page or partial page of data.<br />
 	  <div class="params">Parameters:<ul>
 	  <li>A user supplied string. Default "Next Page &gt;&gt;"</li>
 	  </ul>
