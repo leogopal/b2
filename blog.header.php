@@ -176,7 +176,7 @@ if (!isset($orderby)) {
 	}
 }
 
-if ((!$whichcat) && (!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$postend)) {
+if ((!$whichcat) && (!$m) && (!$p) && (!$w) && (!$s) && (empty($poststart) || empty($postend))) {
 	if ($what_to_show == 'posts') {
 		$limits = ' LIMIT '.$posts_per_page;
 	} elseif ($what_to_show == 'days') {
@@ -188,11 +188,23 @@ if ((!$whichcat) && (!$m) && (!$p) && (!$w) && (!$s) && (!$poststart) && (!$post
 	}
 }
 
-if ((isset($poststart)) && (isset($postend)) && ($postend > $poststart)) {
-	$poststart = intval($poststart);
-	$postend = intval($postend);
-	$posts = $postend - $poststart;
+if ((!empty($poststart)) && (!empty($postend)) && ($postend > $poststart)) {
+	if ($what_to_show == 'posts') {
+		$poststart = intval($poststart);
+		$postend = intval($postend);
+		$posts = $postend - $poststart;
 	$limits = ' LIMIT '.$poststart.','.$posts;
+	} elseif ($what_to_show == 'days') {
+		$poststart = intval($poststart);
+		$postend = intval($postend);
+		$posts = $postend - $poststart;
+		$lastpostdate = get_lastpostdate();
+		$lastpostdate = mysql2date('Y-m-d 00:00:00',$lastpostdate);
+		$lastpostdate = mysql2date('U',$lastpostdate);
+		$startdate = date('Y-m-d H:i:s', ($lastpostdate - (($poststart -1) * 86400)));
+		$otherdate = date('Y-m-d H:i:s', ($lastpostdate - (($postend -1) * 86400)));
+		$where .= ' AND post_date > \''.$otherdate.'\' AND post_date < \''.$startdate.'\'';
+	}
 }
 
 if (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
@@ -206,7 +218,10 @@ if ($p == 'all') {
 $now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
 
 if ($pagenow != 'b2edit.php') {
-	$where .= ' AND post_date < \''.$now.'\' AND post_category > 0';
+	if ((empty($poststart)) || (empty($postend)) || !($postend > $poststart)) {
+		$where .= ' AND post_date < \''.$now.'\'';
+	}
+	$where .= ' AND post_category > \''.$catmin.'\'';
 	$distinct = 'DISTINCT';
 	if ($use_gzipcompression) {
 		// gzipping the output of the script
