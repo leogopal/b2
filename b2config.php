@@ -15,8 +15,8 @@
 
 $siteurl = 'http://yourdomain.com';
 $blogfilename = 'index.php';
-$blogname = 'my weblog';
-$blogdescription = 'babblings !';
+$blogname = "my weblog";
+$blogdescription = "babblings !";
 
 
 # fill these only if you have a Cafelog ID,
