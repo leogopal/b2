@@ -806,7 +806,8 @@ function trackback_rdf($timezone=0) {
 		echo '"'."\n";
 		echo '    dc:date="';
 		the_time('Y-m-dH:i:s');
-		echo zeroise(intval($timezone),2).':00" />'."\n";
+		$sign = ($timezone >= 0) ? '+' : '-';
+		echo $sign.zeroise(intval($timezone),2).':00" />'."\n";
 		echo '</rdf:RDF>';
 	}
 }
