@@ -558,16 +558,17 @@ function dropdown_categories($blog_ID=1) {
 }
 
 function touch_time($edit=1) {
-	global $month, $postdata;
+	global $month, $postdata, $time_difference;
 	echo $postdata['Date'];
 	echo '<br /><br /><input type="checkbox" class="checkbox" name="edit_date" value="1" id="timestamp" /><label for="timestamp"> Edit timestamp</label><br />';
 	
-	$jj = ($edit) ? mysql2date('d', $postdata['Date']) : date('d');
-	$mm = ($edit) ? mysql2date('m', $postdata['Date']) : date('m');
-	$aa = ($edit) ? mysql2date('Y', $postdata['Date']) : date('Y');
-	$hh = ($edit) ? mysql2date('H', $postdata['Date']) : date('H');
-	$mn = ($edit) ? mysql2date('i', $postdata['Date']) : date('i');
-	$ss = ($edit) ? mysql2date('s', $postdata['Date']) : date('s');
+	$time_adj = time() + ($time_difference * 3600);
+	$jj = ($edit) ? mysql2date('d', $postdata['Date']) : date('d', $time_adj);
+	$mm = ($edit) ? mysql2date('m', $postdata['Date']) : date('m', $time_adj);
+	$aa = ($edit) ? mysql2date('Y', $postdata['Date']) : date('Y', $time_adj);
+	$hh = ($edit) ? mysql2date('H', $postdata['Date']) : date('H', $time_adj);
+	$mn = ($edit) ? mysql2date('i', $postdata['Date']) : date('i', $time_adj);
+	$ss = ($edit) ? mysql2date('s', $postdata['Date']) : date('s', $time_adj);
 
 	echo '<input type="text" name="jj" value="'.$jj.'" size="2" maxlength="2" />'."\n";
 	echo "<select name=\"mm\">\n";
