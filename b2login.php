@@ -1,7 +1,8 @@
 <?php
 
-include("./b2config.php");
-include("$b2inc/b2functions.php");
+require("./b2config.php");
+require("$b2inc/b2functions.php");
+require("$b2inc/b2vars.php");
 
 $b2varstoreset = array('action','mode','error','text','popupurl','popuptitle');
 
@@ -34,7 +35,11 @@ case "logout":
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 	header("Cache-Control: no-cache, must-revalidate"); // for HTTP/1.1
 	header("Pragma: no-cache");
-	header("Location: b2login.php");
+	if ($is_IIS) {
+		header("Refresh: 0;url=b2login.php");
+	} else {
+		header("Location: b2login.php");
+	}
 	exit();
 
 break;
@@ -130,7 +135,11 @@ case "login":
 				break;
 		}
 
-		header("Location: $location");
+		if ($is_IIS) {
+			header("Refresh: 0;url=$location");
+		} else {
+			header("Location: $location");
+		}
 	}
 
 break;
