@@ -112,7 +112,7 @@ if ((!empty($HTTP_GET_VARS['tb_id'])) && (empty($HTTP_GET_VARS['__mode'])) && (!
 		$recipient = $authordata["user_email"];
 		$subject = "trackback on post #$comment_post_ID \"".$postdata["Title"]."\"";
 
-		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.6pre4 - PHP/" . phpversion());
+		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
 		
 	}
 

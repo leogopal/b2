@@ -793,7 +793,7 @@ $pingback_ping_doc = 'gets a pingback and registers it as a comment prefixed by 
 
 function pingback_ping($m) {
 	global $tableposts, $tablecomments, $comments_notify;
-	global $siteurl, $blogfilename;
+	global $siteurl, $blogfilename, $b2_version;
 
 	dbconnect();
 
@@ -897,7 +897,7 @@ function pingback_ping($m) {
 					$recipient = $authordata['user_email'];
 					$subject = "pingback on post #$post_ID \"".$postdata['Title'].'"';
 
-					@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.6pre5 - PHP/" . phpversion());
+					@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
 					
 				}
 			} else {

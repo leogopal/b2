@@ -5,7 +5,7 @@ include ("blog.header.php");
 Header("Content-type: text/xml");
 if (!isset($rss_language)) { $rss_language = 'en'; }
 ?><?php echo "<?xml version=\"1.0\"?".">\n"; ?>
-<!-- generator="b2/0.6pre3" -->
+<!-- generator="b2/<?php echo $b2_version ?>" -->
 <rss version="0.92">
 	<channel>
 		<title><?php bloginfo_rss("name") ?></title>

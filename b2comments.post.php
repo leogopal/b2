@@ -90,7 +90,7 @@ if ($ok) {
 		$recipient = $authordata["user_email"];
 		$subject = "comment on post #$comment_post_ID \"".$postdata["Title"]."\"";
 
-		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 v0.6 - PHP/" . phpversion());
+		@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
 		
 	}
 
