@@ -59,7 +59,7 @@ function format_to_edit($content) {
 	}
 function format_to_post($content) {
 	global $post_autobr,$comment_autobr;
-	$content = addslashes(addslashes_gpc($content));
+	$content = addslashes($content);
 	if ($post_autobr || $comment_autobr) { $content = autobrize($content); }
 	return($content);
 	}
@@ -166,7 +166,7 @@ function convert_chars($content,$flag="html") { // html/unicode entities output,
 	$content = preg_replace("/<title>(.+?)<\/title>/","",$content);
 	$content = preg_replace("/<category>(.+?)<\/category>/","",$content);
 	
-	$content = str_replace("&amp;","&#38;",$content);
+#	$content = str_replace("&amp;","&#38;",$content);
 	$content = strtr($content, $b2_htmltrans);
 
 	for ($i=0; $i<strlen($content); $i=$i+1) {
@@ -185,7 +185,7 @@ function convert_chars($content,$flag="html") { // html/unicode entities output,
 					if (($jord>=128) || (($jord>=128) && ($jord<=159))) {
 						$j = "&#".$jord.";"; // $j = htmlentities($j);
 					} elseif (($j == "&") && ($jnext != "#")) {
-						$j = "&#38;";
+						$j = "&amp;";
 					}
 					break;
 				case "xml":
@@ -951,7 +951,15 @@ function pingback($content, $post_ID) {
 					debug_fwrite($log, $result->faultCode().' -- '.$result->faultString());
 				} else {
 					$value = xmlrpc_decode($result->value());
-					debug_fwrite($log, $value);
+					if (is_array($value)) {
+						$value_arr = '';
+						foreach($value as $blah) {
+							$value_arr .= $blah.' |||| ';
+						}
+						debug_fwrite($log, $value_arr);
+					} else {
+						debug_fwrite($log, $value);
+					}
 				}
 			}
 			fclose($page);
