@@ -277,20 +277,31 @@ function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file
 	$content = convert_bbcode($content);
 	$content = convert_gmcode($content);
 	$content = convert_chars($content, 'unicode');
-	if ($encode_html == 1) {
-		$cut = 0;
-	}
-	if ($cut) {
-		$dotdotdot = ($cut < strlen($content)) ? '...' : '';
-		$content = substr($content, 0, $cut).$dotdotdot;
-		$content = balanceTags($content);
+	if ($cut && !$encode_html) {
+		$encode_html = 2;
 	}
 	if ($encode_html == 1) {
 		$content = htmlspecialchars($content);
+		$cut = 0;
 	} elseif ($encode_html == 0) {
 		$content = make_url_footnote($content);
 	} elseif ($encode_html == 2) {
 		$content = strip_tags($content);
+	}
+	if ($cut) {
+		$blah = explode(' ', $content);
+		if (count($blah) > $cut) {
+			$k = $cut;
+			$use_dotdotdot = 1;
+		} else {
+			$k = count($blah);
+			$use_dotdotdot = 0;
+		}
+		for ($i=0; $i<$k; $i++) {
+			$excerpt .= $blah[$i].' ';
+		}
+		$excerpt .= ($use_dotdotdot) ? '...' : '';
+		$content = $excerpt;
 	}
 	echo $content;
 }
