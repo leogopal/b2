@@ -696,7 +696,7 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 			$content = stripslashes($row->post_content);
 			$content = explode("<!--more-->",$content);
 			$content = $content[0];
-			$rss .= "\t\t\t<description>".convert_chars(strip_tags($content),"unicode")."</description>\n";
+			$rss .= "\t\t\t<description>".convert_chars(make_url_footnote($content),"unicode")."</description>\n";
 
 			$rss .= "\t\t\t<link>".htmlentities("$siteurl/$blogfilename".$querystring_start.'p'.$querystring_equal.$row->ID.$querystring_separator.'c'.$querystring_equal.'1')."</link>\n";
 			$rss .= "\t\t</item>\n";
@@ -718,6 +718,26 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 	} else {
 		return(false);
 	}
+}
+
+function make_url_footnote($content) {
+	global $siteurl;
+	preg_match_all('/<a(.+?)href=\"(.+?)\"(.*?)>(.+?)<\/a>/', $content, $matches);
+	$j = 0;
+	for ($i=0; $i<count($matches[0]); $i++) {
+		$links_summary = (!$j) ? "\n" : $links_summary;
+		$j++;
+		$link_match = $matches[0][$i];
+		$link_number = '['.($i+1).']';
+		$link_url = $matches[2][$i];
+		$link_text = $matches[4][$i];
+		$content = str_replace($link_match, $link_text.' '.$link_number, $content);
+		$link_url = (strtolower(substr($link_url,0,7)) != 'http://') ? $siteurl.$link_url : $link_url;
+		$links_summary .= "\n".$link_number.' '.$link_url;
+	}
+	$content = strip_tags($content);
+	$content .= $links_summary;
+	return($content);
 }
 
 
