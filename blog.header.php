@@ -9,9 +9,9 @@ $b2blah = dirname(__FILE__).'/';
 if ( (substr($b2inc,0,1)=='/') || (substr($b2inc,1,1)==':') ) {
 	$b2blah='./';
 }
+require_once ($b2blah.$b2inc.'/b2template.functions.php');
 require_once ($b2blah.$b2inc.'/b2vars.php');
 require_once ($b2blah.$b2inc.'/b2functions.php');
-require_once ($b2blah.$b2inc.'/b2template.functions.php');
 require_once ($b2blah.$b2inc.'/xmlrpc.inc');
 require_once ($b2blah.$b2inc.'/xmlrpcs.inc');
 
