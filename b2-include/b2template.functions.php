@@ -585,18 +585,39 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 
 /***** Comment tags *****/
 
+// generic comments/trackbacks/pingbacks numbering
+function generic_ctp_number($post_id, $mode = 'comments') {
+	global $postdata, $tablecomments, $c, $querycount, $cache_ctp_number, $use_cache;
+	if (empty($cache_ctp_number[$id]) || (!$use_cache)) {
+		$post_id = intval($post_id);
+		$query = "SELECT * FROM $tablecomments WHERE comment_post_ID = $post_id";
+		$result = mysql_query($query) or die('SQL query: '.$query.'<br />MySQL Error: '.mysql_error());
+		$querycount++;
+		$ctp_number = array();
+		while($row = mysql_fetch_object($result)) {
+			if (stristr($row->comment_text, '<trackback />')) {
+				$ctp_number['trackbacks']++;
+			} elseif (stristr($row->comment_text, '<pingback />')) {
+				$ctp_number['pingbacks']++;
+			} else {
+				$ctp_number['comments']++;
+			}
+			$ctp_number['ctp']++;
+		}
+		$cache_ctp_number[$id] = $ctp_number;
+	} else {
+		$ctp_number = $cache_ctp_number[$id][$mode];
+	}
+	if (($mode != 'comments') && ($mode != 'trackbacks') && ($mode != 'pingbacks') && ($mode != 'ctp')) {
+		$mode = 'ctp';
+	}
+	return $ctp_number[$mode];
+}
+
 function comments_number($zero='no comment', $one='1 comment', $more='% comments') {
 	// original hack by dodo@regretless.com
 	global $id,$postdata,$tablecomments,$c,$querycount,$cache_commentsnumber,$use_cache;
-	if (empty($cache_commentsnumber[$id]) OR (!$use_cache)) {
-		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content NOT LIKE '%<trackback />%' AND comment_content NOT LIKE '%<pingback />%'";
-		$result=mysql_query($query);
-		$number=mysql_num_rows($result);
-		$querycount++;
-		$cache_commentsnumber[$id] = $number;
-	} else {
-		$number = $cache_commentsnumber[$id];
-	}
+	$number = generic_ctp_number($id, 'comments');
 	if ($number == 0) {
 		$blah = $zero;
 	} elseif ($number == 1) {
@@ -748,15 +769,7 @@ function trackback_url($display = 1) {
 
 function trackback_number($zero='no trackback', $one='1 trackback', $more='% trackbacks') {
 	global $id, $tablecomments, $tb, $querycount, $cache_trackbacknumber, $use_cache;
-	if (empty($cache_trackbacknumber[$id]) OR (!$use_cache)) {
-		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<trackback />%'";
-		$result=mysql_query($query);
-		$number=mysql_num_rows($result);
-		$querycount++;
-		$cache_trackbacknumber[$id] = $number;
-	} else {
-		$number = $cache_trackbacknumber[$id];
-	}
+	$number = generic_ctp_number($id, 'trackbacks');
 	if ($number == 0) {
 		$blah = $zero;
 	} elseif ($number == 1) {
@@ -832,15 +845,7 @@ function trackback_rdf($timezone=0) {
 
 function pingback_number($zero='no pingback', $one='1 pingback', $more='% pingbacks') {
 	global $id, $tablecomments, $tb, $querycount, $cache_pingbacknumber, $use_cache;
-	if (empty($cache_pingbacknumber[$id]) OR (!$use_cache)) {
-		$query="SELECT * FROM $tablecomments WHERE comment_post_ID = $id AND comment_content LIKE '%<pingback />%'";
-		$result=mysql_query($query);
-		$number=mysql_num_rows($result);
-		$querycount++;
-		$cache_pingbacknumber[$id] = $number;
-	} else {
-		$number = $cache_pingbacknumber[$id];
-	}
+	$number = generic_ctp_number($id, 'pingbacks');
 	if ($number == 0) {
 		$blah = $zero;
 	} elseif ($number == 1) {
