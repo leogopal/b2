@@ -2,10 +2,12 @@
 
 /* customize these as you wish */
 
-$calendarmonthnamedisplay = 1;	// set this to 0 if you don't want to display the month name
-$calendarmonthnameformat = 'F Y';
+$calendarmonthdisplay = 1;	// set this to 0 if you don't want to display the month name
+$calendarmonthformat = 'F Y';
+$calendarmonthstart = '<caption class="b2calendarmonth">';
+$calendarmonthend = '</caption>';
 
-$calendartablestart = '<table class="b2calendartable">';
+$calendartablestart = '<table class="b2calendartable" summary="Monthly calendar with links to each day\'s posts">';
 $calendartableend = '</table>';
 
 $calendarrowstart = '<tr class="b2calendarrow">';
@@ -102,13 +104,13 @@ $afterthismonth = zeroise(intval($thismonth)-1,2);
 
 // displays everything
 
-if ($calendarmonthnamedisplay) {
-	echo '<span class="b2calendarmonth">';
-	echo date_i18n($calendarmonthnameformat, mktime(0, 0, 0, $thismonth, 1, $thisyear));
-	echo '</span>'."\n";
-}
-
 echo $calendartablestart."\n";
+
+if ($calendarmonthdisplay) {
+	echo $calendarmonthstart;
+	echo date_i18n($calendarmonthformat, mktime(0, 0, 0, $thismonth, 1, $thisyear));
+	echo $calendarmonthend."\n";
+}
 
 if ($calendarheaderdisplay) {
 	echo $calendarrowstart."\n";
