@@ -33,8 +33,9 @@ function dbconnect() {
 	return(($connexion && $connexionbase));
 }
 
-/***** Formatting functions *****/
 
+
+/***** Formatting functions *****/
 
 function autobrize($content) {
 	$content = preg_replace("/<br>\n/", "\n", $content);
@@ -81,6 +82,9 @@ function backslashit($string) {
 function mysql2date($dateformatstring, $mysqlstring) {
 	global $month, $weekday;
 	$m = $mysqlstring;
+	if (empty($m)) {
+		return false;
+	}
 	$i = mktime(substr($m,11,2),substr($m,14,2),substr($m,17,2),substr($m,5,2),substr($m,8,2),substr($m,0,4)); 
 	if ((!empty($month)) && (!empty($weekday))) {
 		$datemonth = $month[date('m', $i)];
@@ -98,7 +102,14 @@ function mysql2date($dateformatstring, $mysqlstring) {
 #		echo $i." ".$mysqlstring;
 	}
 	return $j;
+}
+
+function addslashes_gpc($gpc) {
+	if (!get_magic_quotes_gpc()) {
+		$gpc = addslashes($gpc);
 	}
+	return($gpc);
+}
 
 function date_i18n($dateformatstring, $unixtimestamp) {
 	global $month, $weekday;
@@ -648,13 +659,14 @@ function pingCafelog($cafelogID,$title='',$p='') {
 
 // pings Blo.gs
 function pingBlogs($blog_ID="1") {
-	global $use_weblogsping, $blogname,$siteurl,$blogfilename;
-	if ((!(($blogname=='my weblog') && ($siteurl=='http://yourdomain.com') && ($blogfilename=='b2.php'))) && (!preg_match('/localhost\//',$siteurl)) && ($use_weblogsping)) {
+	global $use_blodotgsping, $blodotgsping_url, $use_rss, $blogname, $siteurl, $blogfilename;
+	if ((!(($blogname=='my weblog') && ($siteurl=='http://example.com') && ($blogfilename=='b2.php'))) && (!preg_match('/localhost\//',$siteurl)) && ($use_blodotgsping)) {
+		$url = ($blodotgsping_url == 'http://example.com') ? $siteurl.'/'.$blogfilename : $blodotgsping_url;
 		$client = new xmlrpc_client('/', 'ping.blo.gs', 80);
-		if (@filesize($siteurl.'/b2rss.xml') > 150) {
-			$message = new xmlrpcmsg('weblogUpdates.extendedPing', array(new xmlrpcval($blogname), new xmlrpcval($siteurl.'/'.$blogfilename), new xmlrpcval($siteurl."/".$blogfilename), new xmlrpcval($siteurl.'/b2rss.xml')));
+		if ($use_rss) {
+			$message = new xmlrpcmsg('weblogUpdates.extendedPing', array(new xmlrpcval($blogname), new xmlrpcval($url), new xmlrpcval($url), new xmlrpcval($siteurl.'/b2rss.xml')));
 		} else {
-			$message = new xmlrpcmsg('weblogUpdates.ping', array(new xmlrpcval($blogname), new xmlrpcval($siteurl.'/'.$blogfilename)));
+			$message = new xmlrpcmsg('weblogUpdates.ping', array(new xmlrpcval($blogname), new xmlrpcval($url)));
 		}
 		$result = $client->send($message);
 		if (!$result || $result->faultCode()) {
@@ -690,8 +702,7 @@ function rss_update($blog_ID, $num_posts="", $file="./b2rss.xml") {
 	global $use_rss;
 	global $admin_email,$blogname,$siteurl,$blogfilename,$blogdescription,$posts_per_rss,$rss_language;
 	global $tableposts,$postdata,$row;
-	global $querystring_start, $querystring_equal, $querystring_separator;
-	
+
 	if ($rss_language == '') {
 		$rss_language = 'en';
 	}
@@ -810,6 +821,144 @@ function xmlrpc_removepostdata($content) {
 	$content = preg_replace('/<category>(.+?)<\/category>/si', '', $content);
 	$content = trim($content);
 	return($content);
+}
+
+function debug_fopen($filename, $mode) {
+	global $debug;
+	if ($debug == 1) {
+		$fp = fopen($filename, $mode);
+		return $fp;
+	} else {
+		return false;
+	}
+}
+
+function debug_fwrite($fp, $string) {
+	global $debug;
+	if ($debug == 1) {
+		fwrite($fp, $string);
+	}
+}
+
+function debug_fclose($fp) {
+	global $debug;
+	if ($debug == 1) {
+		fclose($fp);
+	}
+}
+
+function pingback($content, $post_ID) {
+	// original code by Mort (http://mort.mine.nu:8080)
+	global $siteurl, $blogfilename;
+	$log = debug_fopen('./pingback.log', 'a');
+	$post_links = array();
+	debug_fwrite($log, 'BEGIN '.time()."\n");
+
+	// Variables
+	$ltrs = '\w';
+	$gunk = '/#~:.?+=&%@!\-';
+	$punc = '.:?\-';
+	$any = $ltrs.$gunk.$punc;
+	$pingback_str = 'rel="pingback"';
+	$pingback_href_original_pos = 27;
+
+	// Step 1
+	// Parsing the post, external links (if any) are stored in the $post_links array
+	// This regexp comes straigth from phpfreaks.com
+	// http://www.phpfreaks.com/quickcode/Extract_All_URLs_on_a_Page/15.php
+	preg_match_all("{\b http : [$any] +? (?= [$punc] * [^$any] | $)}x", $content, $post_links_temp);
+
+	// Debug
+	debug_fwrite($log, 'Post contents:');
+	debug_fwrite($log, $content."\n");
+	
+	// Step 2.
+	// Walking thru the links array
+	// first we get rid of links pointing to sites, not to specific files
+	// Example:
+	// http://dummy-weblog.org
+	// http://dummy-weblog.org/
+	// http://dummy-weblog.org/post.php
+	// We don't wanna ping first and second types, even if they have a valid <link/>
+
+	foreach($post_links_temp[0] as $link_test){
+		$test = parse_url($link_test);
+		if (isset($test['query'])) {
+			$post_links[] = $link_test;
+		} elseif(($test['path'] != '/') && ($test['path'] != '')) {
+			$post_links[] = $link_test;
+		}
+	}
+
+	foreach ($post_links as $pagelinkedto){
+		debug_fwrite($log, 'Processing -- '.$pagelinkedto."\n\n");
+
+		$page = fopen($pagelinkedto, 'r');
+		$link_content = fread($page, 3072);
+		$pingback_link_offset = strpos($link_content, $pingback_str);
+
+		if ($pingback_link_offset === false){
+			debug_fwrite($log, "Pingback server not found\n\n*************************\n\n");
+			fclose($page);
+		} else {
+			debug_fwrite($log, "Pingback server found @ \n");
+
+			// so, "<rel ="pingback"> is found. Then, look for the string "href="
+			$pingback_href_pos = strpos($link_content, 'href=', $pingback_link_offset);
+
+			// the URL for the server should start 6 chars forward, shouldn't it?
+			$pingback_href_start = $pingback_href_pos+6;
+
+			// the next double quote after that, shuld mark the pingback server URL end
+			$pingback_href_end = strpos($link_content, '"', $pingback_href_start);
+
+			// then end minus start equal server url length and that's about all the math i can grasp :-)
+			$pingback_server_url_len = $pingback_href_end-$pingback_href_start;
+
+			// We know the start, we know the end, time for a clear cut ...
+			$pingback_server_url = substr($link_content, $pingback_href_start, $pingback_server_url_len);
+			debug_fwrite($log, $pingback_server_url);
+			debug_fwrite($log,"\n\nPingback server data\n");
+
+			// Assuming there's a "http://" bit, let's get rid of it
+			$host_clear = substr($pingback_server_url, 7);
+
+			//  the trailing slash marks the end of the server name
+			$host_end = strpos($host_clear, '/');
+
+			// Another clear cut
+			$host_len = $host_end-$host_start;
+			$host = substr($host_clear, 0, $host_len);
+			debug_fwrite($log, 'host: '.$host."\n");
+
+			// If we got the server name right, the rest of the string is the server path
+			$path=substr($host_clear,$host_end);
+			debug_fwrite($log, 'path: '.$path."\n\n");
+
+			 // Now, the RPC call
+			$method = 'pingback.ping';
+			debug_fwrite($log, 'Page Linked To: '.$pagelinkedto."\n");
+			debug_fwrite($log, 'Page Linked From: ');
+			$pagelinkedfrom = $siteurl.'/'.$blogfilename.'?p='.$post_ID.'&amp;c=1';
+			debug_fwrite($log, $pagelinkedfrom."\n");
+
+			$client = new xmlrpc_client($path, $host, 80);
+			$message = new xmlrpcmsg($method, array(new xmlrpcval($pagelinkedfrom), new xmlrpcval($pagelinkedto)));
+			$result = $client->send($message);
+			if ($result){
+				if (!$result->value()){
+					debug_fwrite($log, $result->faultCode().' -- '.$result->faultString());
+				} else {
+					$value = xmlrpc_decode($result->value());
+					debug_fwrite($log, $value);
+				}
+			}
+			fclose($page);
+		}
+	}
+
+	debug_fwrite($log, "\nEND: ".time()."\n****************************\n\r");
+	debug_fclose($log);
 }
 
 
