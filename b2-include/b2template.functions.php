@@ -355,7 +355,7 @@ function previous_post($format='%', $previous='previous post: ', $title='yes', $
 			$p_info = mysql_fetch_object($query);
 			$p_title = $p_info->post_title;
 			$p_id = $p_info->ID;
-			$string = '<a href="'.$pagenow.$querystring_start.'p'.$querystring_equal.$p_id.$querystring_separator.'more'.$querystring_equal.'1'.$querystring_separator.'c'.$querystring_equal.'1">'.$previous;
+			$string = '<a href="'.$blogfilename.$querystring_start.'p'.$querystring_equal.$p_id.$querystring_separator.'more'.$querystring_equal.'1'.$querystring_separator.'c'.$querystring_equal.'1">'.$previous;
 			if (!($title!='yes')) {
 				$string .= stripslashes($p_title);
 			}
@@ -400,7 +400,7 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 			$p_info = mysql_fetch_object($query);
 			$p_title = $p_info->post_title;
 			$p_id = $p_info->ID;
-			$string = '<a href="'.$pagenow.$querystring_start.'p'.$querystring_equal.$p_id.$querystring_separator.'more'.$querystring_equal.'1'.$querystring_separator.'c'.$querystring_equal.'1">'.$next;
+			$string = '<a href="'.$blogfilename.$querystring_start.'p'.$querystring_equal.$p_id.$querystring_separator.'more'.$querystring_equal.'1'.$querystring_separator.'c'.$querystring_equal.'1">'.$next;
 			if ($title=='yes') {
 				$string .= stripslashes($p_title);
 			}
