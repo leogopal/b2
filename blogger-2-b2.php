@@ -80,8 +80,9 @@ textarea,input,select {
 
 			$postinfo=explode("|||",$posts[$i]);
 			$post_date=$postinfo[0];
-			$post_content=$postinfo[2];
-			$post_number=$postinfo[3];
+			$post_content=$postinfo[3];
+			$post_number=$postinfo[4];
+			$post_title=trim(addslashes($postinfo[2]));
 
 			$post_author=trim(addslashes($postinfo[1]));
 			// we'll check the author is registered already
@@ -128,8 +129,6 @@ textarea,input,select {
 
 			$post_content=addslashes($post_content);
 			$post_content=str_replace("<br>","<br />",$post_content); // the XHTML touch... ;)
-
-			$post_title="";
 
 			$query = "INSERT INTO $tableposts (ID, post_author,post_date,post_content,post_title,post_category) VALUES ('$post_number','$post_author_ID','$post_date','$post_content','$post_title','1')";
 			$result = mysql_query($query) or die(mysql_error());
@@ -208,7 +207,7 @@ textarea,input,select {
 <p>Log into your Blogger account.<br />
 Go to the Settings, and make Blogger publish your files in the directory where your b2 resides. Change the Date/Time format to be mm/dd/yyyy hh:mm:ss AM/PM (the first choice in the dropdown menu). In Archives: set the frequency to 'monthly' and the archive filename to 'cafelog.php' (without the quotes), set the ftp archive path to make Blogger publish the archives in your b2 directory. Click 'save changes'.<br />
 Go to the Templates. Replace your existing template with this line (copy and paste):
-<blockquote>&lt;Blogger>&lt;cafelogpost>&lt;$BlogItemDateTime$>|||&lt;$BlogItemAuthorNickname$>|||&lt;$BlogItemBody$>|||&lt;$BlogItemNumber$>&lt;/Blogger></blockquote>
+<blockquote>&lt;Blogger>&lt;cafelogpost>&lt;$BlogItemDateTime$>|||&lt;$BlogItemAuthorNickname$>|||&lt;PostSubject>&lt;$BlogItemSubject$>&lt;/PostSubject>|||&lt;$BlogItemBody$>|||&lt;$BlogItemNumber$>&lt;/Blogger></blockquote>
 Go to the Archives, and click 'republish all'.<br />
 Check in your FTP that you've got the archive files published. They should look like this example: <i>2001_10_01_cafelog.php</i>. If they aren't there, redo the republish process.<br /><br />You're done with the hard part. :)</p>
 
