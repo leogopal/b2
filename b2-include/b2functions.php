@@ -289,9 +289,10 @@ function is_email($user_email) {
 
 
 function get_lastpostdate() {
-	global $tableposts,$cache_lastpostdate,$use_cache;
+	global $tableposts,$cache_lastpostdate,$use_cache, $time_difference;
 	if ((!isset($cache_lastpostdate)) OR (!$use_cache)) {
-		$sql = "SELECT * FROM $tableposts ORDER BY post_date DESC LIMIT 1";
+		$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
+		$sql = "SELECT * FROM $tableposts WHERE post_date <= '$now' ORDER BY post_date DESC LIMIT 1";
 		$result = mysql_query($sql) or die("Your SQL query: <br />$sql<br /><br />MySQL said:<br />".mysql_error());
 		$querycount++;
 		$myrow = mysql_fetch_object($result);
