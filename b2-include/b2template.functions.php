@@ -260,8 +260,6 @@ function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file
 	global $HTTP_SERVER_VARS, $preview;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	$output = '';
-	if (($c) || ($withcomments))
-		$more="1";
 	if ($more_file != '') {
 		$file=$more_file;
 	} else {
