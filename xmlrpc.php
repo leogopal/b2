@@ -795,6 +795,7 @@ function pingback_ping($m) {
 	// original code by Mort (http://mort.mine.nu:8080)
 	global $tableposts, $tablecomments, $comments_notify;
 	global $siteurl, $blogfilename, $b2_version;
+	global $HTTP_SERVER_VARS;
 
 	dbconnect();
 
@@ -895,7 +896,7 @@ function pingback_ping($m) {
 					$recipient = $authordata['user_email'];
 					$subject = "pingback on post #$post_ID \"".$postdata['Title'].'"';
 
-					@mail($recipient, $subject, $notify_message, "From: b2@$SERVER_NAME\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
+					@mail($recipient, $subject, $notify_message, "From: b2@".$HTTP_SERVER_VARS['SERVER_NAME']."\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
 					
 				}
 			} else {
