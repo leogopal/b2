@@ -626,7 +626,7 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 // generic comments/trackbacks/pingbacks numbering
 function generic_ctp_number($post_id, $mode = 'comments') {
 	global $postdata, $tablecomments, $querycount, $cache_ctp_number, $use_cache;
-	if (isset($cache_ctp_number[$post_id]) || (!$use_cache)) {
+	if (!isset($cache_ctp_number[$post_id]) || (!$use_cache)) {
 		$post_id = intval($post_id);
 		$query = "SELECT * FROM $tablecomments WHERE comment_post_ID = $post_id";
 		$result = mysql_query($query) or die('SQL query: '.$query.'<br />MySQL Error: '.mysql_error());
@@ -1057,7 +1057,24 @@ function is_new_day() {
 	}
 }
 
-function add_filters($tag, $function_to_add) {
+function apply_filters($tag, $string) {
+	global $b2_filter;
+	if (isset($b2_filter['all'])) {
+		$b2_filter['all'] = (is_string($b2_filter['all'])) ? array($b2_filter['all']) : $b2_filter['all'];
+		$b2_filter[$tag] = array_merge($b2_filter['all'], $b2_filter[$tag]);
+		$b2_filter[$tag] = array_unique($b2_filter[$tag]);
+	}
+	if (isset($b2_filter[$tag])) {
+		$b2_filter[$tags] = (is_string($b2_filter[$tag])) ? array($b2_filter[$tag]) : $b2_filter[$tag];
+		$functions = $b2_filter[$tag];
+		foreach($functions as $function) {
+			$string = $function($string);
+		}
+	}
+	return $string;
+}
+
+function add_filter($tag, $function_to_add) {
 	global $b2_filter;
 	if (isset($b2_filter[$tag])) {
 		$functions = $b2_filter[$tag];
@@ -1068,30 +1085,24 @@ function add_filters($tag, $function_to_add) {
 		} elseif (is_string($functions)) {
 			$new_functions[] = $functions;
 		}
-		$new_functions[] = $function_to_add;
+/* this is commented out because it just makes PHP die silently
+   for no apparent reason
+		if (is_array($function_to_add)) {
+			foreach($function_to_add as $function) {
+				if (!in_array($function, $b2_filter[$tag])) {
+					$new_functions[] = $function;
+				}
+			}
+		} else */if (is_string($function_to_add)) {
+			if (!in_array($function_to_add, $b2_filter[$tag])) {
+				$new_functions[] = $function_to_add;
+			}
+		}
 		$b2_filter[$tag] = $new_functions;
 	} else {
-		$b2_filter[$tag] = $function_to_add;
+		$b2_filter[$tag] = array($function_to_add);
 	}
 	return true;
-}
-
-function apply_filters($tag, $string) {
-	global $b2_filter;
-	if (isset($b2_filter['all'])) {
-		$b2_filter[$tag] = $b2_filter['all'];
-	}
-	if (isset($b2_filter[$tag])) {
-		$functions = $b2_filter[$tag];
-		if (is_array($functions)) {
-			foreach($functions as $function) {
-				$string = $function($string);
-			}
-		} elseif (is_string($functions)) {
-			$string = $functions($string);
-		}
-	}
-	return $string;
 }
 
 ?>
