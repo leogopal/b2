@@ -32,7 +32,7 @@ $email = trim($HTTP_POST_VARS["email"]);
 $url = trim($HTTP_POST_VARS["url"]);
 $comment = trim($HTTP_POST_VARS["comment"]);
 $original_comment = $comment;
-$autobr = $HTTP_POST_VARS["comment_autobr"];
+$comment_autobr = $HTTP_POST_VARS["comment_autobr"];
 $comment_post_ID = $HTTP_POST_VARS["comment_post_ID"];
 
 if (($require_name_email) && ($email == "" || $email == "@") || $author == "" || $author == "name") { //original fix by Dodo
