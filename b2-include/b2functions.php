@@ -775,7 +775,7 @@ function xmlrpc_removepostdata($content) {
 
 function balanceTags($text) {
   global $use_balanceTags;
-  if ($use_balanceTags = 0) {
+  if ($use_balanceTags == 0) {
 	  return($text);
   } else {
 
