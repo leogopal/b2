@@ -44,7 +44,7 @@ if ($comment == "comment" || $comment == "") {
 	exit;
 }
 
-$user_ip = $REMOTE_ADDR;
+$user_ip = $HTTP_SERVER_VARS['REMOTE_ADDR'];
 $user_domain = gethostbyaddr($user_ip);
 $time_difference = get_settings("time_difference");
 $now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
