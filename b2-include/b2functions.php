@@ -1055,7 +1055,7 @@ function pingback($content, $post_ID) {
              1.0  First Version
 */
 
-function balanceTags($text) {
+function balanceTags($text, $is_comment) {
 	global $use_balanceTags;
 	if ($use_balanceTags == 0) {
 		return($text);
@@ -1075,9 +1075,9 @@ function balanceTags($text) {
 
 	while (preg_match("/<(\/?\w*)\s*([^>]*)>/",$text,$regex)) {
 		$newtext = $newtext . $tagqueue;
-		
-			$i = strpos($text,$regex[0]);
-			$l = strlen($tagqueue) + strlen($regex[0]);
+
+		$i = strpos($text,$regex[0]);
+		$l = strlen($tagqueue) + strlen($regex[0]);
 
 		// clear the shifter
 		$tagqueue = '';
@@ -1114,29 +1114,26 @@ function balanceTags($text) {
 			$tag = strtolower($regex[1]);
 
 			// Tag Cleaning
-			if(checkTag($tag)) {
-				// Push if not img or br or hr
-				if($tag != 'br' && $tag != 'img' && $tag != 'hr') {
-					$stacksize = array_push ($tagstack, $tag);
-				}
 
-				// Attributes
-				// $attributes = $regex[2];
-				$attributes = cleanAttributes($regex[2]);
-				if($attributes) {
-					// fix to avoid CSS defacements
-					if ($disable_styles) {
-						$attributes = str_replace('style=', 'title=', $attributes);
-						$attributes = str_replace('class=', 'title=', $attributes);
-						$attributes = str_replace('id=', 'title=', $attributes);
-					}
-					$attributes = ' '.$attributes;
-				}
-
-				$tag = '<'.$tag.$attributes.'>';
-			} else {
-				$tag = '';
+			// Push if not img or br or hr
+			if($tag != 'br' && $tag != 'img' && $tag != 'hr') {
+				$stacksize = array_push ($tagstack, $tag);
 			}
+
+			// Attributes
+			// $attributes = $regex[2];
+			$attributes = $regex[2];
+			if($attributes) {
+				// fix to avoid CSS defacements
+				if ($is_comment) {
+					$attributes = str_replace('style=', 'title=', $attributes);
+					$attributes = str_replace('class=', 'title=', $attributes);
+					$attributes = str_replace('id=', 'title=', $attributes);
+				}
+				$attributes = ' '.$attributes;
+			}
+
+			$tag = '<'.$tag.$attributes.'>';
 		}
 
 		$newtext .= substr($text,0,$i) . $tag;
@@ -1159,92 +1156,6 @@ function balanceTags($text) {
 	$newtext = str_replace("<    !--","< !--",$newtext);
 
 	return $newtext;
-}
-
-function checkTag($tag) {
-	$ok = 1;
-
-	// the using ifs are 25% faster than declaring an array and using in_array()
-	if ($tag == 'applet' || $tag == 'base' || $tag == 'body' || $tag == 'embed' || $tag == 'frame' || $tag == 'frameset' || $tag == 'html' || $tag == 'iframe' || $tag == 'layer' || $tag == 'meta' || $tag == 'object' || $tag == 'script' || $tag == 'style') {
-	$ok = 0;
-	}
-
-	return $ok;
-}
-
-function cleanAttributes($attributes) {
-
-	return($attributes); // I forgot why this got deactivated, actually
-
-	$name = 1; // if we're in a name or a value
-	$quote = 0; // quote open or not
-	$new ='';
-	$attr = '';
-	$i = 0;
-	$l = 0;
-
-	while($attributes) {
-		if($name) {
-			$found = preg_match('/([^\s=]+)\s*([=]*)/i', $attributes, $regex);
-
-			$attr .= strtolower($regex[1]);
-			$i = strpos($attributes,$regex[0]);
-
-			//$new .= "[name]$attr" . '[/name]';
-
-			// DEBUG
-			//echo "<fieldset><legend>name</legend>attributes: [$attributes]<br>regex[1]: [$regex[1]]</fieldset><br>";
-
-			$l = strlen($regex[0]);
-
-			// strip quotes in attribute names
-			$attr = str_replace('"', '', $attr);
-
-			if($attr == 'style' || $attr == 'type' || preg_match('/^on/', $attr)) { // allow src and hrefs
-				$attr = ' ';
-			} else {
-				if($regex[2]) {
-					$attr .= '=';
-					$name = 0;
-				} else {
-					if(substr($attributes,$i+$l)) $attr .= ' ';
-				}
-			}
-		} else { //var
-			$found = preg_match('/("?)([^\s"]+)("?)/i', $attributes, $regex);
-			$attr = $regex[0];
-			$i = strpos($attributes,$regex[0]);
-			$l = strlen($regex[0]);
-
-			//DEBUG
-			//echo "<fieldset><legend>var</legend>found: $found<br>attributes: [$attributes]<br>regex[2]: [$regex[2]]<br>";
-			//print_r($regex);
-			//echo "</fieldset><br>";
-
-			if($regex[1]) $quote ? !$quote : $quote;
-			if($regex[3]) $quote ? !$quote : $quote;
-
-			if(preg_match('/javascript:/', $attr)) {
-				$attr = '""';
-			}
-
-			// sets to name if closed quote
-			$quote ? $name = 0 : $name = 1;
-		}
-
-		$new .= substr($attributes,0,$i) . $attr;
-		$attr = '';
-		$attributes = substr($attributes,$i+$l);
-
-	}
-
-	//allow badly formed attributes?  i don't think so
-	//$new .= $attributes;
-
-	// open quote
-	$quote ? $new .= '"' : $new ;
-
-	return $new;
 }
 
 ?>
