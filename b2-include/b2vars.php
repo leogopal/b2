@@ -192,4 +192,14 @@ $b2_gecko_correction["out"] = array(
 	"&euro;", "&#8201;"
 );
 
+
+# sorts the smilies' array
+function smiliescmp ($a, $b) {
+   if (strlen($a) == strlen($b)) {
+      return strcmp($a["fruit"], $b["fruit"]);
+   }
+   return (strlen($a) > strlen($b)) ? -1 : 1;
+}
+uksort($b2smiliestrans, "smiliescmp");
+
 ?>
