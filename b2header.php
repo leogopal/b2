@@ -32,7 +32,7 @@ while($row = mysql_fetch_object($result)) {
 if (($is_macIE) || ($is_lynx))
 	$use_quicktags=0;
 
-$b2varstoreset = array('profile','standalone','redirect','redirect_url','a','popuptitle','popupurl','text', 'trackback');
+$b2varstoreset = array('profile','standalone','redirect','redirect_url','a','popuptitle','popupurl','text', 'trackback', 'pingback');
 for ($i=0; $i<count($b2varstoreset); $i += 1) {
 	$b2var = $b2varstoreset[$i];
 	if (!isset($$b2var)) {
