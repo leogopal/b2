@@ -7,6 +7,16 @@ switch($action) {
 		$toprow_title = "New Post";
 		$form_action = "post";
 		$form_extra = "";
+		if ($use_pingback) {
+			$form_pingback = '<input type="checkbox" class="checkbox" name="post_pingback" value="1" checked="checked" tabindex="7" /> PingBack the URLs in this post<br />';
+		} else {
+			$form_pingback = '';
+		}
+		if ($use_trackback) {
+			$form_trackback = '<br /><br /><b>TrackBack</b> an URL:<br /><input type="text" name="trackback_url" style="width: 415px" />';
+		} else {
+			$form_trackback = '';
+		}
 		$colspan = 3;
 		break;
 	case "edit":
@@ -15,6 +25,8 @@ switch($action) {
 		$form_action = "editpost";
 		$form_extra = "\" />\n<input type=\"hidden\" name=\"post_ID\" value=\"$post";
 		$colspan = 2;
+		$form_pingback = '<input type="hidden" name="post_pingback" value="0" />';
+		$form_trackback = '';
 		break;
 	case "editcomment":
 		$submitbutton_text ="Edit this !";
@@ -22,6 +34,8 @@ switch($action) {
 		$form_action = "editedcomment";
 		$form_extra = "\" />\n<input type=\"hidden\" name=\"comment_ID\" value=\"$comment\" />\n<input type=\"hidden\" name=\"comment_post_ID\" value=\"".$commentdata["comment_post_ID"];
 		$colspan = 3;
+		$form_pingback = '<input type="hidden" name="post_pingback" value="0" />';
+		$form_trackback = '';
 		break;
 }
 
@@ -94,10 +108,12 @@ if ($action != "editcomment") {
 
 <input type="checkbox" class="checkbox" name="post_autobr" value="1" <?php
 if ($autobr)
-echo " checked" ?> tabindex="6" /> Auto-BR (converts line-breaks into &lt;br /> tags)<br />
+echo " checked" ?> tabindex="7" /> Auto-BR (converts line-breaks into &lt;br /> tags)<br />
+
+<?php echo $form_pingback ?>
 
 <?php if ($use_preview) { ?>
-<input type="button" value="preview" onclick="preview(this.form);" class="search" />
+<input type="button" value="preview" onclick="preview(this.form);" class="search" tabindex="8"/>
 <?php } ?>
 
 <input type="submit" name="submit" value="<?php echo $submitbutton_text ?>" class="search" style="font-weight: bold;" tabindex="5" /> 
@@ -105,14 +121,15 @@ echo " checked" ?> tabindex="6" /> Auto-BR (converts line-breaks into &lt;br /> 
 <?php if ($use_spellchecker) { ?>
 <!--<input type = "button" value = "Spell Check" onclick="var f=document.forms[0]; doSpell( 'en', f.post_content, '<?php echo $spellchecker_url ?>/sproxy.cgi', true);" class="search" tabindex="5" />-->
 <input type="button" value="Check Spelling" onclick="DoSpell
-('post','content','');" class="search" />
+('post','content','');" class="search" tabindex="9"/>
 <?php } ?>
 
 <?php if ( ($use_fileupload) && ($user_level >= $fileupload_minlevel) && ((ereg(" ".$user_login." ", $fileupload_allowedusers)) || (trim($fileupload_allowedusers)=="")) ) { ?>
-<input type="button" value="upload a file/image" onclick="launchupload();" class="search" />
-<?php } ?>
+<input type="button" value="upload a file/image" onclick="launchupload();" class="search"  tabindex="10" />
+<?php }
 
-<?php
+echo $form_trackback;
+
 // if the level is 5+, allow user to edit the timestamp - not on 'new post' screen though
 #if (($user_level > 4) && ($action != "post"))
 if ($user_level > 4) {
