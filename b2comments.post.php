@@ -37,7 +37,7 @@ if (strlen($email) < 6) {
 	$email = '';
 }
 $url = trim(strip_tags($url));
-$url = (stristr($url, '://')) ? 'http://'.$url : $url;
+$url = (!stristr($url, '://')) ? 'http://'.$url : $url;
 if (strlen($url) < 7) {
 	$url = '';
 }
