@@ -20,6 +20,10 @@ for ($i=0; $i<count($b2varstoreset); $i += 1) {
 	}
 }
 
+if (!$users_can_register) {
+	$action = 'disabled';
+}
+
 switch($action) {
 
 case "register":
@@ -163,6 +167,69 @@ registration<br />complete
 </table>
 
 </div>
+</body>
+</html>
+
+	<?php
+break;
+
+case "disabled":
+
+	?><html>
+<head>
+<title>b2 > Registration Currently Disabled</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="<?php echo $b2inc; ?>/b2.css" type="text/css">
+<style type="text/css">
+<!--
+<?php
+if (!preg_match("/Nav/",$HTTP_USER_AGENT)) {
+?>
+textarea,input,select {
+	background-color: #f0f0f0;
+	border-width: 1px;
+	border-color: #cccccc;
+	border-style: solid;
+	padding: 2px;
+	margin: 1px;
+}
+<?php
+}
+?>
+-->
+</style>
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#cccccc" vlink="#cccccc" alink="#ff0000">
+
+<table width="100%" height="100%">
+<td align="center" valign="middle">
+
+<table width="200" height="200" style="border: 1px solid #cccccc;" cellpadding="0" cellspacing="0">
+
+<tr height="50">
+<td height="50" width="50">
+<a href="http://cafelog.com" target="_blank"><img src="b2-img/b2minilogo.png" border="0" alt="visit b2's homepage" /></a>
+</td>
+<td class="b2menutop" align="center">
+registration disabled<br />
+</td>
+</tr>
+
+<tr height="150">
+<td align="center" valign="center" height="150" colspan="2">
+<table width="80%" height="100%">
+<tr><td class="b2menutop">
+User registration is currently not allowed.<br />
+<a href="<?php echo $siteurl.'/'.$blogfilename; ?>" >Home</a>
+</td></tr></table>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
 </body>
 </html>
 

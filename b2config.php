@@ -45,6 +45,11 @@ $admin_email = 'you@yourdomain.com';
 $new_users_can_blog = 1;
 
 
+# set this to o or 1, weither you want to allow users to register on your blog.
+
+$users_can_register = 1;
+
+
 # day at the start of the week: 0 for Sunday, 1 for Monday, 2 for Tuesday, etc
 $start_of_week = 1;
 
