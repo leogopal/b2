@@ -201,11 +201,23 @@ elseif (($m) || ($p) || ($w) || ($s) || ($whichcat) || ($author)) {
 	$limits = '';
 }
 
-if ((isset($poststart)) && (isset($postend)) && ($postend > $poststart)) {
-	$poststart = intval($poststart);
-	$postend = intval($postend);
-	$posts = $postend - $poststart;
-	$limits = ' LIMIT '.$poststart.','.$posts;
+if ((!empty($poststart)) && (!empty($postend)) && ($postend > $poststart)) {
+	if ($what_to_show == 'posts') {
+		$poststart = intval($poststart);
+		$postend = intval($postend);
+		$posts = $postend - $poststart;
+		$limits = ' LIMIT '.$poststart.','.$posts;
+	} elseif ($what_to_show == 'days') {
+		$poststart = intval($poststart);
+		$postend = intval($postend);
+		$posts = $postend - $poststart;
+		$lastpostdate = get_lastpostdate();
+		$lastpostdate = mysql2date('Y-m-d 00:00:00',$lastpostdate);
+		$lastpostdate = mysql2date('U',$lastpostdate);
+		$startdate = date('Y-m-d H:i:s', ($lastpostdate - (($poststart -1) * 86400)));
+		$otherdate = date('Y-m-d H:i:s', ($lastpostdate - (($postend -1) * 86400)));
+		$where .= ' AND post_date > \''.$otherdate.'\' AND post_date < \''.$startdate.'\'';
+	}
 }
 
 if ($p == 'all') {
