@@ -497,16 +497,26 @@ function next_post($format='%', $next='next post: ', $title='yes', $in_same_cat=
 
 
 function next_posts($max_page = 0) { // original by cfactor at cooltux.org
-	global $HTTP_SERVER_VARS, $blogfilename, $p, $paged, $what_to_show;
+	global $HTTP_SERVER_VARS, $siteurl, $blogfilename, $p, $paged, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
-		$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
-		$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
+		if (!empty($qstr)) {
+			$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
+			$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
+		} elseif ('' != $qstr = str_replace($HTTP_SERVER_VARS['SCRIPT_NAME'], '', 
+											$HTTP_SERVER_VARS['REQUEST_URI']) ) {
+			$qstr = preg_replace("/^\//", "", $qstr);
+			$qstr = preg_replace("/paged\/\d{0,}\//", "", $qstr);		
+			$qstr = preg_replace("/paged\/\d{0,}/", "", $qstr);
+			$qstr = preg_replace("/\/$/", "", $qstr);
+		}
 		if (!$paged) $paged = 1;
 		$nextpage = intval($paged) + 1;
 		if (!$max_page || $max_page >= $nextpage) {
-			echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'paged'.$querystring_equal.$nextpage;
+			echo  $siteurl.'/'.$blogfilename.$querystring_start.
+				($qstr == '' ? '' : $qstr.$querystring_separator) .
+				'paged'.$querystring_equal.$nextpage;
 		}
 	}
 }
@@ -535,15 +545,25 @@ function next_posts_link($label='Next Page >>', $max_page=0) {
 
 
 function previous_posts() { // original by cfactor at cooltux.org
-	global $HTTP_SERVER_VARS, $blogfilename, $p, $paged, $what_to_show;
+	global $HTTP_SERVER_VARS, $siteurl, $blogfilename, $p, $paged, $what_to_show;
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	if (empty($p) && ($what_to_show == 'paged')) {
 		$qstr = $HTTP_SERVER_VARS['QUERY_STRING'];
-		$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
-		$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
+		if (!empty($qstr)) {
+			$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
+			$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
+		} elseif ('' != $qstr = str_replace($HTTP_SERVER_VARS['SCRIPT_NAME'], '', 
+											$HTTP_SERVER_VARS['REQUEST_URI']) ) {
+			$qstr = preg_replace("/^\//", "", $qstr);
+			$qstr = preg_replace("/paged\/\d{0,}\//", "", $qstr);		
+			$qstr = preg_replace("/paged\/\d{0,}/", "", $qstr);
+			$qstr = preg_replace("/\/$/", "", $qstr);
+		}
 		$nextpage = intval($paged) - 1;
 		if ($nextpage < 1) $nextpage = 1;
-		echo $blogfilename.$querystring_start.$qstr.$querystring_separator.'paged'.$querystring_equal.$nextpage;
+		echo $siteurl.'/'.$blogfilename.$querystring_start.
+			($qstr == '' ? '' : $qstr.$querystring_separator) .
+			'paged'.$querystring_equal.$nextpage;
 	}
 } 
 
