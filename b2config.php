@@ -39,11 +39,11 @@ $pathserver = 'http://example.com';
 $admin_email = 'you@example.com';
 
 
-# set this to 0 or 1, weither you want new users to be able to post entries once they registered
+# set this to 0 or 1, whether you want new users to be able to post entries once they registered
 $new_users_can_blog = 1;
 
 
-# set this to o or 1, weither you want to allow users to register on your blog.      
+# set this to 0 or 1, whether you want to allow users to register on your blog.      
 $users_can_register = 1;
 
 
@@ -159,6 +159,18 @@ $use_blodotgsping = 0;
 
 # if you ping blo.gs, this is the URL that will be sent to it (enter your blog's URL):
 $blodotgsping_url = 'http://example.com';
+
+
+
+// ** Trackback / PingBack **
+
+# set this to 0 or 1, whether you want to allow your posts to be trackback'able or not
+# note: setting it to zero would also disable sending trackbacks
+$use_trackback = 0;
+
+# set this to 0 or 1, whether you want to allow your posts to be pingback'able or not
+# note: setting it to zero would also disable sending pingbacks
+$use_pingback = 0;
 
 
 
