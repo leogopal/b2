@@ -48,8 +48,14 @@ function get_bloginfo($show='') {
 		case "description":
 			$output = $blogdescription;
 			break;
+		case "rdf_url":
+			$output = $siteurl.'/b2rdf.php';
+			break;
 		case "rss_url":
-			$output = $siteurl.'/b2rss.xml';
+			$output = $siteurl.'/b2rss.php';
+			break;
+		case "rss2_url":
+			$output = $siteurl.'/b2rss2.php';
 			break;
 		case "pingback_url":
 			$output = $pathserver.'/xmlrpc.php';
@@ -271,6 +277,9 @@ function the_content_rss($more_link_text='(more...)', $stripteaser=0, $more_file
 	$content = convert_bbcode($content);
 	$content = convert_gmcode($content);
 	$content = convert_chars($content, 'unicode');
+	if ($encode_html == 1) {
+		$cut = 0;
+	}
 	if ($cut) {
 		$dotdotdot = ($cut < strlen($content)) ? '...' : '';
 		$content = substr($content, 0, $cut).$dotdotdot;
