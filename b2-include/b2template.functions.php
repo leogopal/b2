@@ -504,12 +504,14 @@ function next_posts($max_page = 0) { // original by cfactor at cooltux.org
 		if (!empty($qstr)) {
 			$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
 			$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
-		} elseif ('' != $qstr = str_replace($HTTP_SERVER_VARS['SCRIPT_NAME'], '', 
+		} elseif (stristr($HTTP_SERVER_VARS['REQUEST_URI'], $HTTP_SERVER_VARS['SCRIPT_NAME'] )) {
+			if ('' != $qstr = str_replace($HTTP_SERVER_VARS['SCRIPT_NAME'], '', 
 											$HTTP_SERVER_VARS['REQUEST_URI']) ) {
-			$qstr = preg_replace("/^\//", "", $qstr);
-			$qstr = preg_replace("/paged\/\d{0,}\//", "", $qstr);		
-			$qstr = preg_replace("/paged\/\d{0,}/", "", $qstr);
-			$qstr = preg_replace("/\/$/", "", $qstr);
+				$qstr = preg_replace("/^\//", "", $qstr);
+				$qstr = preg_replace("/paged\/\d{0,}\//", "", $qstr);		
+				$qstr = preg_replace("/paged\/\d{0,}/", "", $qstr);
+				$qstr = preg_replace("/\/$/", "", $qstr);
+			}
 		}
 		if (!$paged) $paged = 1;
 		$nextpage = intval($paged) + 1;
@@ -552,12 +554,14 @@ function previous_posts() { // original by cfactor at cooltux.org
 		if (!empty($qstr)) {
 			$qstr = preg_replace("/&paged=\d{0,}/","",$qstr);
 			$qstr = preg_replace("/paged=\d{0,}/","",$qstr);
-		} elseif ('' != $qstr = str_replace($HTTP_SERVER_VARS['SCRIPT_NAME'], '', 
+		} elseif (stristr($HTTP_SERVER_VARS['REQUEST_URI'], $HTTP_SERVER_VARS['SCRIPT_NAME'] )) {
+			if ('' != $qstr = str_replace($HTTP_SERVER_VARS['SCRIPT_NAME'], '', 
 											$HTTP_SERVER_VARS['REQUEST_URI']) ) {
-			$qstr = preg_replace("/^\//", "", $qstr);
-			$qstr = preg_replace("/paged\/\d{0,}\//", "", $qstr);		
-			$qstr = preg_replace("/paged\/\d{0,}/", "", $qstr);
-			$qstr = preg_replace("/\/$/", "", $qstr);
+				$qstr = preg_replace("/^\//", "", $qstr);
+				$qstr = preg_replace("/paged\/\d{0,}\//", "", $qstr);		
+				$qstr = preg_replace("/paged\/\d{0,}/", "", $qstr);
+				$qstr = preg_replace("/\/$/", "", $qstr);
+			}
 		}
 		$nextpage = intval($paged) - 1;
 		if ($nextpage < 1) $nextpage = 1;
