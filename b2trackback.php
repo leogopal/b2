@@ -1,4 +1,4 @@
-	<?php if (!empty($tb)) { ?>
+<?php if (!empty($tb)) { ?>
 <!-- you can START editing here -->
 
 	<?php // don't touch these 2 lines
@@ -54,13 +54,14 @@
 if (!empty($HTTP_GET_VARS['tb_id'])) {
 	// trackback is done by a GET
 	$tb_id = $HTTP_GET_VARS['tb_id'];
-	$url = $HTTP_GET_VARS['url'];
 	$title = $HTTP_GET_VARS['title'];
 	$excerpt = $HTTP_GET_VARS['excerpt'];
 	$blog_name = $HTTP_GET_VARS['blog_name'];
-} elseif (!empty($HTTP_POST_VARS['tb_id'])) {
+} elseif (!empty($HTTP_POST_VARS['url'])) {
 	// trackback is done by a POST
-	$tb_id = $HTTP_POST_VARS['tb_id'];
+	$request_array = 'HTTP_POST_VARS';
+	$tb_id = explode('/', $HTTP_SERVER_VARS['REQUEST_URI']);
+	$tb_id = $tb_id[count($tb_id)-1];
 	$url = $HTTP_POST_VARS['url'];
 	$title = $HTTP_POST_VARS['title'];
 	$excerpt = $HTTP_POST_VARS['excerpt'];
@@ -69,17 +70,19 @@ if (!empty($HTTP_GET_VARS['tb_id'])) {
 
 if ((strlen(''.$tb_id)) && (empty($HTTP_GET_VARS['__mode'])) && (strlen(''.$url))) {
 
+	@header('Content-Type: text/xml');
+
+
 	require_once("b2config.php");
 	require_once("$b2inc/b2template.functions.php");
 	require_once("$b2inc/b2vars.php");
 	require_once("$b2inc/b2functions.php");
 
 	if (!$use_trackback) {
-		die('Sorry, this weblog does not allow you to trackback its posts.');
+		trackback_response(1, 'Sorry, this weblog does not allow you to trackback its posts.');
 	}
 
 	dbconnect();
-
 
 	$url = addslashes($url);
 	$title = strip_tags($title);
@@ -92,7 +95,7 @@ if ((strlen(''.$tb_id)) && (empty($HTTP_GET_VARS['__mode'])) && (strlen(''.$url)
 	$comment = '<trackback />';
 	$comment .= "<b>$title</b><br />$excerpt";
 
-	$author = $blog_name;
+	$author = addslashes($blog_name);
 	$email = '';
 	$original_comment = $comment;
 	$comment_post_ID = $tb_id;
@@ -100,8 +103,8 @@ if ((strlen(''.$tb_id)) && (empty($HTTP_GET_VARS['__mode'])) && (strlen(''.$url)
 
 	$user_ip = $HTTP_SERVER_VARS['REMOTE_ADDR'];
 	$user_domain = gethostbyaddr($user_ip);
-	$time_difference = get_settings("time_difference");
-	$now = date("Y-m-d H:i:s",(time() + ($time_difference * 3600)));
+	$time_difference = get_settings('time_difference');
+	$now = date('Y-m-d H:i:s',(time() + ($time_difference * 3600)));
 
 	$comment = convert_chars($comment);
 	$comment = format_to_post($comment);
@@ -114,30 +117,30 @@ if ((strlen(''.$tb_id)) && (empty($HTTP_GET_VARS['__mode'])) && (strlen(''.$url)
 
 	$query = "INSERT INTO $tablecomments VALUES ('0','$comment_post_ID','$author','$email','$url','$user_ip','$now','$comment','0')";
 	$result = mysql_query($query);
-	if (!$result)
+	if (!$result) {
 		die ("There is an error with the database, it can't store your comment...<br>Contact the <a href=\"mailto:$admin_email\">webmaster</a>");
+	} else {
 
-	if ($comments_notify) {
+		if ($comments_notify) {
 
-		$notify_message  = "New trackback on your post #$comment_post_ID.\r\n\r\n";
-		$notify_message .= "website: $comment_author (IP: $user_ip , $user_domain)\r\n";
-		$notify_message .= "url    : $comment_author_url\r\n";
-		$notify_message .= "excerpt: \n".stripslashes($original_comment)."\r\n\r\n";
-		$notify_message .= "You can see all trackbacks on this post there: \r\n";
-		$notify_message .= "$siteurl/$blogfilename?p=$comment_post_ID&tb=1\r\n\r\n";
+			$notify_message  = "New trackback on your post #$comment_post_ID.\r\n\r\n";
+			$notify_message .= "website: $comment_author (IP: $user_ip , $user_domain)\r\n";
+			$notify_message .= "url    : $comment_author_url\r\n";
+			$notify_message .= "excerpt: \n".stripslashes($original_comment)."\r\n\r\n";
+			$notify_message .= "You can see all trackbacks on this post there: \r\n";
+			$notify_message .= "$siteurl/$blogfilename?p=$comment_post_ID&tb=1\r\n\r\n";
 
-		$postdata = get_postdata($comment_post_ID);
-		$authordata = get_userdata($postdata["Author_ID"]);
-		$recipient = $authordata["user_email"];
-		$subject = "trackback on post #$comment_post_ID \"".$postdata["Title"]."\"";
+			$postdata = get_postdata($comment_post_ID);
+			$authordata = get_userdata($postdata["Author_ID"]);
+			$recipient = $authordata["user_email"];
+			$subject = "trackback on post #$comment_post_ID \"".$postdata["Title"]."\"";
 
-		@mail($recipient, $subject, $notify_message, "From: b2@".$HTTP_SERVER_VARS['SERVER_NAME']."\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
-		
+			@mail($recipient, $subject, $notify_message, "From: b2@".$HTTP_SERVER_VARS['SERVER_NAME']."\r\n"."X-Mailer: b2 $b2_version - PHP/" . phpversion());
+			
+		}
+
+		trackback_response(0);
 	}
-
-	header('Content-type: application/xml');
-	echo "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?".">\n<response>\n<error>0</error>\n</response>";
-	die();
 
 }/* elseif (empty($HTTP_GET_VARS['__mode'])) {
 
