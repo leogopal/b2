@@ -2,7 +2,7 @@
 $title = "Post / Edit";
 /* <Edit> */
 
-$b2varstoreset = array('action','safe_mode','withcomments','c','posts','poststart','content','edited_post_title','comment_error','profile');
+$b2varstoreset = array('action','safe_mode','withcomments','c','posts','poststart','content','edited_post_title','comment_error','profile', 'trackback_url');
 for ($i=0; $i<count($b2varstoreset); $i += 1) {
 	$b2var = $b2varstoreset[$i];
 	if (!isset($$b2var)) {
@@ -61,6 +61,11 @@ case "post":
 	pingWeblogs($blog_ID);
 	pingCafelog($cafelogID, $post_title, $post_ID);
 	pingBlogs($blog_ID);
+
+	if ($trackback_url) {
+		$excerpt = (strlen(strip_tags($content)) > 255) ? substr(strip_tags($content), 0, 252).'...' : strip_tags($content);
+		trackback($trackback_url, stripslashes($post_title), $excerpt, $post_ID);
+	}
 
 	if (!empty($HTTP_POST_VARS["mode"])) {
 		switch($HTTP_POST_VARS["mode"]) {

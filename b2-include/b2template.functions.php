@@ -622,6 +622,7 @@ function comment_author_IP() {
 
 function comment_text() {
 	global $commentdata;
+	$comment = str_replace('<trackback />', '', $comment);
 	$comment = stripslashes($commentdata['comment_content']);
 	$comment = convert_chars($comment);
 	$comment = convert_bbcode($comment);
@@ -647,6 +648,15 @@ function comment_time($d='') {
 		echo mysql2date($timeformat, $commentdata['comment_date']);
 	} else {
 		echo mysql2date($d, $commentdata['comment_date']);
+	}
+}
+
+function comment_is_trackback($display=1) {
+	global $commentdata;
+	if ($display) {
+		echo $commentdata['comment_is_trackback'];
+	} else {
+		return $commentdata['comment_is_trackback'];
 	}
 }
 
