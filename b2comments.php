@@ -73,7 +73,7 @@
 	<p class="commentfield">
 	your comment<br />
 	<textarea cols="40" rows="4" name="comment" tabindex="4" class="textarea"
-Ê   onfocus="this.value=(this.value=='comment') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'comment' : this.value;" >comment</textarea> 
+	onfocus="this.value=(this.value=='comment') ? '' : this.value;" onblur="this.value=(this.value=='') ? 'comment' : this.value;" >comment</textarea> 
 	</p>
 
 	<p class="commentfield">
