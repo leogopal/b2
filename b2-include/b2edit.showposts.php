@@ -12,7 +12,7 @@ if (!$posts) {
 	}
 }
 
-if ((isset($poststart)) && (isset($postend)) && ($poststart == $postend)) {
+if ((!empty($poststart)) && (!empty($postend)) && ($poststart == $postend)) {
 	$p=$poststart;
 	$poststart=0;
 	$postend=0;
