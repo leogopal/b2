@@ -16,6 +16,7 @@
 </style>
 <link rel="stylesheet" type="text/css" media="print" href="b2-include/print.css" />
 <link rel="alternate" type="text/xml" title="XML" href="<?php echo $siteurl ?>/b2rss.php" />
+<?php comments_popup_script() ?>
 
 </head>
 <body>
@@ -39,7 +40,7 @@
 <?php the_content(); ?>
 
 <div class="rightFlush">
-<?php link_pages("<br />Pages: ","<br />","number") ?> <a href="<?php comments_link() ?>"><?php comments_number("comments ?", "1 comment", "% comments") ?></a>
+<?php link_pages("<br />Pages: ","<br />","number") ?> <?php comments_popup_link("comments ?", "1 comment", "% comments") ?>
 <?php include ("b2comments.php"); ?>
 </div>
 
@@ -69,7 +70,7 @@
 
 <h4>categories:</h4>
 
-<?php list_cats(0); ?>
+<?php list_cats(0, 'All', 'name'); ?>
 
 <h4>search:</h4>
 
@@ -93,7 +94,7 @@
 <br />
 
 <a href="b2rss.xml"><img src="b2-img/xml.gif" alt="view this weblog as RSS !" width="36" height="14" border="0"  /></a><br />
-<!--<a href="http://validator.w3.org/check?uri=referer" title="yes, this page validates as XHTML 1.0 Transitional"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" border="0" /></a>-->
+<a href="http://validator.w3.org/check/referer" title="this page validates as XHTML 1.0 Transitional"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" border="0" /></a>
 
 </div>
 

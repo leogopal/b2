@@ -11,6 +11,7 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta content="TRUE" name="MSSmartTagsPreventParsing" />
 <link rel="alternate" type="text/xml" title="XML" href="<?php echo $siteurl ?>/b2rss.php" />
+<?php comments_popup_script() ?>
 </head>
 
 <body>
@@ -29,7 +30,7 @@
 <br />
 <em>posted by <strong><?php the_author() ?></strong> @ <a href="<?php permalink_link() ?>"><?php the_time() ?></a></em>
 <br />
-<a href="<?php comments_link() ?>"><?php comments_number("no comments", "1 comment", "% comments") ?></a>
+<?php comments_popup_link("comments ?", "1 comment", "% comments") ?>
 
 </p>
 
