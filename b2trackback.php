@@ -54,6 +54,7 @@
 if (!empty($HTTP_GET_VARS['tb_id'])) {
 	// trackback is done by a GET
 	$tb_id = $HTTP_GET_VARS['tb_id'];
+	$url = $HTTP_GET_VARS['url'];
 	$title = $HTTP_GET_VARS['title'];
 	$excerpt = $HTTP_GET_VARS['excerpt'];
 	$blog_name = $HTTP_GET_VARS['blog_name'];
