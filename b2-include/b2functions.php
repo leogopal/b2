@@ -940,7 +940,7 @@ function pingback($content, $post_ID) {
 			$method = 'pingback.ping';
 			debug_fwrite($log, 'Page Linked To: '.$pagelinkedto."\n");
 			debug_fwrite($log, 'Page Linked From: ');
-			$pagelinkedfrom = $siteurl.'/'.$blogfilename.'?p='.$post_ID.'&amp;c=1';
+			$pagelinkedfrom = $siteurl.'/'.$blogfilename.'?p='.$post_ID.'&c=1';
 			debug_fwrite($log, $pagelinkedfrom."\n");
 
 			$client = new xmlrpc_client($path, $host, 80);
