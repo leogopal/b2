@@ -34,7 +34,7 @@ if (!isset($rss_excerpt_length) || ($rss_encoded_html == 1)) { $rss_excerpt_leng
 		<title><?php the_title_rss() ?></title>
 		<link><?php permalink_single_rss() ?></link>
 		<dc:date><?php the_time('Y-m-d\TH:i:s'); ?></dc:date>
-		<dc:creator><?php the_author() ?> (mailto:<?php the_author_email() ?></dc:creator>
+		<dc:creator><?php the_author() ?> (mailto:<?php the_author_email() ?>)</dc:creator>
 		<dc:subject><?php the_category_rss() ?></dc:subject>
 		<guid isPermaLink="false"><?php echo $id; ?>@<?php bloginfo_rss("url") ?></guid>
 		<description><?php the_content_rss('', 0, '', $rss_excerpt_length, 2) ?></description>
