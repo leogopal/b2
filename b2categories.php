@@ -23,7 +23,7 @@ switch($action) {
 case "addcat":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	if ($user_level < 3)
 	die ("Cheatin' uh ?");
@@ -40,7 +40,7 @@ break;
 case "Delete":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	$cat_ID = $HTTP_POST_VARS["cat_ID"];
 	$cat_name=get_catname($cat_ID);
@@ -64,7 +64,7 @@ break;
 
 case "Rename":
 
-	include_once ("./b2header.php");
+	require_once ("./b2header.php");
 	$cat_name=get_catname($HTTP_POST_VARS["cat_ID"]);
 	$cat_name=addslashes($cat_name);
 	?>
@@ -88,7 +88,7 @@ break;
 case "editedcat":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	if ($user_level < 3)
 	die ("Cheatin' uh ?");
@@ -106,7 +106,7 @@ break;
 default:
 
 	$standalone=0;
-	include_once ("./b2header.php");
+	require_once ("./b2header.php");
 	if ($user_level < 3) {
 		die("You have no right to edit the categories for this blog.<br>Ask for a promotion to your <a href=\"mailto:$admin_email\">blog admin</a> :)");
 	}

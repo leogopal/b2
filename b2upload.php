@@ -2,7 +2,7 @@
 /* b2 File Upload - original hack by shockingbird.com */
 
 $standalone="1";
-include_once("./b2header.php");
+require_once("./b2header.php");
 
 if ($user_level == 0) //Checks to see if user has logged in
 die ("Cheatin' uh ?");

@@ -4,7 +4,7 @@
 $mode = "bookmarklet";
 
 $standalone = 1;
-include_once("./b2header.php");
+require_once("./b2header.php");
 
 if ($user_level == 0)
 die ("Cheatin' uh ?");

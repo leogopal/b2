@@ -4,7 +4,7 @@
 $mode = "sidebar";
 
 $standalone = 1;
-include_once("./b2header.php");
+require_once("./b2header.php");
 
 get_currentuserinfo();
 

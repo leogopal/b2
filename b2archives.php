@@ -2,8 +2,8 @@
 
 // *** b2 Archive file
 
-include_once("./b2config.php");
-include_once("$b2inc/b2functions.php");
+require_once("./b2config.php");
+require_once("$b2inc/b2functions.php");
 
 dbconnect();
 

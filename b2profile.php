@@ -17,8 +17,8 @@ for ($i=0; $i<count($b2varstoreset); $i += 1) {
 	}
 }
 
-include_once("b2config.php");
-include_once("$b2inc/b2functions.php");
+require_once("b2config.php");
+require_once("$b2inc/b2functions.php");
 
 dbconnect();
 
@@ -26,7 +26,7 @@ switch($action) {
 
 case "update":
 	
-	include_once("$b2inc/b2verifauth.php");
+	require_once("$b2inc/b2verifauth.php");
 
 	get_currentuserinfo();
 
@@ -97,7 +97,7 @@ break;
 
 case "viewprofile":
 
-	include_once("$b2inc/b2verifauth.php");
+	require_once("$b2inc/b2verifauth.php");
 /*	$profile=1;
 
 	get_currentuserinfo();

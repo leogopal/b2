@@ -1,6 +1,8 @@
-<?php echo $tabletop ?>
-
 <?php
+
+echo $tabletop;
+require_once('b2config.php');
+
 if (!$posts) {
 	if ($posts_per_page) {
 		$posts=$posts_per_page;

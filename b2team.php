@@ -23,7 +23,7 @@ switch ($action) {
 case "promote":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	if (empty($HTTP_GET_VARS["prom"])) {
 		header("Location: b2team.php");
@@ -53,7 +53,7 @@ break;
 case "delete":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	$id = $HTTP_GET_VARS["id"];
 

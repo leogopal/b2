@@ -30,9 +30,9 @@ $calendaremptycellcontent = '&nbsp;';
 /* stop customizing (unless you really know what you're doing) */
 
 
-include_once('b2config.php');
-include_once("$b2inc/b2functions.php");
-include_once("$b2inc/b2vars.php");
+include('b2config.php');
+require_once("$b2inc/b2functions.php");
+require_once("$b2inc/b2vars.php");
 dbconnect();
 
 if (isset($calendar) && ($calendar != '')) {

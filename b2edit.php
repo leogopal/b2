@@ -23,7 +23,7 @@ switch($action) {
 case "post":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	$post_autobr = $HTTP_POST_VARS["post_autobr"];
 	$content = format_to_post($HTTP_POST_VARS["content"]);
@@ -84,7 +84,7 @@ break;
 case "edit":
 
 	$standalone=0;
-	include_once ("./b2header.php");
+	require_once ("./b2header.php");
 	$post = $HTTP_GET_VARS["post"];
 	if ($user_level > 0) {
 		$postdata=get_postdata($post) or die("Oops, no post with this ID. <a href=\"b2edit.php\">Go back</a> !");
@@ -112,7 +112,7 @@ break;
 case "editpost":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 	
 	if ($user_level == 0)
 	die ("Cheatin' uh ?");
@@ -160,7 +160,7 @@ break;
 case "delete":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	if ($user_level == 0)
 	die ("Cheatin' uh ?");
@@ -192,7 +192,7 @@ break;
 case "editcomment":
 
 	$standalone=0;
-	include_once ("./b2header.php");
+	require_once ("./b2header.php");
 
 	get_currentuserinfo();
 
@@ -213,7 +213,7 @@ break;
 case "deletecomment":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	if ($user_level == 0)
 		die ("Cheatin' uh ?");
@@ -235,7 +235,7 @@ break;
 case "editedcomment":
 
 	$standalone = 1;
-	include_once("./b2header.php");
+	require_once("./b2header.php");
 
 	if ($user_level == 0)
 		die ("Cheatin' uh ?");
@@ -281,7 +281,7 @@ break;
 default:
 
 	$standalone=0;
-	include_once ("./b2header.php");
+	require_once ("./b2header.php");
 	
 	if ($user_level > 0) {
 		if ((!$withcomments) && (!$c)) {
