@@ -239,6 +239,41 @@ case "viewprofile":
 
 break;
 
+
+case 'IErightclick':
+
+	$profile = 1;
+	include ('b2header.php');
+
+	?>
+
+	<div class="menutop">&nbsp;IE one-click bookmarklet</div>
+
+	<table width="100%" cellpadding="20">
+	<tr><td>
+
+	<p>To have a one-click bookmarklet, just copy and paste this<br />into a new text file:</p>
+	<?php
+	$regedit = "REGEDIT4\r\n[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Post To &b2 : ".$blogname."]\r\n@=\"javascript:doc=external.menuArguments.document;Q=doc.selection.createRange().text;void(btw=window.open('".$pathserver."/b2bookmarklet.php?text='+escape(Q)+'&popupurl='+escape(doc.location.href)+'&popuptitle='+escape(doc.title),'b2bookmarklet','scrollbars=no,width=480,height=300,left=100,top=150,status=yes'));btw.focus();\"\r\n\"contexts\"=hex:31\"";
+	?>
+	<pre style="margin: 20px; background-color: #cccccc; border: 1px dashed #333333; padding: 5px; font-size: 12px;"><?php echo $regedit; ?></pre>
+	<p>Save it as b2.reg, and double-click on this file in an Explorer<br />
+	window. Answer Yes to the question, and restart Internet Explorer.<br /><br />
+	That's it, you can now right-click in an IE window and select <br />
+	'Post to b2' to make the bookmarklet appear :)</p>
+
+	<p align="center">
+		<form>
+		<input class="search" type="button" value="1" name="Close this window" />
+		</form>
+	</p>
+	</td></tr>
+	</table>
+	<?php
+
+break;
+
+
 default:
 
 	$profile=1;
@@ -255,7 +290,7 @@ default:
 	<input type="hidden" name="action" value="update" />
 	<input type="hidden" name="checkuser_id" value="<?php echo $user_ID ?>" />
 	<table width="100%">
-	<td width="200">
+	<td width="200" valign="top">
 
 	<table cellpadding="5" cellspacing="0">
 	<tr>
@@ -367,6 +402,18 @@ if ($is_NS4 || $is_gecko) {
 } else if ($is_winIE) {
 ?>
 <a href="javascript:Q='';if(top.frames.length==0)Q=document.selection.createRange().text;void(btw=window.open('<?php echo $path ?>/b2bookmarklet.php?text='+escape(Q)+'<?php echo $bookmarklet_tbpb ?>&popupurl='+escape(location.href)+'&popuptitle='+escape(document.title),'b2bookmarklet','scrollbars=no,width=480,height=<?php echo $bookmarklet_height ?>,left=100,top=150,status=yes'));btw.focus();">b2 - <?php echo $blogname ?></a>
+
+<script type="text/javascript" language="javascript">
+<!--
+function oneclickbookmarklet(blah) {
+	window.open ("b2profile.php?action=IErightclick", "oneclickbookmarklet", "width=500, height=450, location=0, menubar=0, resizable=0, scrollbars=1, status=1, titlebar=0, toolbar=0, screenX=120, left=120, screenY=120, top=120");
+}
+// -->
+</script>
+
+<br /><br />
+One-click bookmarklet:<br />
+<a href="javascript:oneclickbookmarklet(0);">click here</a>
 
 <?php
 } else if ($is_opera) {
