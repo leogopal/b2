@@ -97,6 +97,8 @@ $use_htmltrans = 1;
 # this could help balance your HTML code. if it gives bad results, set it to 0
 $use_balanceTags = 1;
 
+# this would convert quotes into smart/curly quotes, set it to 1 to enable it
+$use_smartquotes = 0;
 
 
 // ** Image upload **

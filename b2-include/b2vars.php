@@ -248,11 +248,13 @@ if (!isset($b2smiliestrans)) {
 }
 
 # sorts the smilies' array
-function smiliescmp ($a, $b) {
-   if (strlen($a) == strlen($b)) {
-      return strcmp($a, $b);
-   }
-   return (strlen($a) > strlen($b)) ? -1 : 1;
+if (!function_exists('smiliescmp')) {
+	function smiliescmp ($a, $b) {
+	   if (strlen($a) == strlen($b)) {
+		  return strcmp($a, $b);
+	   }
+	   return (strlen($a) > strlen($b)) ? -1 : 1;
+	}
 }
 uksort($b2smiliestrans, 'smiliescmp');
 
@@ -264,6 +266,11 @@ foreach($b2smiliestrans as $smiley => $img) {
 		$smiley_masked .= substr($smiley, $i, 1).chr(160);
 	}
 	$b2_smiliesreplace[] = "<img src='$smilies_directory/$img' alt='$smiley_masked' />";
+}
+
+# sets curly quotes on or off from the config
+if (isset($use_smartquotes) && ($use_smartquotes)) {
+	add_filter('all', 'phpcurlme');
 }
 
 ?>
