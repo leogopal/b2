@@ -202,4 +202,14 @@ function smiliescmp ($a, $b) {
 }
 uksort($b2smiliestrans, "smiliescmp");
 
+# generates smilies' search & replace arrays
+foreach($b2smiliestrans as $smiley => $img) {
+	$b2_smiliessearch[] = $smiley;
+	$smiley_masked = '';
+	for ($i = 0; $i < strlen($smiley); $i = $i + 1) {
+		$smiley_masked .= substr($smiley, $i, 1).chr(160);
+	}
+	$b2_smiliesreplace[] = "<img src='$smilies_directory/$img' alt='$smiley_masked' />";
+}
+
 ?>
