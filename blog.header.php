@@ -15,7 +15,7 @@ require_once ($b2blah.$b2inc.'/b2template.functions.php');
 require_once ($b2blah.$b2inc.'/xmlrpc.inc');
 require_once ($b2blah.$b2inc.'/xmlrpcs.inc');
 
-$b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search','exact','sentence','poststart','postend','preview','debug','calendar','page','more');
+$b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search','exact','sentence','poststart','postend','preview','debug','calendar','page','more','tb','pb');
 
 	for ($i=0; $i<count($b2varstoreset); $i += 1) {
 		$b2var = $b2varstoreset[$i];
@@ -31,13 +31,6 @@ $b2varstoreset = array('m','p','posts','w','c','cat','withcomments','s','search'
 			}
 		}
 	}
-
-function addslashes_gpc($gpc) {
-	if (!get_magic_quotes_gpc()) {
-		$gpc = addslashes($gpc);
-	}
-	return($gpc);
-}
 
 /* Connecting to the db */
 dbconnect();
