@@ -341,7 +341,7 @@ function the_content_unicode($more_link_text='(more...)', $stripteaser=0, $more_
 function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file='') {
 	global $id,$postdata,$more,$c,$withcomments,$page,$pages,$multipage,$numpages;
 	global $HTTP_SERVER_VARS, $preview;
-	global $querystring_start, $querystring_equal, $querystring_separator;
+	global $blogfilename, $querystring_start, $querystring_equal, $querystring_separator;
 	$output = '';
 	if ($more_file != '') {
 		$file=$more_file;
@@ -360,7 +360,7 @@ function get_the_content($more_link_text='(more...)', $stripteaser=0, $more_file
 		if ($more) {
 			$output .= '<a name="more'.$id.'"></a>'.$content[1];
 		} else {
-			$output .= ' <a href="'.$file.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'more'.$querystring_equal.'1#more'.$id.'">'.$more_link_text.'</a>';
+			$output .= ' <a href="'.$blogfilename.$querystring_start.'p'.$querystring_equal.$id.$querystring_separator.'more'.$querystring_equal.'1#more'.$id.'">'.$more_link_text.'</a>';
 		}
 	}
 	if ($preview) { // preview fix for javascript bug with foreign languages
