@@ -674,13 +674,11 @@ function comment_is_trackback($display=1) {
 function permalink_anchor($mode = 'id') {
 	global $id, $postdata;
 	switch(strtolower($mode)) {
-		case 'id':
-			echo '<a name="'.$id.'"></a>';
-			break;
 		case 'title':
 			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
 			echo '<a name="'.$title.'"></a>';
 			break;
+		case 'id':
 		default:
 			echo '<a name="'.$id.'"></a>';
 			break;
@@ -692,13 +690,11 @@ function permalink_link($file='', $mode = 'id') {
 	global $querystring_start, $querystring_equal, $querystring_separator;
 	$file = ($file=='') ? $pagenow : $file;
 	switch(strtolower($mode)) {
-		case 'id':
-			$anchor = $id;
-			break;
 		case 'title':
 			$title = preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $postdata['Title']);
 			$anchor = $title;
 			break;
+		case 'id':
 		default:
 			$anchor = $id;
 			break;
