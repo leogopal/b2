@@ -13,7 +13,7 @@
     *
     * pop3 class
     *
-    * $Id: class.POP3.php,v 1.1 2002/08/29 13:39:27 michelvaldrighi Exp $
+    * $Id: class.POP3.php,v 1.2 2002/11/30 20:49:51 macshack Exp $
     */
 
 class POP3 {
@@ -43,7 +43,7 @@ class POP3 {
     var $RFC1939    = TRUE;     //  Set by noop(). See rfc1939.txt
                                 //
 
-    var $ALLOWAPOP  = FASLE;    //  Allow or disallow apop()
+    var $ALLOWAPOP  = FALSE;    //  Allow or disallow apop()
                                 //  This must be set to true
                                 //  manually
 
