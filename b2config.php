@@ -36,13 +36,15 @@ $pathserver = 'http://example.com';
 
 
 # your email (obvious uh ?)
-
 $admin_email = 'you@example.com';
 
 
 # set this to 0 or 1, weither you want new users to be able to post entries once they registered
-
 $new_users_can_blog = 1;
+
+
+# set this to o or 1, weither you want to allow users to register on your blog.      
+$users_can_register = 1;
 
 
 # day at the start of the week: 0 for Sunday, 1 for Monday, 2 for Tuesday, etc
