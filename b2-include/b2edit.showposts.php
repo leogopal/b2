@@ -220,14 +220,14 @@ echo " selected";
 		<tr>
 		<td>
 			<p>
-				<b><?php the_time("Y/m/d @ H:i:s"); ?></b> [ <a href="b2edit.php?p=<?php echo $id ?>&c=1"><?php comments_number("no comment", "1 comment", "% comments") ?></a>
+				<b><?php the_time('Y/m/d @ H:i:s'); ?></b> [ <a href="b2edit.php?p=<?php echo $id ?>&c=1"><?php comments_number('no comment', '1 comment', "% comments") ?><?php trackback_number('', ', 1 trackback', ', % trackbacks') ?><?php pingback_number('', ', 1 pingback', ', % pingbacks') ?></a>
 				<?php
 				if (($user_level > $authordata[13]) or ($user_login == $authordata[1])) {
 				echo " - <a href=\"b2edit.php?action=edit&post=".$postdata["ID"];
 				if ($m)
 				echo "&m=$m";
 				echo "\">Edit</a>";
-				echo " - <a href=\"b2edit.php?action=delete&post=".$postdata["ID"]."\">Delete</a> ";
+				echo " - <a href=\"b2edit.php?action=delete&post=".$postdata["ID"]."\" onclick=\"return confirm('You are about to delete this post \'".$row->post_title."\'\\n  \'Cancel\' to stop, \'OK\' to delete.')\">Delete</a> ";
 				}
 				?>
 				]
