@@ -13,7 +13,7 @@
 # $blogfilename is the name of the default file for your blog
 # $blogname is the name of your blog
 
-$siteurl = 'http://yourdomain.com';
+$siteurl = 'http://example.com';
 $blogfilename = 'index.php';
 $blogname = "my weblog";
 $blogdescription = "babblings !";
@@ -32,22 +32,17 @@ $use_cafelogping = 0;    # set this to 1 if you do have a Cafelog ID
 # $pathserver is where you have uploaded b2: for example, 'http://mydomain.com' (no ending slash !)
 #   by default b2 is set to run in the folder your blog resides, same as $siteurl
 
-$pathserver = 'http://yourdomain.com';
+$pathserver = 'http://example.com';
 
 
 # your email (obvious uh ?)
 
-$admin_email = 'you@yourdomain.com';
+$admin_email = 'you@example.com';
 
 
 # set this to 0 or 1, weither you want new users to be able to post entries once they registered
 
 $new_users_can_blog = 1;
-
-
-# set this to o or 1, weither you want to allow users to register on your blog.
-
-$users_can_register = 1;
 
 
 # day at the start of the week: 0 for Sunday, 1 for Monday, 2 for Tuesday, etc
@@ -113,10 +108,10 @@ $use_fileupload = 0;
 #   note that the  directory must be writable by the webserver (ChMod 766)
 #   note for windows-servers users: use forwardslashes instead of backslashes
 #$fileupload_realpath = '/home/your/site/b2/images';
-$fileupload_realpath = '/home/yourdomain/public_html/images';
+$fileupload_realpath = '/home/example/public_html/images';
 
 # enter the URL of that directory (it's used to generate the links to the pictures)
-$fileupload_url = 'http://yourdomain.com/images';
+$fileupload_url = 'http://example.com/images';
 
 # accepted file types, you can add to that list if you want
 #   note: add a space before and after each file type
@@ -151,8 +146,17 @@ $rss_language = 'en';
 
 // ** Weblogs.com ping **
 
-# set this to 1 if you want your site to be listed on weblogs.com when you add a new post
+# set this to 1 if you want your site to be listed on http://weblogs.com when you add a new post
 $use_weblogsping = 0;
+
+
+// ** Blo.gs ping **
+
+# set this to 1 if you want your site to be listed on http://blo.gs when you add a new post
+$use_blodotgsping = 0;
+
+# if you ping blo.gs, this is the URL that will be sent to it (enter your blog's URL):
+$blodotgsping_url = 'http://example.com';
 
 
 
@@ -179,7 +183,7 @@ $comments_notify = 0;
 $use_smilies = 0;
 
 # the directory where your smilies are (no trailing slash)
-$smilies_directory = 'http://yourdomain.com/b2-img/smilies';
+$smilies_directory = 'http://example.com/b2-img/smilies';
 
 # here's the conversion table, you can modify it if you know what you're doing
 $b2smiliestrans = array(
@@ -275,8 +279,8 @@ $querystring_separator = '&amp;';
 // ** Configuration for b2mail.php ** (skip this if you don't intend to blog via email)
 
 # mailserver settings
-$mailserver_url = 'mail.yourdomain.com';
-$mailserver_login = 'login@yourdomain.com';
+$mailserver_url = 'mail.example.com';
+$mailserver_login = 'login@example.com';
 $mailserver_pass = 'password';
 $mailserver_port = 110;
 
