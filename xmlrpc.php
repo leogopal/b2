@@ -989,7 +989,7 @@ function pingback_ping($m) {
 				while($linea = fread($fp, $puntero)) {
 					$linea = preg_replace('#&([^amp\;])#is', '&amp;$1', $linea);
 					if (empty($matchtitle)) {
-						preg_match('|<title>([^<]*?)</title>|', $linea, $matchtitle);
+						preg_match('|<title>([^<]*?)</title>|is', $linea, $matchtitle);
 					}
 					$pos2 = strpos(strip_tags($linea, '<a>'), $pagelinkedto);
 					$pos3 = strpos(strip_tags($linea, '<a>'), str_replace('http://www.', 'http://', $pagelinkedto));
@@ -1007,7 +1007,8 @@ function pingback_ping($m) {
 
 				if (!empty($context)) {
 
-					$title = $matchtitle[1];
+					$pagelinkedfrom = preg_replace('#&([^amp\;])#is', '&amp;$1', $pagelinkedfrom);
+					$title = (!strlen($matchtitle[1])) $pagelinkedfrom : $matchtitle[1];
 					$original_context = $context;
 					$context = '<pingback />[...] '.addslashes(trim($context)) .' [...]';
 					$context = format_to_post($context);
