@@ -786,8 +786,8 @@ function trackback_rdf($timezone=0) {
 		echo '"'."\n";
 		echo '    dc:subject="'.addslashes(get_the_category()).'"'."\n";
 		echo '    dc:description="';
-		$blahblah = strip_tags(get_the_content());
-		$blahblah = (strlen($blahblah) > 255) ? substr(addslashes($blahblah), 0, 252).'...' : $blahblah;
+		$blahblah = strip_tags(str_replace('"', '&quot;', get_the_content()));
+		$blahblah = (strlen($blahblah) > 255) ? substr($blahblah, 0, 252).'...' : $blahblah;
 		echo $blahblah.'"'."\n";
 		echo '    dc:creator="';
 		the_author();
